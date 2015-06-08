@@ -111,58 +111,58 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     }
     @Override
     public void onClick(View v) {
-        String email = String.valueOf(((EditText) getActivity().findViewById(R.id.register_email)).getText());
-        String emailAgain = String.valueOf(((EditText) getActivity().findViewById(R.id.register_email_again)).getText());
-        String password = String.valueOf(((EditText) getActivity().findViewById(R.id.register_password)).getText());
-        String passwordAgain = String.valueOf(((EditText) getActivity().findViewById(R.id.register_password_again)).getText());;
         switch(v.getId()) {
             case R.id.register_button:
-                ((Button)getActivity().findViewById(R.id.register_button)).setEnabled(false);
-                String error = "";
-                if(!email.equals(emailAgain)) {
-                    error = getString(R.string.email_mismatch_error_message);
-                } else if(!password.equals(passwordAgain)) {
-                    error = getString(R.string.password_mismatch_error_message);
-                } else if(password.length() < getActivity().getResources().getInteger(R.integer.minPasswordChars)) {
-                    error = getString(R.string.password_too_short_error_message_beginning) + getActivity().getResources().getInteger(R.integer.minPasswordChars) + getString(R.string.password_too_short_error_message_ending);
-                }
-                if(!error.equals("")) {
-                    Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
-                    ((Button)getActivity().findViewById(R.id.register_button)).setEnabled(true);
-                } else {
-                    register(email, password);
-                }
+                register();
                 break;
         }
     }
-    public void register(String email, String password) {
-        ParseUser user = new ParseUser();
-        user.setUsername(email);
-        user.setPassword(password);
-        user.signUpInBackground(new SignUpCallback() {
-            public void done(ParseException e) {
-                if (e == null) {
-                    //Regisered Successful
-                    ((MainActivity)getActivity()).showHomeFragment();
-                } else {
-                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    ((Button)getActivity().findViewById(R.id.register_button)).setEnabled(true);
+
+    public void register() {
+        //Variables related to the testing of a successful register
+        String email = String.valueOf(((EditText) getActivity().findViewById(R.id.register_email)).getText());
+        String emailAgain = String.valueOf(((EditText) getActivity().findViewById(R.id.register_email_again)).getText());
+        String password = String.valueOf(((EditText) getActivity().findViewById(R.id.register_password)).getText());
+        String passwordAgain = String.valueOf(((EditText) getActivity().findViewById(R.id.register_password_again)).getText());
+
+        //Disable the register button to ensure that the request is not made twice
+        ((Button)getActivity().findViewById(R.id.register_button)).setEnabled(false);
+
+        //Any error that will be displayed
+        String error = "";
+
+        if(!email.equals(emailAgain)) { //Emails to not match
+            error = getString(R.string.email_mismatch_error_message);
+        } else if(email.isEmpty() || emailAgain.isEmpty() || password.isEmpty() || passwordAgain.isEmpty()) {
+            error = getString(R.string.missing_field_error_message);
+        } else if(!password.equals(passwordAgain)) { //Passwords do not match
+            error = getString(R.string.password_mismatch_error_message);
+        } else if(password.length() < getActivity().getResources().getInteger(R.integer.minPasswordChars)) { //Password does not meet length requirements
+            error = getString(R.string.password_too_short_error_message_beginning) + getActivity().getResources().getInteger(R.integer.minPasswordChars) + getString(R.string.password_too_short_error_message_ending);
+        }
+        if(!error.equals("")) {
+            Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+            ((Button)getActivity().findViewById(R.id.register_button)).setEnabled(true);
+        } else {
+            ParseUser user = new ParseUser();
+            user.setUsername(email);
+            user.setPassword(password);
+            user.signUpInBackground(new SignUpCallback() {
+                public void done(ParseException e) {
+                    if (e == null) {
+                        //Regisered Successful
+                        Toast.makeText(getActivity(), "Successful registered", Toast.LENGTH_SHORT).show();
+                        getFragmentManager().popBackStack();
+                    } else {
+                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-        });
+            });
+        }
+        ((Button) getActivity().findViewById(R.id.register_button)).setEnabled(true);
     }
 
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);

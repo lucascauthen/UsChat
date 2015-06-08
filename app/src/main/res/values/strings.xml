@@ -27,5 +27,10 @@
     <string name="password_mismatch_error_message">The given passwords do not match.</string>
     <string name="password_too_short_error_message_beginning">"Passwords must have a minimum of "</string>
     <string name="password_too_short_error_message_ending">" characters."</string>
+    <string name="parse_app_id">6BYovscrrL3h55LXMWgQdQ4AYm7dBQ6vO0BjYZ1e</string>
+    <string name="parse_client_id">e7iTzIwBjs0pmGo7Kq36esdeqLKxHbFg3IIRkvGD</string>
+    <string name="missing_field_error_message">Please enter values for all of the fields.</string>
+    <string name="unsuccessful_login_error">Invalid username or password!</string>
     <integer name="minPasswordChars">8</integer>
+    <integer name="config_mediumAnimTime">500</integer>
 </resources>

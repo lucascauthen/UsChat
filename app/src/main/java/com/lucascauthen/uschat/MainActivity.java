@@ -28,9 +28,10 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnF
 
         //Parse initialization
 
-        Parse.initialize(this, "6BYovscrrL3h55LXMWgQdQ4AYm7dBQ6vO0BjYZ1e", "e7iTzIwBjs0pmGo7Kq36esdeqLKxHbFg3IIRkvGD");
-
+        Parse.initialize(this, getString(R.string.parse_app_id), getString(R.string.parse_client_id));
+        ParseUser.logOut();
         ParseUser currentUser = ParseUser.getCurrentUser();
+
         if(currentUser != null) {
 
         } else {
@@ -48,33 +49,34 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnF
         LoginFragment loginFragment = new LoginFragment();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(R.id.group, loginFragment, "login");
-        transaction.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_in);
+        transaction.setCustomAnimations(R.anim.abc_slide_in_bottom, R.anim.abc_fade_in);
         transaction.commit();
     }
     public void showRegisterFragment() {
         RegisterFragment registerFragment = (RegisterFragment)fragmentManager.findFragmentByTag("register");
         FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_from_right, R.anim.enter_from_right, R.anim.exit_from_left);
         if(registerFragment == null) {
             registerFragment = new RegisterFragment();
         }
         transaction.detach(fragmentManager.findFragmentByTag("login"));
         transaction.add(R.id.group, registerFragment);
         transaction.addToBackStack("register");
-        transaction.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_in);
+
         transaction.commit();
     }
+
     public void showHomeFragment(){
         HomeFragment homeFragment = (HomeFragment)fragmentManager.findFragmentByTag("home");
         FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_from_right, R.anim.enter_from_right, R.anim.exit_from_left);
         if(homeFragment == null) {
             homeFragment = new HomeFragment();
         }
         transaction.detach(fragmentManager.findFragmentByTag("home"));
         transaction.add(R.id.group, homeFragment);
         //Clear the back stack because we don't want you to be able to go back the the register screen/loggin screen again if you press back
-        for(int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
-            fragmentManager.popBackStack();
-        }
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         transaction.addToBackStack("home");
         transaction.commit();
     }

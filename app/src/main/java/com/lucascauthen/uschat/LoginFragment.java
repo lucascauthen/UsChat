@@ -13,9 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.LogInCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 
 /**
@@ -74,7 +79,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View myFragmentView = inflater.inflate(R.layout.fragment_login, container, false);
-        Button loginButton = (Button)myFragmentView.findViewById(R.id.email_sign_in_button);
+        Button loginButton = (Button)myFragmentView.findViewById(R.id.login_form_sign_in);
         Button signupButton = (Button)myFragmentView.findViewById(R.id.signup_button);
         loginButton.setOnClickListener(this);
         signupButton.setOnClickListener(this);
@@ -125,14 +130,29 @@ public class LoginFragment extends Fragment implements View.OnClickListener  {
         FragmentTransaction transaction = manager.beginTransaction();
         switch(v.getId()) {
             case R.id.signup_button:
-                Toast.makeText(getActivity(), "Sign up", Toast.LENGTH_SHORT).show();
                 ((MainActivity)getActivity()).showRegisterFragment();
                 break;
-            case R.id.email_sign_in_button:
-                Toast.makeText(getActivity(), "Sign in", Toast.LENGTH_SHORT).show();
-
+            case R.id.login_form_sign_in:
+                getActivity().findViewById(R.id.login_form_sign_in).setEnabled(false);
+                login();
                 break;
         }
+    }
+    public void login() {
+        String username = String.valueOf(((EditText)getActivity().findViewById(R.id.login_form_email)).getText());
+        String password = String.valueOf(((EditText)getActivity().findViewById(R.id.login_form_password)).getText());
+        ParseUser.logInInBackground(username, password, new LogInCallback() {
+            @Override
+            public void done(ParseUser parseUser, ParseException e) {
+                if(parseUser != null) {
+                    ((MainActivity)getActivity()).showHomeFragment();
+                } else {
+                    //Invalid username or passowrd
+                    Toast.makeText(getActivity(), getString(R.string.unsuccessful_login_error), Toast.LENGTH_SHORT).show();
+                }
+                getActivity().findViewById(R.id.login_form_sign_in).setEnabled(true);
+            }
+        });
     }
 
     /**
