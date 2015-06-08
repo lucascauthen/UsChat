@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">UsChat</string>
+    <!-- Strings related to login -->
+
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_email_again">Retype Email</string>
+    <string name="prompt_password_again">Retype Password</string>
+    <string name="password_mismatch">The passwords do not match</string>
+    <string name="email_mismatch">The emails do not match</string>
+    <string name="action_sign_in">Login</string>
+    <string name="action_register">Register</string>
+    <string name="invalid_email">This email address is invalid</string>
+    <string name="invalid_password">Password is too short</string>
+    <string name="incorrect_password">Password is incorrect</string>
+    <string name="field_required">This field is required</string>
+    <string name="app_title">UsChat</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_signup">Sign up</string>
+    <string name="title_activity_test">TestActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="email_mismatch_error_message">The emails provided do not match.</string>
+    <string name="password_mismatch_error_message">The given passwords do not match.</string>
+    <string name="password_too_short_error_message_beginning">"Passwords must have a minimum of "</string>
+    <string name="password_too_short_error_message_ending">" characters."</string>
+    <integer name="minPasswordChars">8</integer>
+</resources>
