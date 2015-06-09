@@ -3,23 +3,18 @@ package com.lucascauthen.uschat;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.LogInCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 
@@ -97,13 +92,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener  {
     @Override
     public void onStart() {
         super.onStart();
-        ((MainActivity)getActivity()).getSupportActionBar().hide();
+        ((LoginActivity)getActivity()).getSupportActionBar().hide();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity)getActivity()).getSupportActionBar().hide();
+        ((LoginActivity)getActivity()).getSupportActionBar().hide();
     }
 
     @Override
@@ -115,7 +110,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener  {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-        ((MainActivity)getActivity()).getSupportActionBar().hide();
+        ((LoginActivity)getActivity()).getSupportActionBar().hide();
     }
 
     @Override
@@ -130,7 +125,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener  {
         FragmentTransaction transaction = manager.beginTransaction();
         switch(v.getId()) {
             case R.id.signup_button:
-                ((MainActivity)getActivity()).showRegisterFragment();
+                ((LoginActivity)getActivity()).showRegisterFragment();
                 break;
             case R.id.login_form_sign_in:
                 getActivity().findViewById(R.id.login_form_sign_in).setEnabled(false);
@@ -145,7 +140,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener  {
             @Override
             public void done(ParseUser parseUser, ParseException e) {
                 if(parseUser != null) {
-                    ((MainActivity)getActivity()).showHomeFragment();
+                    ((LoginActivity)getActivity()).startMainActivity();
                 } else {
                     //Invalid username or passowrd
                     Toast.makeText(getActivity(), getString(R.string.unsuccessful_login_error), Toast.LENGTH_SHORT).show();

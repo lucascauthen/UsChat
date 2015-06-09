@@ -31,6 +31,12 @@
     <string name="parse_client_id">e7iTzIwBjs0pmGo7Kq36esdeqLKxHbFg3IIRkvGD</string>
     <string name="missing_field_error_message">Please enter values for all of the fields.</string>
     <string name="unsuccessful_login_error">Invalid username or password!</string>
+    <string name="login_fragment_name">login</string>
+    <string name="register_fragment_name">register</string>
+    <string name="camera_fragment_name">camera</string>
+    <string name="home_fragment_name">home</string>
     <integer name="minPasswordChars">8</integer>
     <integer name="config_mediumAnimTime">500</integer>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="camera_log_tag">camera</string>
 </resources>
