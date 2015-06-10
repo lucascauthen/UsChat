@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -16,33 +17,28 @@ import android.widget.FrameLayout;
 import com.lucascauthen.uschat.Camera.CameraPreview;
 
 import java.io.IOException;
+import java.util.logging.LogRecord;
 
 
 public class CameraFragment extends Fragment {
 
+    private  final int VIDEO_CAPTURE_DELAY = 1000;
     private Camera camera;
     private CameraPreview preview;
     private int curCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
     //TODO: Fix this: this prevents the app from reassigning the camera on first opening
     private boolean fromPause = false;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private boolean isMouseDown = false;
+    private boolean tryingToCaptureVideo = false;
+    private boolean capturingVideo = false;
+    private boolean mouseCameUp = false;
 
     private OnFragmentInteractionListener mListener;
 
     public static CameraFragment newInstance(String param1, String param2) {
         CameraFragment fragment = new CameraFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -53,10 +49,6 @@ public class CameraFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
         camera = getCameraInstance();
     }
 
@@ -66,6 +58,27 @@ public class CameraFragment extends Fragment {
         preview = new CameraPreview(this.getActivity(), camera);
         final FrameLayout previewFrame = (FrameLayout) view.findViewById(R.id.camera_preview);
         previewFrame.addView(this.preview);
+        //startPrintVariables();
+        view.findViewById(R.id.button_capture).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        isMouseDown = true;
+                        if(!tryingToCaptureVideo) {
+                            tryCaptureVideo();
+                        }
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        isMouseDown = false;
+                        mouseCameUp = true;
+                        capturePicture();
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
         final GestureDetector gesture = new GestureDetector(getActivity(),
                 new GestureDetector.SimpleOnGestureListener() {
 
@@ -88,15 +101,25 @@ public class CameraFragment extends Fragment {
             }
         });
         // Inflate the layout for this fragment
+        view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
         return view;
     }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    //TODO: Delete after testing:
+    public void startPrintVariables() {
+        Handler handle = new Handler();
+        handle.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Print info:
+                Log.d(getString(R.string.camera_log_tag), "isMouseDown: " + isMouseDown);
+                Log.d(getString(R.string.camera_log_tag), "tryingToCaptureVideo: " + tryingToCaptureVideo);
+                Log.d(getString(R.string.camera_log_tag), "capturingVideo: " + capturingVideo);
+                Log.d(getString(R.string.camera_log_tag), "mouseCameUp: " + mouseCameUp);
+                startPrintVariables();
+            }
+        }, 1000);
     }
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -116,7 +139,6 @@ public class CameraFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
     public Camera getCameraInstance(){
@@ -172,5 +194,37 @@ public class CameraFragment extends Fragment {
             fromPause = false;
         }
         super.onResume();
-}
+    }
+
+    public void capturePicture() {
+        if(!capturingVideo) {
+            Log.d(getString(R.string.camera_log_tag), "Capturing picture!");
+
+        }
+    }
+    public void tryCaptureVideo() {
+        Log.d(getString(R.string.camera_log_tag), "Trying to capture video!");
+        tryingToCaptureVideo = true;
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(isMouseDown && !mouseCameUp){
+                    captureVideo();
+                } else {
+                    tryingToCaptureVideo = false;
+                    mouseCameUp = false;
+                    Log.d(getString(R.string.camera_log_tag), "Not capturing video, taking a picture instead!");
+                }
+            }
+        }, VIDEO_CAPTURE_DELAY);
+
+    }
+    public void captureVideo() {
+        tryingToCaptureVideo = false;
+        capturingVideo = true;
+        Log.d(getString(R.string.camera_log_tag), "Capturing video!");
+        capturingVideo = false;
+
+    }
 }
