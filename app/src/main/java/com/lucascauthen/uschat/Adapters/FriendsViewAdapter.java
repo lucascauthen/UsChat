@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lucascauthen.uschat.Chatting.Friend;
+import com.lucascauthen.uschat.FriendsFragment;
+import com.lucascauthen.uschat.MainActivity;
 import com.lucascauthen.uschat.R;
 
 import java.util.List;
@@ -32,11 +34,19 @@ public class FriendsViewAdapter extends RecyclerView.Adapter<FriendsViewAdapter.
     }
 
     @Override
-    public void onBindViewHolder(FriendViewHolder holder, int position) {
+    public void onBindViewHolder(FriendViewHolder holder, final int position) {
         holder.friendName.setText(friends.get(position).getName());
         holder.friendshipStatus.setText(friends.get(position).getFriendshipStatus());
         //TODO: Change to actually getting an image for the person
         holder.friendPhoto.setImageResource(R.drawable.ic_action_person_outline);
+        ((ImageButton)holder.friendSettingButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity mainActivity = (MainActivity) v.getContext();
+                ((FriendsFragment)mainActivity.getSupportFragmentManager().findFragmentById(mainActivity.getFriendFragmentId()))
+                        .onPersonSettingsRequest(position); //This is not a typo, both person and friend use this call
+            }
+        });
     }
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {

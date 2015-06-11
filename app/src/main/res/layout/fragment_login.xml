@@ -56,13 +56,13 @@
                         android:id="@+id/login_error_group"></LinearLayout>
 
                     <EditText android:id="@+id/login_form_email" android:layout_width="match_parent"
-                        android:layout_height="wrap_content" android:hint="@string/prompt_email"
+                        android:layout_height="wrap_content" android:hint="@string/prompt_username"
                         android:inputType="textEmailAddress" android:maxLines="1"
                         android:singleLine="true"
                         android:layout_marginBottom="10dp"
                         android:textColorHint="@color/text_color_light"
                         android:textColor="@color/text_color_light"
-                        android:text="lucascauthen@gmail.com" />
+                        android:text="lucas" />
 
                     <EditText android:id="@+id/login_form_password" android:layout_width="match_parent"
                         android:layout_height="wrap_content" android:hint="@string/prompt_password"

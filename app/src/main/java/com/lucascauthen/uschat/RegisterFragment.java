@@ -105,6 +105,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
 
     public void register() {
         //Variables related to the testing of a successful register
+        String username = String.valueOf(((EditText) getActivity().findViewById(R.id.register_username)).getText());
         String email = String.valueOf(((EditText) getActivity().findViewById(R.id.register_email)).getText());
         String emailAgain = String.valueOf(((EditText) getActivity().findViewById(R.id.register_email_again)).getText());
         String password = String.valueOf(((EditText) getActivity().findViewById(R.id.register_password)).getText());
@@ -130,7 +131,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
             ((Button)getActivity().findViewById(R.id.register_button)).setEnabled(true);
         } else {
             ParseUser user = new ParseUser();
-            user.setUsername(email);
+            user.setUsername(username);
+            user.setEmail(email);
             user.setPassword(password);
             user.signUpInBackground(new SignUpCallback() {
                 public void done(ParseException e) {

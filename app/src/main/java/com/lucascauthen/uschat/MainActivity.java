@@ -1,6 +1,7 @@
 package com.lucascauthen.uschat;
 
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -10,10 +11,13 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+
+import com.parse.ParseUser;
 
 
 public class MainActivity extends AppCompatActivity implements CameraFragment.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener, FriendsFragment.OnFragmentInteractionListener {
@@ -161,5 +165,18 @@ public class MainActivity extends AppCompatActivity implements CameraFragment.On
         public static final int HOME = 0;
         public static final int CAMERA = 1;
         public static final int FRIENDS = 2;
+    }
+    public void logout() {
+        ParseUser.logOut();
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+    public int getFriendFragmentId() {
+        if(friendsFragment != null) {
+            return friendsFragment.getId();
+        }
+        Log.d("MainActivity", "Trying to access the FriendFragment but it has not been created!");
+        return 0;
     }
 }

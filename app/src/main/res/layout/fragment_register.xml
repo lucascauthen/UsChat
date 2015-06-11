@@ -54,6 +54,17 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:id="@+id/register_error_group"></LinearLayout>
+                        <EditText
+                            android:id="@+id/register_username"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/register_username_hint"
+                            android:inputType="textPersonName"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:layout_marginBottom="10dp"
+                            android:textColorHint="@color/text_color_light"
+                            android:textColor="@color/text_color_light" />
 
                         <EditText android:id="@+id/register_email" android:layout_width="match_parent"
                             android:layout_height="wrap_content" android:hint="@string/prompt_email"

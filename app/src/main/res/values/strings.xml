@@ -3,6 +3,7 @@
     <!-- Strings related to login -->
 
     <string name="prompt_email">Email</string>
+    <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>
     <string name="prompt_email_again">Retype Email</string>
     <string name="prompt_password_again">Retype Password</string>
@@ -39,4 +40,13 @@
     <integer name="config_mediumAnimTime">500</integer>
     <string name="title_activity_main">MainActivity</string>
     <string name="camera_log_tag">camera</string>
+    <string name="people_search_hint">Search for new friends...</string>
+    <string name="friends_list_title">Friends List</string>
+    <string name="register_username_hint">Username</string>
+    <string name="friendship_status_not_friends">Not friends.</string>
+    <string name="dialog_remove_friend">Remove Friend</string>
+    <string name="dialog_add_friend">Add Friend</string>
+    <string name="dialog_accept_request">Accept Friend Request</string>
+    <string name="dialog_reject_request">Reject Friend Request</string>
+    <string name="dialog_cancel_request">Cancel Sent Request</string>
 </resources>
