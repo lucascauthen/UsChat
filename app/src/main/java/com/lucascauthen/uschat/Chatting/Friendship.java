@@ -6,6 +6,7 @@ package com.lucascauthen.uschat.Chatting;
 public class Friendship {
     private final String name;
     private final FriendshipStatus status;
+    private final String from;
 
     public String getName() {
         return name;
@@ -16,8 +17,13 @@ public class Friendship {
     }
 
 
-    public Friendship(String name, FriendshipStatus status) {
+    public String getFrom() {
+        return from;
+    }
+
+    public Friendship(String name, String from, FriendshipStatus status) {
         this.name = name;
         this.status = status;
+        this.from = from;
     }
 }

@@ -49,4 +49,7 @@
     <string name="dialog_accept_request">Accept Friend Request</string>
     <string name="dialog_reject_request">Reject Friend Request</string>
     <string name="dialog_cancel_request">Cancel Sent Request</string>
+    <string name="database_friendship_status_requested">requested</string>
+    <string name="database_friendship_status_friends">friends</string>
+    <string name="database_friendship_status_notfriends">notFriends</string>
 </resources>

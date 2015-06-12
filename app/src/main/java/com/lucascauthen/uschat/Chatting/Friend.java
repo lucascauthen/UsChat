@@ -30,7 +30,10 @@ public class Friend {
     public boolean getIsStatusLoaded() {
         return isStatusLoaded;
     }
-    public String getFriendshipStatus() {
+    public FriendshipStatus getFriendshipStatus() {
+        return this.friendshipStatus;
+    }
+    public String getFriendshipStatusString() {
         if(isStatusLoaded) {
             return friendshipStatus.toString();
         } else {

@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,7 +35,7 @@ public class FriendsViewAdapter extends RecyclerView.Adapter<FriendsViewAdapter.
     @Override
     public void onBindViewHolder(FriendViewHolder holder, final int position) {
         holder.friendName.setText(friends.get(position).getName());
-        holder.friendshipStatus.setText(friends.get(position).getFriendshipStatus());
+        holder.friendshipStatus.setText(friends.get(position).getFriendshipStatusString());
         //TODO: Change to actually getting an image for the person
         holder.friendPhoto.setImageResource(R.drawable.ic_action_person_outline);
         ((ImageButton)holder.friendSettingButton).setOnClickListener(new View.OnClickListener() {

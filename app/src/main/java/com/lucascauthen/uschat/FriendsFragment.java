@@ -26,11 +26,14 @@ import com.lucascauthen.uschat.Chatting.Friend;
 import com.lucascauthen.uschat.Chatting.Friendship;
 import com.lucascauthen.uschat.Chatting.FriendshipStatus;
 import com.lucascauthen.uschat.Chatting.Person;
-import com.parse.FindCallback;
+import com.lucascauthen.uschat.Events.Task;
+import com.lucascauthen.uschat.Events.TaskListener;
+import com.parse.DeleteCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,11 +94,9 @@ public class FriendsFragment extends Fragment {
             }
         });
         if(!isStarted) {
-            refreshItems();
-            showFriends = false;
-            refreshItems();
-            showFriends = true;
-            isStarted = false;
+            loadPersonsFromCloud(null); //Null to prevent the view from being updated twice
+            loadFriendsFromCloud();
+            isStarted = true;
         }
 
 
@@ -171,55 +172,88 @@ public class FriendsFragment extends Fragment {
         }
     }
     public void refreshItems() {
-        //Determines if it should show persons for friends
         if(showFriends) {
-            getFriendsFromCloud();
+            loadFriendsFromCloud();
         } else {
-            getPersonsFromCloud();
+            loadPersonsFromCloud();
         }
     }
-    public void getFriendsFromCloud() {
-        //TODO: Change this function to return objects from parse:
+    public void loadFriendsFromCloud(TaskListener listener) {
         friendList = new ArrayList<Friend>();
-
-        //Stops the loading...
-        onItemsLoadComplete();
-    }
-    public void onItemsLoadComplete() {
-        getFriendshipsFromCloud();
-        if(showFriends) {
-            updateFriendsFriendshipStatus();
-        } else {
-            updatePersonsFriendshipStatus();
-        }
-        loadRecyclerView();
-        refreshLayout.setRefreshing(false);
-    }
-
-    public void getPersonsFromCloud() {
-        personList = new ArrayList<Person>();
-        final ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereNotEqualTo("username", ParseUser.getCurrentUser().getUsername());
-        query.findInBackground(new FindCallback<ParseUser>() {
-            public void done(List<ParseUser> objects, ParseException e) {
-                if (e == null) {
-                    for (ParseUser user : objects) {
-                        personList.add(new Person(user.getString("username")));
+        new Task(listener, new Runnable() {
+            @Override
+            public void run() {
+                loadFriendshipsFromCloud(new TaskListener() {
+                    @Override
+                    public void finished(boolean result) {
+                        for(Friendship friendship : friendShipList) {
+                            friendList.add(new Friend(friendship.getName(), friendship.getStatus()));
+                        }
                     }
-                    //TODO: Kill this
-                    personList.add(new Person("Test1", FriendshipStatus.FRIENDS));
-                    personList.add(new Person("Test2", FriendshipStatus.REQUEST_RECIEVED));
-                    personList.add(new Person("Test3", FriendshipStatus.REQUEST_SENT));
-                } else {
-                    Log.d("friends", "Something went wrong retrieving persons: " + e.getMessage());
-                }
-                onItemsLoadComplete();
+                });
+            }
+        }).execute();
+    }
+    public void loadFriendsFromCloud() {
+        loadFriendsFromCloud(new TaskListener() {
+            @Override
+            public void finished(boolean result) {
+                onFriendsLoaded();
             }
         });
     }
+    public void onFriendsLoaded() {
+        onLoadComplete();
+        loadFriendshipsFromCloud();
+        loadRecyclerView();
+    }
+    public void onLoadComplete() {
+        refreshLayout.setRefreshing(false);
+    }
+
+    public void loadPersonsFromCloud(TaskListener taskListener) {
+        personList = new ArrayList<Person>();
+        final ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereNotEqualTo("username", ParseUser.getCurrentUser().getUsername());
+        new Task(taskListener, new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    List<ParseUser> list = query.find();
+                    for (ParseUser user : list) {
+                        personList.add(new Person(user.getString("username")));
+                    }
+                } catch (ParseException e) {
+                    Log.d("friends", "Something went wrong retrieving persons: " + e.getMessage());
+                }
+            }
+        }).execute();
+    }
+    public void loadPersonsFromCloud() {
+        loadPersonsFromCloud(new TaskListener() {
+            @Override
+            public void finished(boolean result) {
+                onPersonsLoaded();
+            }
+        });
+    }
+
+    public void onPersonsLoaded() { //This is the default result after a load -> the view gets updated
+        onLoadComplete();
+        loadFriendshipsFromCloud();
+        loadRecyclerView();
+    }
     //TODO: Rename to something more descriptive. It don't just 'get' the friendships from the cloud
     //Gets a list of ParseObjects from the cloud with all of the friendships between people and the current user
-    public void  getFriendshipsFromCloud() {
+    public void loadFriendshipsFromCloud() {
+        loadFriendshipsFromCloud(new TaskListener() {
+            @Override
+            public void finished(boolean result) {
+                onFriendshipsLoaded();
+            }
+        });
+    }
+    public void loadFriendshipsFromCloud(TaskListener listener) {
         final ParseQuery<ParseObject> toQuery = ParseQuery.getQuery("FriendRequest");
         final ParseQuery<ParseObject> fromQuery = ParseQuery.getQuery("FriendRequest");
 
@@ -229,54 +263,56 @@ public class FriendsFragment extends Fragment {
         List<ParseQuery<ParseObject>> queries = new ArrayList<ParseQuery<ParseObject>>();
         queries.add(toQuery);
         queries.add(fromQuery);
-        ParseQuery<ParseObject> mainQuery = ParseQuery.or(queries);
-        mainQuery.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> results, ParseException e) {
-                if (e == null) {
-                    updateFriendShipStatuses(results);
-                } else {
+        final ParseQuery<ParseObject> mainQuery = ParseQuery.or(queries);
+        new Task(listener, new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    List<ParseObject> list = mainQuery.find();
+                    friendShipList = new ArrayList<Friendship>();
+                    for(ParseObject friendship : list) {
+                        String otherPerson = ""; //Person in a friendship that is not the current user
+                        String from = ""; //Person who sent the request
+                        String friendshipStatus = friendship.getString("type");
+                        //If the name in the requestTo field is not the current user then it is the other person
+                        boolean isFrom;
+                        if(ParseUser.getCurrentUser().getUsername().equals(friendship.getString("requestTo"))) {
+                            otherPerson = friendship.getString("requestFrom");
+                            from = otherPerson;
+                            isFrom = true;
+                        } else { //This means the currentUser's name IS in the requestTo field, so we want the requestFrom field (because it has the other person)
+                            otherPerson = friendship.getString("requestTo");
+                            from = ParseUser.getCurrentUser().getUsername();
+                            isFrom = false;
+                        }
+
+                        friendShipList.add(new Friendship(otherPerson, from, statusFactory(friendshipStatus, isFrom)));
+                    }
+                } catch (ParseException e) {
                     Log.d("friends", "Something went wrong loading friendship statuses: " + e.getMessage());
                 }
             }
-        });
+        }).execute();
     }
-    //Formats the information from the ParseObjects into the friendships arrayList
-    public void updateFriendShipStatuses(List<ParseObject> list) {
-        friendShipList = new ArrayList<Friendship>();
-        for(ParseObject friendship : list) {
-            String otherPerson = ""; //Person in a friendship that is not the current user
-            String friendshipStatus = friendship.getString("type");
-            //If the name in the requestTo field is not the current user then it is the other person
-            boolean isFrom;
-            if(friendship.getString("requestTo") != ParseUser.getCurrentUser().getUsername()) {
-                otherPerson = friendship.getString("requestTo");
-                isFrom = false;
-            } else { //This means the currentUser's name IS in the requestTo field, so we want the requestFrom field (because it has the other person)
-                otherPerson = friendship.getString("requestFrom");
-                isFrom = true;
-            }
-
-            friendShipList.add(new Friendship(otherPerson, statusFactory(friendshipStatus, isFrom)));
-        }
-        onUpdateFriendShipStatusesComplete();
+    public void onFriendshipsLoaded() {
+        updateFriendsFriendshipStatus();
+        updatePersonsFriendshipStatus();
+        loadRecyclerView();
     }
     public FriendshipStatus statusFactory(String status, boolean isFrom) {
-        if(status.equals("requested")) {
+        if(status.equals(getString(R.string.database_friendship_status_requested))) {
             if(isFrom) {
-                return FriendshipStatus.REQUEST_SENT;
+                return FriendshipStatus.REQUEST_RECIEVED;
             }
-            return FriendshipStatus.REQUEST_RECIEVED;
-        } else if(status.equals("friends")) {
+            return FriendshipStatus.REQUEST_SENT;
+        } else if(status.equals(getString(R.string.database_friendship_status_friends))) {
             return FriendshipStatus.FRIENDS;
-        } else if(status.equals("notFriends")) {
+        } else if(status.equals(getString(R.string.database_friendship_status_notfriends))) {
             return FriendshipStatus.NOT_FRIENDS;
         }
         return FriendshipStatus.NOT_FRIENDS; //default
     }
 
-    public void onUpdateFriendShipStatusesComplete() {
-        //TODO: Work on this
-    }
     public void updateFriendsFriendshipStatus() {
         //Update friendship statuses for friends
         for(Friendship friendship : friendShipList) {
@@ -294,6 +330,7 @@ public class FriendsFragment extends Fragment {
             for(Friendship friendship : friendShipList) {
                 if(person.getName().equals(friendship.getName())) {
                     person.setFriendShipStatus(friendship.getStatus());
+                    person.setRequestFrom(friendship.getFrom());
                 }
             }
             //For any person that does not have a status, set it to not friends
@@ -385,17 +422,81 @@ public class FriendsFragment extends Fragment {
     }
     public void requestRemoveFriend(int personIndex) {
         Log.d("friends", "Requesting to remove " + personList.get(personIndex).getName());
+        Person person = personList.get(personIndex);
+        //TODO: Fix this.. Its kinda inefficient
+        if(person.getName().equals(person.getRequestFrom())) { //This means the person was sent a request
+            deleteFriendRequest(person.getName(), ParseUser.getCurrentUser().getUsername());
+        } else {
+            deleteFriendRequest(ParseUser.getCurrentUser().getUsername(), person.getName());
+        }
     }
     public void requestCancelFriendRequest(int personIndex) {
         Log.d("friends", "Requesting to cancel request to " + personList.get(personIndex).getName());
+        Log.d("friends", "Requesting to reject request from " + personList.get(personIndex).getName());
+        deleteFriendRequest(ParseUser.getCurrentUser().getUsername() ,personList.get(personIndex).getName() );
     }
     public void requestAcceptFriendRequest(int personIndex) {
         Log.d("friends", "Requesting to accept request from " + personList.get(personIndex).getName());
+        requestRejectFriendRequest(personIndex);
+        ParseObject newFriend = new ParseObject("FriendRequest");
+        newFriend.put("requestFrom", ParseUser.getCurrentUser().getUsername());
+        newFriend.put("requestTo", personList.get(personIndex).getName());
+        newFriend.put("type", getString(R.string.database_friendship_status_friends));
+        newFriend.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                refreshItems();
+            }
+        });
     }
     public void requestRejectFriendRequest(int personIndex) {
         Log.d("friends", "Requesting to reject request from " + personList.get(personIndex).getName());
+        deleteFriendRequest(personList.get(personIndex).getName(), ParseUser.getCurrentUser().getUsername());
+    }
+    public void deleteFriendRequest(String from, String to) {
+        final ParseQuery<ParseObject> query = ParseQuery.getQuery("FriendRequest");
+        query.whereEqualTo("requestTo", to);
+        query.whereEqualTo("requestFrom", from);
+        new Task(null, new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    List<ParseObject> list = query.find();
+                    if(!list.isEmpty()) {
+                        ParseObject request = list.get(0);
+                        request.deleteInBackground(new DeleteCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                refreshItems();
+                            }
+                        });
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).execute();
     }
     public void requestAddFriend(int personIndex) {
         Log.d("friends", "Requesting to add " + personList.get(personIndex).getName());
+        ParseObject newFriend = new ParseObject("FriendRequest");
+        newFriend.put("requestFrom", ParseUser.getCurrentUser().getUsername());
+        newFriend.put("requestTo", personList.get(personIndex).getName());
+        newFriend.put("type", getString(R.string.database_friendship_status_requested));
+        newFriend.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                refreshItems();
+            }
+        });
+    }
+    public List<Friend> getFriends() {
+        List<Friend> realFriends = new ArrayList<Friend>();
+        for(Friend friend : friendList) {
+            if(friend.getFriendshipStatus().equals(FriendshipStatus.FRIENDS)) {
+                realFriends.add(friend);
+            }
+        }
+        return realFriends;
     }
 }

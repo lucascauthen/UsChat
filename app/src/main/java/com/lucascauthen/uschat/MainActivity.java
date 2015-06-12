@@ -17,10 +17,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.lucascauthen.uschat.Chatting.Friend;
 import com.parse.ParseUser;
 
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements CameraFragment.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener, FriendsFragment.OnFragmentInteractionListener {
+
+public class MainActivity extends AppCompatActivity implements CameraFragment.OnRequestFriendsList, HomeFragment.OnFragmentInteractionListener, FriendsFragment.OnFragmentInteractionListener {
 
     private final int NUM_PAGES = 3;
     private ViewPager pager;
@@ -135,6 +138,11 @@ public class MainActivity extends AppCompatActivity implements CameraFragment.On
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public List<Friend> getFriends() {
+        return friendsFragment.getFriends();
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
