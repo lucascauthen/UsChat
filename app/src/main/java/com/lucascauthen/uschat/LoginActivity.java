@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
 
         //Parse initialization
 
-        Parse.initialize(this, getString(R.string.parse_app_id), getString(R.string.parse_client_id));
+        Parse.initialize(this, getString(R.string.parse_app_id), getString(R.string.parse_client_key));
         ParseUser currentUser = ParseUser.getCurrentUser();
 
         if(currentUser != null) {

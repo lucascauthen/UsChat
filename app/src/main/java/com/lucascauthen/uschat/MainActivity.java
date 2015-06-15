@@ -18,6 +18,9 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.lucascauthen.uschat.Chatting.Friend;
+import com.parse.LogOutCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import java.util.List;
