@@ -1,21 +1,33 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="com.lucascauthen.uschat.CameraFragment">
-
-    <!-- TODO: Update blank fragment layout -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
     <FrameLayout
-        android:id="@+id/camera_preview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="1"
+        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+        android:layout_height="match_parent" tools:context="com.lucascauthen.uschat.presentation.view.fragments.old.CameraFragment">
 
-        />
-    <Button
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/button_capture"
-        android:layout_gravity="center_horizontal|bottom"
-        android:background="@drawable/camera_button"/>
-        />
+        <!-- TODO: Update blank fragment layout -->
+        <FrameLayout
+            android:id="@+id/camera_preview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
 
-</FrameLayout>
+            />
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/camera_capture_button"
+            android:layout_gravity="center_horizontal|bottom"
+            android:background="@drawable/camera_button"/>
+            />
+
+    </FrameLayout>
+    <ProgressBar
+        android:id="@+id/camera_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:indeterminate="true"
+        android:visibility="gone"
+        android:background="#ccffffff"
+        />
+</RelativeLayout>

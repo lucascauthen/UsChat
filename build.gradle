@@ -3,9 +3,14 @@
 buildscript {
     repositories {
         jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.2.3'
+        //Used for dagger 2
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+        //Used for retro lambda
+        classpath 'me.tatarka:gradle-retrolambda:3.1.0'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -15,5 +20,6 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        mavenCentral()
     }
 }

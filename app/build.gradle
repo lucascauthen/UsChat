@@ -1,4 +1,8 @@
 apply plugin: 'com.android.application'
+//For Dagger 2
+apply plugin: 'com.neenbedankt.android-apt'
+//For Retrolambda
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 22
@@ -17,14 +21,60 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    //For Retrolambda
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 
 dependencies {
     compile 'com.android.support:support-v4:22.0.0'
     compile 'com.android.support:appcompat-v7:22.1.1'
+
+    //Parse
     compile 'com.parse.bolts:bolts-android:1.+'
     compile fileTree(dir: 'libs', include: 'Parse-*.jar')
+
+    //UI Specific
     compile 'com.android.support:cardview-v7:21.0.+'
     compile 'com.android.support:recyclerview-v7:22.0.+'
+
+    //Dagger 2 stuff
+    compile 'com.google.dagger:dagger:2.0'
+    apt 'com.google.dagger:dagger-compiler:2.0'
+    provided 'org.glassfish:javax.annotation:10.0-b28'
+
+    //Testing stuff
+    testCompile 'junit:junit:4.12'
+    testCompile "org.mockito:mockito-core:1.9.5"
+
+    //RxJava
+    compile 'io.reactivex:rxjava:1.0.10'
+
+    //RxAndroid
+    compile 'io.reactivex:rxandroid:0.25.0'
+
+    //Butterknife for injecting views
+    compile 'com.jakewharton:butterknife:6.1.0'
+
+
+
+}
+
+String java8 = getJavaVersion(8)
+String java7 = getJavaVersion(7)
+retrolambda {
+    jdk java8 //have tried with JAVA8_HOME
+    oldJdk java7 //have tried with JAVA6_HOME
+    javaVersion JavaVersion.VERSION_1_7 //have matched the above with VERSION_1_6
+}
+
+String getJavaVersion(Integer v) {
+    def sout = new StringBuffer()
+    def proc = "/usr/libexec/java_home -v 1.$v".execute()
+    proc.consumeProcessOutput(sout, new StringBuffer())
+    proc.waitForOrKill(1000)
+    return sout.toString().replace("\n", "").replace("\r", "")
 }
