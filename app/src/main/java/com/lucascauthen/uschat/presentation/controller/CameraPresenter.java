@@ -1,6 +1,8 @@
 package com.lucascauthen.uschat.presentation.controller;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.util.Log;
 import android.widget.FrameLayout;
@@ -29,11 +31,16 @@ public class CameraPresenter implements Presenter {
 
     private static final NullCameraCrudView NULL_VIEW = new NullCameraCrudView();
     private CameraCrudView view = NULL_VIEW;
+    private Bitmap lastImage = null;
 
     private Camera.PictureCallback pictureCallback = new Camera.PictureCallback() {
         @Override
-        public void onPictureTaken(byte[] data, Camera camera) {
-
+        public void onPictureTaken(byte[] data, Camera camera) { //Currently in the background executor
+            lastImage = BitmapFactory.decodeByteArray(data, 0, data.length);
+            foregroundExecutor.execute(() -> {
+                view.hideLoading();
+                view.notifyCaptureSuccess(lastImage);
+            });
         }
     };
 
@@ -64,17 +71,7 @@ public class CameraPresenter implements Presenter {
         view.disableControls();
         backgroundExecutor.execute(() -> {
             camera.stopPreview();
-            //camera.takePicture(null, null, pictureCallback);
-            try {
-                Thread.sleep(3000);
-                camera.startPreview(); //Remember to restart preview
-                foregroundExecutor.execute(() -> {
-                    view.hideLoading();
-                    view.enableControls();
-                });
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            camera.takePicture(null, null, pictureCallback);
         });
     }
 
@@ -131,7 +128,7 @@ public class CameraPresenter implements Presenter {
 
         void disableControls();
 
-        void notifyCaptureSuccess(); //TODO: Might pass some information about the capture back to the view
+        void notifyCaptureSuccess(Bitmap image); //TODO: Might pass some information about the capture back to the view
 
         void notifyCaptureFailure(String message);
 
@@ -167,7 +164,7 @@ public class CameraPresenter implements Presenter {
         }
 
         @Override
-        public void notifyCaptureSuccess() {
+        public void notifyCaptureSuccess(Bitmap image) {
 
         }
 

@@ -56,4 +56,6 @@
     <string name="successful_login">Login successful!</string>
     <string name="regist_success_message">You are successfully registered! You can now login.</string>
     <string name="title_activity_picture_preview">PicturePreviewActivity</string>
+    <string name="picture_preview_reject">Reject</string>
+    <string name="picture_preview_accept">Accept</string>
 </resources>

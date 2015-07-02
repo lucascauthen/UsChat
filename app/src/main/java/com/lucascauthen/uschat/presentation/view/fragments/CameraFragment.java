@@ -1,5 +1,7 @@
 package com.lucascauthen.uschat.presentation.view.fragments;
 
+import android.app.Dialog;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.presentation.controller.CameraPresenter;
 import com.lucascauthen.uschat.presentation.view.components.CameraPreview;
+import com.lucascauthen.uschat.presentation.view.dialogs.PicturePreviewDialog;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -34,6 +37,7 @@ public class CameraFragment extends Fragment implements CameraPresenter.CameraCr
 
     //Camera Specific:
     private CameraPreview preview;
+    private Dialog capturePreview;
 
     //Presentation
     private CameraPresenter presenter;
@@ -121,8 +125,9 @@ public class CameraFragment extends Fragment implements CameraPresenter.CameraCr
     }
 
     @Override
-    public void notifyCaptureSuccess() {
-        //TODO: UI changes for a successful capture, possibly a preview dialog
+    public void notifyCaptureSuccess(Bitmap bitmap) {
+        capturePreview = new PicturePreviewDialog(getActivity()).create(bitmap);
+        capturePreview.show();
     }
 
     @Override
