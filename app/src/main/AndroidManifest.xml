@@ -45,10 +45,6 @@
             android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar"
             android:windowSoftInputMode="stateVisible|adjustResize" >
         </activity>
-        <activity
-            android:name=".presentation.view.activities.PicturePreviewActivity"
-            android:label="@string/title_activity_picture_preview" >
-        </activity>
     </application>
 
 </manifest>

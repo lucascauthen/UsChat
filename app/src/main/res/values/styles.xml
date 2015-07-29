@@ -21,9 +21,33 @@
     <style name="RobotoEditTextStyle" parent="android:Widget.EditText">
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
-    <color name="background">#4CAF50</color>
+    <color name="accent_light">#4CAF50</color>
     <color name="accent">#1B5E20</color>
-    <color name="accent_dark">#134216</color>
+    <color name="accent_dark">#0D2E0F</color>
     <color name="text_color_light">#ffffffff</color>
+    <style name="DialogSlideAnimation">
+        <!-- <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item> -->
+        <item name="android:windowEnterAnimation">@anim/fade_in_fast</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_right</item>
+    </style>
+    <!-- Animation for dialog box -->
+    <style name="DialogSlideStyle" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowAnimationStyle">@style/DialogSlideAnimation</item>
+    </style>
+
+
+    <style name="SelectFriendsDialog" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowAnimationStyle">@style/SelectFriendsDialogAnimation</item>
+    </style>
+
+    <style name="SelectFriendsDialogAnimation">
+        <item name="android:windowEnterAnimation">@android:anim/slide_in_left</item>
+        <item name="android:windowExitAnimation">@android:anim/slide_out_right</item>
+    </style>
+
+    <style name="DialogNoAnimation">
+        <item name="android:windowEnterAnimation">@anim/enter</item>
+        <item name="android:windowExitAnimation">@anim/exit</item>
+    </style>
 
 </resources>

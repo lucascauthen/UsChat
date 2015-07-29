@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.lucascauthen.uschat.presentation.view.fragments.old.FriendsFragment"
+    tools:context="com.lucascauthen.uschat.old.FriendsFragment"
     android:background="@color/text_color_light">
 
     <RelativeLayout
@@ -28,7 +28,7 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/search_edit_text"
+            android:id="@+id/friend_search_edit_text"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerInParent="true"
@@ -46,9 +46,9 @@
             android:layout_height="wrap_content"
             android:text="@string/friends_list_title"
             android:id="@+id/friends_list_title_text_view"
-            android:layout_below="@+id/search_edit_text"
-            android:layout_toRightOf="@+id/search_edit_text"
-            android:layout_toEndOf="@+id/search_edit_text"
+            android:layout_below="@+id/friend_search_edit_text"
+            android:layout_toRightOf="@+id/friend_search_edit_text"
+            android:layout_toEndOf="@+id/friend_search_edit_text"
             android:layout_alignParentEnd="false"
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
@@ -58,15 +58,31 @@
             android:textColor="@color/text_color_light"/>
     </RelativeLayout>
     <!-- TODO: Update blank fragment layout -->
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshFriendsList"
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/friend_rv"
+        android:layout_weight="1"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/friend_swipe_refresh"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/friend_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+        </android.support.v4.widget.SwipeRefreshLayout>
+        <ProgressBar
+            android:id="@+id/friend_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:indeterminate="true"
+            android:visibility="gone"
+            android:background="#ccffffff"
             />
-    </android.support.v4.widget.SwipeRefreshLayout>
+
+    </RelativeLayout>
+
 </LinearLayout>

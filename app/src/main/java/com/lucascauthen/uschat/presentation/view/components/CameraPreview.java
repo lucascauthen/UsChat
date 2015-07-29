@@ -3,20 +3,26 @@ package com.lucascauthen.uschat.presentation.view.components;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Point;
 import android.hardware.Camera;
 import android.util.Log;
+import android.view.Display;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.WindowManager;
 
 import com.lucascauthen.uschat.R;
 
 import java.io.IOException;
+import java.util.List;
 
 public class CameraPreview extends SurfaceView {
     private SurfaceHolder holder;
     private Camera camera;
     int curCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
+    private static int HEIGHT;
+
 
     public CameraPreview(Context context, Camera camera) {
         super(context);
@@ -27,6 +33,11 @@ public class CameraPreview extends SurfaceView {
         holder = getHolder();
         // deprecated setting, but required on Android versions prior to 3.0
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        HEIGHT = size.y;
     }
 
 
@@ -42,6 +53,9 @@ public class CameraPreview extends SurfaceView {
                 Camera.Parameters parameters = camera.getParameters();
                 parameters.set("orientation", "portrait");
                 parameters.setRotation(90);
+                List<Camera.Size> sizeList = parameters.getSupportedPictureSizes();
+                int chosenSize = getPictureSizeIndexForHeight(sizeList, HEIGHT);
+                parameters.setPictureSize(sizeList.get(chosenSize).width, sizeList.get(chosenSize).height);
                 camera.setParameters(parameters);
                 camera.setDisplayOrientation(90);
                 camera.startPreview();
@@ -53,6 +67,18 @@ public class CameraPreview extends SurfaceView {
         }
     }
 
+    private int getPictureSizeIndexForHeight(List<Camera.Size> sizeList, int height) {
+        int chosenHeight = -1;
+        for(int i=0; i<sizeList.size(); i++) {
+            if(sizeList.get(i).height < height) {
+                chosenHeight = i-1;
+                if(chosenHeight==-1)
+                    chosenHeight = 0;
+                break;
+            }
+        }
+        return chosenHeight;
+    }
     public void surfaceDestroyed(SurfaceHolder holder) {
         // empty. Take care of releasing the Camera preview in your activity.
     }

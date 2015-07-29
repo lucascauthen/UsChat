@@ -1,0 +1,71 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/text_color_light"
+    android:orientation="vertical"
+    tools:context="com.lucascauthen.uschat.old.FriendsFragment">
+
+    <RelativeLayout
+        android:id="@+id/menuBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="9"
+        android:background="@color/accent_dark"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/send_chat_reject"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="false"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center|right"
+            android:layout_marginRight="16dp"
+            android:background="@null"
+            android:src="@drawable/ic_action_close" />
+
+        <TextView
+            android:id="@+id/send_chat_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentLeft="false"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/send_chat_title"
+            android:textSize="25sp"
+            android:textColor="@color/text_color_light"/>
+
+        <ImageButton
+            android:id="@+id/send_chat_accept"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center|right"
+            android:layout_marginRight="16dp"
+            android:background="@null"
+            android:src="@drawable/ic_action_send"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp">
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/select_friends_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    </RelativeLayout>
+
+</LinearLayout>

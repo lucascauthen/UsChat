@@ -7,7 +7,7 @@ import com.lucascauthen.uschat.data.repository.Repo;
 /**
  * Created by lhc on 6/25/15.
  */
-public class ChatReadThroughCache implements Repo{
+public class ChatReadThroughCache implements Repo<Chat>{
     private final CachingRepo<Chat> firstLevelRepo;
     private final Repo<Chat> secondLevelRepo;
 
@@ -17,18 +17,18 @@ public class ChatReadThroughCache implements Repo{
     }
 
     @Override
-    public void put(Object item) {
+    public void put(Chat item) {
         firstLevelRepo.setIsStale();
-        secondLevelRepo.put((Chat)item);
+        secondLevelRepo.put(item);
     }
 
     @Override
-    public Response get(Request request) {
-        Response<Chat> retVal = null;
-        if(!request.skipCache() && !firstLevelRepo.isStale()) {
-            retVal = firstLevelRepo.get(request);
+    public Response<Chat> get(Request request) {
+        Response<Chat> retVal = null;if(request != null) {
+            if (!request.skipCache() && !firstLevelRepo.isStale()) {
+                retVal = firstLevelRepo.get(request);
+            }
         }
-
         if(retVal == null) {
             retVal = secondLevelRepo.get(request);
             firstLevelRepo.cache(retVal.getValue());
@@ -37,12 +37,12 @@ public class ChatReadThroughCache implements Repo{
     }
 
     @Override
-    public void remove(Object item) {
-        Chat theItem = (Chat)item;
+    public void remove(Chat item) {
+        Chat theItem = item;
     }
 
     @Override
-    public boolean exists(Object item) {
+    public boolean exists(Chat item) {
         return false;
     }
 }

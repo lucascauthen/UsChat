@@ -10,20 +10,18 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Button;
 
 import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.presentation.view.fragments.CameraFragment;
 import com.lucascauthen.uschat.presentation.view.fragments.ChatFragment;
 import com.lucascauthen.uschat.presentation.view.fragments.FriendsFragment;
-import com.lucascauthen.uschat.presentation.view.fragments.old.HomeFragment;
 
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PagerChanger{
 
     private final int NUM_PAGES = 3;
     @InjectView(R.id.main_pager)ViewPager pager;
@@ -43,14 +41,33 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.inject(this);
         //Create the fragments
         chatFragment = ChatFragment.newInstance();
-        cameraFragment = CameraFragment.newInstance();
+        cameraFragment = CameraFragment.newInstance(this);
         friendsFragment = FriendsFragment.newInstance();
 
         pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         pager.setAdapter(pagerAdapter);
 
         //Sets to middle fragment
+        pager.setOffscreenPageLimit(3);
         pager.setCurrentItem(1);
+        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if(position == 0) {//Chat Fragment
+                    chatFragment.onPageSelected(); //Pass message to fragment
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
 
@@ -88,5 +105,11 @@ public class MainActivity extends AppCompatActivity {
         public static final int CHAT = 0;
         public static final int CAMERA = 1;
         public static final int FRIENDS = 2;
+    }
+
+    public void changePage(int pageIndex) {
+        if(pageIndex <= pager.getChildCount()) {
+            pager.setCurrentItem(pageIndex);
+        }
     }
 }

@@ -10,9 +10,14 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.lucascauthen.uschat.R;
+import com.lucascauthen.uschat.presentation.view.dialogs.listeners.OnAcceptListener;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -20,36 +25,41 @@ import butterknife.InjectView;
 /**
  * Created by lhc on 7/2/15.
  */
-public class PicturePreviewDialog {
-    @InjectView(R.id.preview_image_view)ImageView imageView;
-    private final Activity context;
-    public PicturePreviewDialog(Activity context) {
-        this.context = context;
+public class PicturePreviewDialog extends Dialog {
+    private Bitmap image;
+    private NullOnAcceptListener NULL_LISTENER = new NullOnAcceptListener();
+    private OnAcceptListener onAcceptListener = NULL_LISTENER;
+    private ImageView imageView;
+
+    public PicturePreviewDialog(Context context, Bitmap theImage) {
+        super(context, R.style.DialogSlideStyle);
+        this.image = theImage;
+        setContentView(R.layout.dialog_picture_preview);
+        getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        findViewById(R.id.picture_preview_accept).setOnClickListener(view -> {
+            getWindow().getAttributes().windowAnimations = R.style.DialogNoAnimation;
+            onAcceptListener.accept(this);
+        });
+        findViewById(R.id.picture_preview_reject).setOnClickListener(view -> {
+            cancel();
+        });
+        imageView = ((ImageView) findViewById(R.id.preview_image_view));
+        imageView.setImageBitmap(image);
+        imageView.setOnClickListener(view -> {
+            //TODO: Add text to the view
+        });
+
     }
 
-    public Dialog create(Bitmap image) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        // Get the layout inflater
-        LayoutInflater inflater = context.getLayoutInflater();
+    public void setOnAcceptListener(OnAcceptListener onAcceptListener) {
+        this.onAcceptListener = onAcceptListener;
+    }
 
-        // Inflate and set the layout for the dialog
-        // Pass null as the parent view because its going in the dialog layout
-        View v = inflater.inflate(R.layout.dialog_picture_preview, null);
-        ButterKnife.inject(this, v);
-        builder.setView(v)
-                // Add action buttons
-                .setPositiveButton(R.id.picture_preview_accept, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        // sign in the user ...
-                    }
-                })
-                .setNegativeButton(R.string.picture_preview_reject, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        this.imageView.setImageBitmap(image);
-        return builder.create();
+    private static class NullOnAcceptListener implements OnAcceptListener {
+
+        @Override
+        public void accept(Dialog dialog) {
+            dialog.cancel();
+        }
     }
 }

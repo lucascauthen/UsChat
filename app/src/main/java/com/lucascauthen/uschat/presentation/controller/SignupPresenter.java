@@ -15,7 +15,7 @@ import rx.subjects.BehaviorSubject;
 /**
  * Created by lhc on 6/26/15.
  */
-public class SignupPresenter implements Presenter {
+public class SignupPresenter  {
 
 
     private final Scheduler backgroundScheduler;
@@ -207,18 +207,4 @@ public class SignupPresenter implements Presenter {
         }
     }
 
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void destroy() {
-
-    }
 }

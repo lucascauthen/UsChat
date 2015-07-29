@@ -3,7 +3,7 @@
     android:layout_width="match_parent">
     <FrameLayout
         xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-        android:layout_height="match_parent" tools:context="com.lucascauthen.uschat.presentation.view.fragments.old.CameraFragment">
+        android:layout_height="match_parent" tools:context="com.lucascauthen.uschat.old.CameraFragment">
 
         <!-- TODO: Update blank fragment layout -->
         <FrameLayout

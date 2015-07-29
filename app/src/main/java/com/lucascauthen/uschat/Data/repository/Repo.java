@@ -1,6 +1,9 @@
 package com.lucascauthen.uschat.data.repository;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
 
 /**
  * Created by lhc on 6/25/15.
@@ -18,9 +21,17 @@ public interface Repo<T> {
 
     class Request {
         private final boolean skipCache;
+        private List<String> conditions = new ArrayList<>();
 
-        public Request(boolean skipCache) {
+        public Request(boolean skipCache, String... conditions) {
             this.skipCache = skipCache;
+            for(String condition : conditions) {
+                this.conditions.add(condition);
+            }
+        }
+        public Request(boolean skipCache, List<String> conditions) {
+            this.skipCache = skipCache;
+            this.conditions = conditions;
         }
 
         public boolean skipCache() {
@@ -43,14 +54,19 @@ public interface Repo<T> {
         public int hashCode() {
             return (skipCache ? 1 : 0);
         }
+
+        public List<String> getConditions() {
+            return conditions;
+        }
+
     }
 
     class Response<T> {
-        private Collection<T> responses;
+        private List<T> responses;
         private boolean isCachedData;
 
-        public Response(Collection<T> chats, boolean isCachedData) {
-            this.responses = chats;
+        public Response(List<T> items, boolean isCachedData) {
+            this.responses = items;
             this.isCachedData = isCachedData;
         }
 
@@ -58,7 +74,7 @@ public interface Repo<T> {
             return isCachedData;
         }
 
-        public Collection<T> getValue() {
+        public List<T> getValue() {
             return responses;
         }
     }

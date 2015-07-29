@@ -4,9 +4,11 @@ import com.lucascauthen.uschat.data.entities.Chat;
 import com.lucascauthen.uschat.data.entities.Person;
 import com.lucascauthen.uschat.data.repository.CachingRepo;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -33,13 +35,21 @@ public class InMemoryPersonRepo implements CachingRepo<Person> {
     }
 
     @Override
-    public void put(Person item) {
+    public void put(Person item) { // This can only be used to update a person's friend list
         throw new RuntimeException("Not applicable");
     }
 
     @Override
     public Response<Person> get(Request request) {
-        return new Response<>(Collections.unmodifiableCollection(items), true);
+        List<Person> result = new ArrayList<>();
+        for(String query : request.getConditions()) {
+            for (Person person : items) {
+                if (person.getName().contains(query)) {
+                    result.add(person);
+                }
+            }
+        }
+        return new Response<>(Collections.unmodifiableList(result), true);
     }
 
     @Override

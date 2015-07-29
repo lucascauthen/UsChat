@@ -39,7 +39,7 @@ public class PersonReadThroughCache implements Repo<Person> {
 
     @Override
     public void remove(Person item) {
-        Person theItem = item;
+        throw new RuntimeException("Not applicable");
     }
 
     @Override

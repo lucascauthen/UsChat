@@ -6,10 +6,18 @@ import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.util.Log;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
+import com.lucascauthen.uschat.data.entities.Person;
 import com.lucascauthen.uschat.presentation.view.components.CameraPreview;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 import dagger.Provides;
@@ -18,7 +26,7 @@ import rx.Scheduler;
 /**
  * Created by lhc on 6/25/15.
  */
-public class CameraPresenter implements Presenter {
+public class CameraPresenter {
     private final Scheduler backgroundScheduler;
     private final Scheduler foregroundScheduler;
     private final Executor backgroundExecutor;
@@ -32,11 +40,16 @@ public class CameraPresenter implements Presenter {
     private static final NullCameraCrudView NULL_VIEW = new NullCameraCrudView();
     private CameraCrudView view = NULL_VIEW;
     private Bitmap lastImage = null;
+    private byte[] lastImageRaw = null;
 
     private Camera.PictureCallback pictureCallback = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) { //Currently in the background executor
+            camera.stopPreview();
+            lastImageRaw = data;
             lastImage = BitmapFactory.decodeByteArray(data, 0, data.length);
+            Log.d("UsChat", "Before width: " + lastImage.getWidth());
+            Log.d("UsChat", "Before height: " + lastImage.getHeight());
             foregroundExecutor.execute(() -> {
                 view.hideLoading();
                 view.notifyCaptureSuccess(lastImage);
@@ -50,12 +63,15 @@ public class CameraPresenter implements Presenter {
         this.backgroundExecutor = backgroundExecutor;
         this.foregroundExecutor = foregroundExecutor;
     }
+
     public void attachView(CameraCrudView view) {
         this.view = view;
     }
+
     public void detachView() {
         this.view = NULL_VIEW;
     }
+
     public void onDoubleTap() {
         view.showLoading();
         backgroundExecutor.execute(() -> {
@@ -70,7 +86,6 @@ public class CameraPresenter implements Presenter {
         view.showLoading();
         view.disableControls();
         backgroundExecutor.execute(() -> {
-            camera.stopPreview();
             camera.takePicture(null, null, pictureCallback);
         });
     }
@@ -102,6 +117,11 @@ public class CameraPresenter implements Presenter {
         preview.reloadPreview(camera);
     }
 
+    public void resetCameraAfterCapture() {
+        preview.reloadPreview(camera);
+        view.enableControls();
+        view.hideLoading();
+    }
 
     public void onPause() {
         camera.stopPreview();
@@ -112,7 +132,7 @@ public class CameraPresenter implements Presenter {
     public void onResume() {
         view.showLoading();
         backgroundExecutor.execute(() -> {
-            if(camera == null) {
+            if (camera == null) {
                 camera = getCameraInstance();
             }
             preview.reloadPreview(camera);
@@ -122,6 +142,54 @@ public class CameraPresenter implements Presenter {
         });
     }
 
+    public void updateBitmap(Bitmap newBitmap) {
+        this.lastImage = newBitmap;
+    }
+
+    private byte[] convertToPNG() {
+        if (lastImage != null) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            lastImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            return stream.toByteArray();
+        } else {
+            return null;
+        }
+    }
+
+    public void sendChat(List<String> names) {
+        backgroundExecutor.execute(() -> {
+            if (lastImageRaw != null) {
+                ParseFile file = new ParseFile(lastImageRaw);
+                file.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e != null) {
+                            view.sendUpdateMessage(e.getMessage());
+                            e.printStackTrace();
+                        } else {
+                            //view.sendUpdateMessage("File saved successfully!");
+                            ParseObject chat = new ParseObject("Chats");
+                            chat.put("file", file);
+                            chat.put("to", names);
+                            chat.put("from", Person.getCurrentUser().getName());
+                            chat.saveInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    if(e == null) {
+                                        view.sendUpdateMessage("Image uploaded successfully!");
+                                        view.onSendChat();
+                                    } else {
+                                        view.sendUpdateMessage(e.getMessage());
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    }
 
     public interface CameraCrudView {
         void enableControls();
@@ -135,22 +203,12 @@ public class CameraPresenter implements Presenter {
         void showLoading();
 
         void hideLoading();
+
+        void sendUpdateMessage(String msg);
+
+        void onSendChat();
     }
 
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void destroy() {
-
-    }
     public static class NullCameraCrudView implements CameraCrudView {
 
         @Override
@@ -180,6 +238,16 @@ public class CameraPresenter implements Presenter {
 
         @Override
         public void hideLoading() {
+
+        }
+
+        @Override
+        public void sendUpdateMessage(String msg) {
+
+        }
+
+        @Override
+        public void onSendChat() {
 
         }
     }

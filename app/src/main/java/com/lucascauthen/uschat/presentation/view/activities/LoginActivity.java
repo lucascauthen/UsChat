@@ -2,6 +2,8 @@ package com.lucascauthen.uschat.presentation.view.activities;
 
 import android.annotation.SuppressLint;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
@@ -42,6 +44,9 @@ public class LoginActivity extends AppCompatActivity implements LoginPresenter.L
 
     private Navigator navigator = new Navigator();
 
+    public static Intent getCallingIntent(Context context) {
+        return new Intent(context, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

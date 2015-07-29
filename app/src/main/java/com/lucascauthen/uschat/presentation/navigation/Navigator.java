@@ -3,6 +3,7 @@ package com.lucascauthen.uschat.presentation.navigation;
 import android.content.Context;
 import android.content.Intent;
 
+import com.lucascauthen.uschat.presentation.view.activities.LoginActivity;
 import com.lucascauthen.uschat.presentation.view.activities.MainActivity;
 import com.lucascauthen.uschat.presentation.view.activities.SignupActivity;
 
@@ -23,9 +24,8 @@ public class Navigator {
         }
     }
     public void navigateToLogin(Context context) {
-
+        Intent intentToLaunch = LoginActivity.getCallingIntent(context);
+        context.startActivity(intentToLaunch);
     }
-    public void navigateToChat(Context context) {
 
-    }
 }

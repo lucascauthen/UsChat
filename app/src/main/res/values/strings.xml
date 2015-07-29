@@ -58,4 +58,5 @@
     <string name="title_activity_picture_preview">PicturePreviewActivity</string>
     <string name="picture_preview_reject">Reject</string>
     <string name="picture_preview_accept">Accept</string>
+    <string name="send_chat_title">Select friends...</string>
 </resources>

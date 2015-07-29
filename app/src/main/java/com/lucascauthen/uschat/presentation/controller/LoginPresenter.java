@@ -13,7 +13,7 @@ import rx.subjects.BehaviorSubject;
 /**
  * Created by lhc on 6/25/15.
  */
-public class LoginPresenter implements Presenter {
+public class LoginPresenter {
     private final Scheduler backgroundScheduler;
     private final Scheduler foregroundScheduler;
     private final Executor backgroundExecutor;
@@ -49,6 +49,9 @@ public class LoginPresenter implements Presenter {
                 view.disableLoginControls();
             }
         });
+        if(ParseUser.getCurrentUser() != null) {
+            view.notifyLoginSuccess();
+        }
     }
 
     public void detachView() {
@@ -167,21 +170,6 @@ public class LoginPresenter implements Presenter {
         public String getPassword() {
             return "";
         }
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void destroy() {
 
     }
 }

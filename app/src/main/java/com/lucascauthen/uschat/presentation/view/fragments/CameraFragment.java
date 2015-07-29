@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -17,16 +18,21 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.lucascauthen.uschat.R;
+import com.lucascauthen.uschat.data.entities.Person;
 import com.lucascauthen.uschat.presentation.controller.CameraPresenter;
+import com.lucascauthen.uschat.presentation.view.activities.PagerChanger;
+import com.lucascauthen.uschat.presentation.view.adapters.PersonViewAdapter;
 import com.lucascauthen.uschat.presentation.view.components.CameraPreview;
 import com.lucascauthen.uschat.presentation.view.dialogs.PicturePreviewDialog;
+import com.lucascauthen.uschat.presentation.view.dialogs.SelectFriendsDialog;
+import com.parse.ParseFile;
 
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -34,6 +40,11 @@ import rx.schedulers.Schedulers;
  * Created by lhc on 7/1/15.
  */
 public class CameraFragment extends Fragment implements CameraPresenter.CameraCrudView {
+
+    private static final int[] SELECT_FRIEND_ICON_PACK= {
+        R.drawable.ic_action_add_circle_outline,
+        R.drawable.ic_action_clear
+    };
 
     //Camera Specific:
     private CameraPreview preview;
@@ -46,6 +57,22 @@ public class CameraFragment extends Fragment implements CameraPresenter.CameraCr
     @InjectView(R.id.camera_loading)ProgressBar loading;
 
     private GestureDetector gestureDetector;
+
+    private PersonViewAdapter friendSelectAdapter;
+
+    public void setPagerChanger(PagerChanger pagerChanger) {
+        this.pagerChanger = pagerChanger;
+    }
+
+    private PagerChanger pagerChanger;
+
+    private PersonViewAdapter.PersonViewHolder.InitialStateSetter stateSetter = new PersonViewAdapter.PersonViewHolder.InitialStateSetter() {
+        @Override
+        public int getState(Person person) {
+            return 0;
+        }
+    };
+
 
     public CameraFragment() {
         //Required empty
@@ -64,7 +91,7 @@ public class CameraFragment extends Fragment implements CameraPresenter.CameraCr
             }
         };
         presenter = new CameraPresenter(Schedulers.io(), AndroidSchedulers.mainThread(), backgroundExecutor, foregroundExecutor);
-
+        friendSelectAdapter = new PersonViewAdapter(foregroundExecutor, stateSetter, SELECT_FRIEND_ICON_PACK);
     }
 
     @Nullable
@@ -80,8 +107,14 @@ public class CameraFragment extends Fragment implements CameraPresenter.CameraCr
                 onCaptureClick();
             }
         });
+
         final GestureDetector gesture = new GestureDetector(getActivity(),
                 new GestureDetector.SimpleOnGestureListener() {
+                    @Override
+                    public boolean onSingleTapUp(MotionEvent e) {
+                        return false;
+                    }
+
                     @Override
                     public boolean onDoubleTap(MotionEvent e) {
                         presenter.onDoubleTap();
@@ -96,6 +129,7 @@ public class CameraFragment extends Fragment implements CameraPresenter.CameraCr
             }
         });
         presenter.attachView(this);
+
         return v;
     }
     private boolean touch(MotionEvent e) {
@@ -108,8 +142,10 @@ public class CameraFragment extends Fragment implements CameraPresenter.CameraCr
 
     }
 
-    public static CameraFragment newInstance() {
-        return new CameraFragment();
+    public static CameraFragment newInstance(PagerChanger pagerChanger) {
+        CameraFragment fragment = new CameraFragment();
+        fragment.setPagerChanger(pagerChanger);
+        return fragment;
     }
 
     @Override
@@ -126,10 +162,26 @@ public class CameraFragment extends Fragment implements CameraPresenter.CameraCr
 
     @Override
     public void notifyCaptureSuccess(Bitmap bitmap) {
-        capturePreview = new PicturePreviewDialog(getActivity()).create(bitmap);
-        capturePreview.show();
-    }
+        PicturePreviewDialog dialog = new PicturePreviewDialog(getActivity(), bitmap);
+        dialog.setOnAcceptListener(theDialog -> {
+            SelectFriendsDialog nextDialog = new SelectFriendsDialog(getActivity());
+            nextDialog.attachAdapter(friendSelectAdapter);
+            nextDialog.show();
+            dialog.cancel();
+            nextDialog.setOnSendChatListener(new SelectFriendsDialog.OnSendChatListener() {
+                @Override
+                public void sendChats(List<String> names) {
+                    dialog.cancel();
+                    presenter.sendChat(names);
+                }
+            });
+        });
+        dialog.setOnCancelListener(theDialog -> {
+            presenter.resetCameraAfterCapture();
+        });
 
+        dialog.show();
+    }
     @Override
     public void notifyCaptureFailure(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
@@ -143,6 +195,16 @@ public class CameraFragment extends Fragment implements CameraPresenter.CameraCr
     @Override
     public void hideLoading() {
         loading.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void sendUpdateMessage(String msg) {
+        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSendChat() {
+        pagerChanger.changePage(0);
     }
 
     @Override

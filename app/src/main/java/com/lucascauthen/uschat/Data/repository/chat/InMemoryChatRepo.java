@@ -3,16 +3,18 @@ package com.lucascauthen.uschat.data.repository.chat;
 import com.lucascauthen.uschat.data.entities.Chat;
 import com.lucascauthen.uschat.data.repository.CachingRepo;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
  * Created by lhc on 6/25/15.
  */
 public class InMemoryChatRepo implements CachingRepo<Chat> {
-    private Set<Chat> items = new LinkedHashSet<>();
+    private List<Chat> items = new ArrayList<>();
     private boolean isStale;
 
     @Override
@@ -27,7 +29,7 @@ public class InMemoryChatRepo implements CachingRepo<Chat> {
 
     @Override
     public void cache(Collection<Chat> items) {
-        this.items = new LinkedHashSet<Chat>((LinkedHashSet<Chat>)items);
+        this.items = new ArrayList<>(items);
         isStale = false;
     }
 
@@ -39,7 +41,7 @@ public class InMemoryChatRepo implements CachingRepo<Chat> {
 
     @Override
     public Response get(Request request) {
-        return new Response<Chat>(Collections.unmodifiableCollection(items), true);
+        return new Response<Chat>(Collections.unmodifiableList(items), true);
     }
 
     @Override
