@@ -1,33 +1,49 @@
 package com.lucascauthen.uschat.presentation.controller.base;
 
-import com.lucascauthen.uschat.data.entities.User;
+import android.support.annotation.Nullable;
 
-import java.util.List;
+import com.lucascauthen.uschat.data.entities.User;
+import com.lucascauthen.uschat.data.repository.user.PersonRepo;
 
 /**
  * Created by lhc on 7/30/15.
  */
-public interface BasePersonListViewPresenter extends BaseRecyclerViewPresenter<User, BasePersonListViewPresenter.PersonListAdapter> {
+public interface BasePersonListViewPresenter extends BaseRecyclerViewPresenter<String, BasePersonListViewPresenter.BasePersonListAdapter> {
 
     PersonListCardView.InitialStateSetter getInitialStateSetter();
 
-    List<Integer> getIconPack();
+    void attachAdapter(BasePersonListAdapter adapter, PersonListCardView.InitialStateSetter setter);
 
-    void attachAdapter(PersonListAdapter adapter, PersonListCardView.InitialStateSetter setter, List<Integer> iconPack);
+    void setDisplayType(PersonRepo.Type type);
 
-    interface PersonListAdapter {
-        void notifyDataUpdate();
+    void requestUpdate(BasePersonListAdapter.OnDoneLoadingCallback callback, boolean repoNeedUpdate);
+
+    void updateOnNextRequest();
+
+    void setQuery(@Nullable String query);
+
+    interface BasePersonListAdapter {
+        void notifyDataUpdate(OnDoneLoadingCallback callback);
 
         void attachPresenter(BasePersonListViewPresenter presenter);
+        interface OnDoneLoadingCallback {
+            void done();
+        }
     }
 
     interface PersonListCardView {
 
-        void addActionButton(String key, OnClickActionListener listener);
+        void addActionButton(String key, int iconId, OnClickActionListener listener);
 
         void removeActionButton(String key);
 
-        void changeIconState(String key, int iconPackKey);
+        void changeIconState(String key, int iconId);
+
+        void setStateIcon(int iconId);
+
+        void showLoading();
+
+        void hideLoading();
 
         interface OnClickActionListener {
             void onClick(String person, PersonListCardView view);

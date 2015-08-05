@@ -3,14 +3,14 @@ package com.lucascauthen.uschat.presentation.controller.implmentations;
 import com.lucascauthen.uschat.domain.executor.BackgroundExecutor;
 import com.lucascauthen.uschat.domain.executor.ForegroundExecutor;
 import com.lucascauthen.uschat.domain.scheduler.BackgroundScheduler;
-import com.lucascauthen.uschat.presentation.controller.base.BaseTabViewPresenter;
+import com.lucascauthen.uschat.presentation.controller.base.BasePeopleTabViewPresenter;
 import com.lucascauthen.uschat.presentation.controller.base.BasePagerViewPresenter;
 import com.lucascauthen.uschat.util.NullObject;
 
 /**
  * Created by lhc on 7/31/15.
  */
-public class TabViewPresenter implements BaseTabViewPresenter {
+public class PeopleTabViewPresenter implements BasePeopleTabViewPresenter {
 
     private final BackgroundExecutor backgroundExecutor;
     private final ForegroundExecutor foregroundExecutor;
@@ -21,7 +21,7 @@ public class TabViewPresenter implements BaseTabViewPresenter {
     private static final BaseTabView NULL_VIEW = NullObject.create(BaseTabView.class);
     BaseTabView view = NULL_VIEW;
 
-    public TabViewPresenter(BackgroundExecutor backgroundExecutor, ForegroundExecutor foregroundExecutor, BackgroundScheduler backgroundScheduler) {
+    public PeopleTabViewPresenter(BackgroundExecutor backgroundExecutor, ForegroundExecutor foregroundExecutor, BackgroundScheduler backgroundScheduler) {
         this.backgroundExecutor = backgroundExecutor;
         this.foregroundExecutor = foregroundExecutor;
         this.backgroundScheduler = backgroundScheduler;

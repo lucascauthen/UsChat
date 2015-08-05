@@ -37,7 +37,6 @@ public class LoginActivity extends BaseActivity implements BaseLoginViewPresente
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        getSupportActionBar().hide();
 
         //Butterknife initialization
         ButterKnife.inject(this);

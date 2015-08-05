@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
@@ -25,7 +24,7 @@ import butterknife.InjectView;
  */
 public class SelectFriendsDialog extends Dialog {
 
-    private final BasePersonListViewPresenter.PersonListAdapter adapter;
+    private final BasePersonListViewPresenter.BasePersonListAdapter adapter;
     private final BasePersonListViewPresenter presenter;
     private final BasePersonListViewPresenter.PersonListCardView.InitialStateSetter setter;
     private final List<Integer> iconPack;
@@ -38,7 +37,7 @@ public class SelectFriendsDialog extends Dialog {
     private LinearLayoutManager layoutManager;
     private List<User> selectedFriends = new ArrayList<>();
 
-    public SelectFriendsDialog(Context context, BasePersonListViewPresenter presenter, BasePersonListViewPresenter.PersonListAdapter adapter, OnSendChatListener sendChatListener) {
+    public SelectFriendsDialog(Context context, BasePersonListViewPresenter presenter, BasePersonListViewPresenter.BasePersonListAdapter adapter, OnSendChatListener sendChatListener) {
         super(context, R.style.SelectFriendsDialog);
         setContentView(R.layout.dialog_select_friends);
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);

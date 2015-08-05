@@ -25,13 +25,12 @@ import butterknife.InjectView;
  */
 public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ChatViewHolder> implements BaseChatListViewPresenter.ChatListAdapter {
 
-    private final BaseChatListViewPresenter presenter;
-    private final BaseChatListViewPresenter.ChatListCardView.OnClickChatListener onClickChatListener;
+    private BaseChatListViewPresenter presenter;
+    private BaseChatListViewPresenter.ChatListCardView.OnClickChatListener onClickChatListener;
 
     @Inject
-    public ChatViewAdapter(BaseChatListViewPresenter presenter) {
-        this.presenter = presenter;
-        this.onClickChatListener = presenter.getOnClickChatListener();
+    public ChatViewAdapter() {
+        //Empty
     }
 
     @Override
@@ -56,6 +55,12 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ChatVi
     @Override
     public void notifyDataUpdate() {
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void attachPresenter(BaseChatListViewPresenter presenter) {
+        this.presenter = presenter;
+        //TODO set fields
     }
 
     public static class ChatViewHolder extends RecyclerView.ViewHolder implements BaseChatListViewPresenter.ChatListCardView{

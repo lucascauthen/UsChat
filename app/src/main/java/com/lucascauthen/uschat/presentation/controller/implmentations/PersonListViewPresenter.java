@@ -1,60 +1,81 @@
 package com.lucascauthen.uschat.presentation.controller.implmentations;
 
-import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.data.entities.User;
+import com.lucascauthen.uschat.data.repository.user.PersonRepo;
 import com.lucascauthen.uschat.domain.executor.BackgroundExecutor;
 import com.lucascauthen.uschat.domain.executor.ForegroundExecutor;
 import com.lucascauthen.uschat.presentation.controller.base.BasePersonListViewPresenter;
+import com.lucascauthen.uschat.presentation.controller.base.BaseRecyclerViewPresenter;
 import com.lucascauthen.uschat.util.NullObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by lhc on 7/30/15.
  */
 public class PersonListViewPresenter implements BasePersonListViewPresenter {
 
-    private PersonListAdapter NULL_ADAPTER = NullObject.create(PersonListAdapter.class);
-    private PersonListAdapter adapter = NULL_ADAPTER;
+    private BasePersonListAdapter NULL_ADAPTER = NullObject.create(BasePersonListAdapter.class);
+    private BasePersonListAdapter adapter = NULL_ADAPTER;
 
     private final ForegroundExecutor foregroundExecutor;
     private final BackgroundExecutor backgroundExecutor;
-
-    private List<Integer> iconPack = new ArrayList<>(); //Default
+    private final User user;
 
     private PersonListCardView.InitialStateSetter stateSetter;
+    private PersonRepo.Type displayType;
+    private boolean repoNeedUpdate = true;
+    private String query = null;
 
 
-    public PersonListViewPresenter(ForegroundExecutor foregroundExecutor, BackgroundExecutor backgroundExecutor) {
+
+    public PersonListViewPresenter(ForegroundExecutor foregroundExecutor, BackgroundExecutor backgroundExecutor, User user) {
         this.foregroundExecutor = foregroundExecutor;
         this.backgroundExecutor = backgroundExecutor;
-        iconPack.add(R.drawable.ic_action_error);
+        this.user = user;
     }
 
     @Override
-    public User getItem(int index) {
-        return null; //TODO
+    public String getItem(int index) {
+        if(repoNeedUpdate) {
+            repoNeedUpdate = false;
+            return user.get(new PersonRepo.Request(true, query, displayType)).result().get(index);
+        } else {
+            return user.get(new PersonRepo.Request(false, query, displayType)).result().get(index);
+        }
     }
 
     @Override
-    public void getItemInBackground(int index, OnGetItemCallback<User> callback) {
-        //TODO
+    public void getItemInBackground(int index, OnGetItemCallback<String> callback) {
+        backgroundExecutor.execute(() -> {
+            String item = getItem(index);
+            foregroundExecutor.execute(() -> {
+                callback.onGetItem(item);
+            });
+        });
     }
 
     @Override
     public int getSize() {
-        return 0; //TODO
+        if(repoNeedUpdate) {
+            repoNeedUpdate = false;
+            return user.get(new PersonRepo.Request(true, query, displayType)).result().size();
+        } else {
+            return user.get(new PersonRepo.Request(false, query, displayType)).result().size();
+        }
     }
 
     @Override
     public void getSizeInBackground(OnGetSizeCallback callback) {
-        //TODO
+        backgroundExecutor.execute(() -> {
+            int size = getSize();
+            foregroundExecutor.execute(() -> {
+                callback.onGetSize(size);
+            });
+        });
     }
 
     @Override
-    public void attachAdapter(PersonListAdapter adapter) {
-        throw new RuntimeException("Not applicable. You need to pass the presenter the onClickListener, initialStateSetter, and iconPack.");
+    public void attachAdapter(BasePersonListAdapter adapter) {
+        throw new RuntimeException("Not applicable. You need to pass the presenter the initialStateSetter.");
     }
 
     @Override
@@ -68,16 +89,32 @@ public class PersonListViewPresenter implements BasePersonListViewPresenter {
         return stateSetter;
     }
 
+
     @Override
-    public List<Integer> getIconPack() {
-        return this.iconPack;
+    public void attachAdapter(BasePersonListAdapter adapter, PersonListCardView.InitialStateSetter setter) {
+        this.adapter = adapter;
+        this.stateSetter = setter;
+        adapter.attachPresenter(this);
     }
 
     @Override
-    public void attachAdapter(PersonListAdapter adapter, PersonListCardView.InitialStateSetter setter, List<Integer> iconPack) {
-        this.adapter = adapter;
-        this.stateSetter = setter;
-        this.iconPack = iconPack;
-        adapter.attachPresenter(this);
+    public void setDisplayType(PersonRepo.Type type) {
+        this.displayType = type;
+    }
+
+    @Override
+    public void requestUpdate(BasePersonListAdapter.OnDoneLoadingCallback callback, boolean repoNeedUpdate) {
+        this.repoNeedUpdate = repoNeedUpdate;
+        adapter.notifyDataUpdate(callback);
+    }
+
+    @Override
+    public void updateOnNextRequest() {
+        repoNeedUpdate = true;
+    }
+
+    @Override
+    public void setQuery(String query) {
+        this.query = query;
     }
 }

@@ -21,6 +21,8 @@ public interface BaseChatListViewPresenter extends BasePresenter<BaseChatListVie
 
     interface ChatListAdapter {
         void notifyDataUpdate();
+
+        void attachPresenter(BaseChatListViewPresenter presenter);
     }
 
     interface ChatListCardView {

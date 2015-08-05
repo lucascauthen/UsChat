@@ -3,11 +3,14 @@ package com.lucascauthen.uschat.data.entities;
 import com.lucascauthen.uschat.data.repository.user.PersonCache;
 import com.lucascauthen.uschat.data.repository.user.PersonRepo;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 /**
  * Created by lhc on 6/10/15.
  */
 public class User implements PersonRepo {
-    private String name = "Anonymous User";
+    private static String name = "Anonymous User";
 
     private final PersonCache cachingRepo;
 
@@ -77,19 +80,45 @@ public class User implements PersonRepo {
 
     @Override
     public Response get(Request request) {
-        Response response;
-        if (request.skipCache()) {
-            response = secondaryRepo.get(request);
-            cachingRepo.cache(response);
+        if(request.query() == null) { //Clear the cache
+            cachingRepo.clear();
+            return new Response(Collections.unmodifiableList(new ArrayList<>()), request.requestType());
         } else {
-            response = cachingRepo.get(request);
+            Response response;
+            if (request.skipCache()) {
+                response = secondaryRepo.get(request);
+                cachingRepo.cache(response);
+            } else {
+                response = cachingRepo.get(request);
+            }
+            return response;
         }
-        return response;
     }
 
     @Override
     public void get(Request request, GetCallback callback) {
         callback.onGet(get(request));
     }
+    public enum PersonState {
+        FRIENDS,
+        SENT_REQUEST,
+        RECIEVED_REQUEST,
+        NOT_FRIENDS
+    }
 
+    public class Person {
+        private final String name;
+        private final PersonState state;
+        public Person(String name, PersonState state) {
+            this.name = name;
+            this.state = state;
+        }
+        public String name() {
+            return name;
+        }
+
+        public PersonState state() {
+            return state;
+        }
+    }
 }

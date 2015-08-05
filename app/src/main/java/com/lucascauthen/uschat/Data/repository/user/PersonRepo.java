@@ -3,22 +3,25 @@ package com.lucascauthen.uschat.data.repository.user;
 import android.support.annotation.NonNull;
 
 
+import com.lucascauthen.uschat.data.entities.Person;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by lhc on 8/4/15.
  */
 public interface PersonRepo {
-    void sendFriendRequest(String person);
+    void sendFriendRequest(Person person);
 
-    void acceptReceivedRequest(String person);
+    void acceptReceivedRequest(Person person);
 
-    void rejectReceivedRequest(String person);
+    void rejectReceivedRequest(Person person);
 
-    void deleteSentRequest(String person);
+    void deleteSentRequest(Person person);
 
-    void removeFriend(String person);
+    void removeFriend(Person person);
 
     Response get(Request request);
 
@@ -27,7 +30,8 @@ public interface PersonRepo {
     enum Type {
         FRIEND,
         SENT_REQUEST,
-        RECEIVED_REQUEST
+        RECEIVED_REQUEST,
+        SEARCH
     }
 
     class Request {
@@ -38,7 +42,7 @@ public interface PersonRepo {
 
         public Request(boolean skipCache, Type requestType) {
             this.skipCache = skipCache;
-            this.query = "";
+            this.query = null;
             this.requestType = requestType;
             hasQuery = false;
         }
@@ -46,7 +50,7 @@ public interface PersonRepo {
             this.skipCache = skipCache;
             this.query = query;
             this.requestType = requestType;
-            hasQuery = true;
+            hasQuery = (!query.equals(""));
         }
 
         public boolean skipCache() {
@@ -68,10 +72,10 @@ public interface PersonRepo {
     }
 
     class Response {
-        private final List<String> result;
+        private final List<Person> result;
         private final Type responseType;
 
-        public Response(List<String> result, @NonNull Type responseType) {
+        public Response(List<Person> result, @NonNull Type responseType) {
             if(result != null) {
                 this.result = result;
             } else {
@@ -80,7 +84,7 @@ public interface PersonRepo {
             this.responseType = responseType;
         }
 
-        public List<String> result() {
+        public List<Person> result() {
             return result;
         }
 

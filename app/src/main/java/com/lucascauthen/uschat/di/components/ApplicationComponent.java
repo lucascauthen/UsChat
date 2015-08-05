@@ -6,8 +6,8 @@ import com.lucascauthen.uschat.presentation.view.activities.PagerActivity;
 import com.lucascauthen.uschat.presentation.view.activities.SignUpActivity;
 
 import com.lucascauthen.uschat.presentation.view.fragments.newfrag.CameraFragment;
-import com.lucascauthen.uschat.presentation.view.fragments.newfrag.ChatListFragment;
-import com.lucascauthen.uschat.presentation.view.fragments.newfrag.TabFragment;
+import com.lucascauthen.uschat.presentation.view.fragments.newfrag.ChatTabFragment;
+import com.lucascauthen.uschat.presentation.view.fragments.newfrag.FriendTabFragment;
 
 
 import javax.inject.Singleton;
@@ -28,8 +28,8 @@ public interface ApplicationComponent {
 
     void inject(CameraFragment cameraFragment);
 
-    void inject(ChatListFragment chatListFragment);
+    void inject(ChatTabFragment chatTabFragment);
 
-    void inject(TabFragment tabFragment);
+    void inject(FriendTabFragment friendTabFragment);
 
 }

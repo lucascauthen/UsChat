@@ -12,8 +12,8 @@ import android.support.v4.view.ViewPager;
 import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.presentation.controller.base.BasePagerViewPresenter;
 import com.lucascauthen.uschat.presentation.view.fragments.newfrag.CameraFragment;
-import com.lucascauthen.uschat.presentation.view.fragments.newfrag.ChatListFragment;
-import com.lucascauthen.uschat.presentation.view.fragments.newfrag.TabFragment;
+import com.lucascauthen.uschat.presentation.view.fragments.newfrag.ChatTabFragment;
+import com.lucascauthen.uschat.presentation.view.fragments.newfrag.FriendTabFragment;
 
 import javax.inject.Inject;
 
@@ -26,10 +26,9 @@ public class PagerActivity extends BaseActivity implements BasePagerViewPresente
 
     @InjectView(R.id.main_pager)ViewPager pager;
 
-    @Inject ChatListFragment chatFragment;
+    @Inject ChatTabFragment chatTabFragment;
     @Inject CameraFragment cameraFragment;
-    @Inject
-    TabFragment tabFragment;
+    @Inject FriendTabFragment friendTabFragment;
 
     private ScreenSlidePagerAdapter pagerAdapter;
 
@@ -89,13 +88,13 @@ public class PagerActivity extends BaseActivity implements BasePagerViewPresente
         public Fragment getItem(int position) {
             switch(position) {
                 case Pages.CHAT:
-                    return chatFragment;
+                    return chatTabFragment;
                 case Pages.CAMERA:
                     return cameraFragment;
                 case Pages.FRIENDS:
-                    return tabFragment;
+                    return friendTabFragment;
                 default:
-                    return chatFragment;
+                    return chatTabFragment;
             }
         }
 
