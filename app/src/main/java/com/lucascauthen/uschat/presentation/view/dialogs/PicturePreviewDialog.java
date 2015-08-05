@@ -1,26 +1,13 @@
 package com.lucascauthen.uschat.presentation.view.dialogs;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.presentation.view.dialogs.listeners.OnAcceptListener;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by lhc on 7/2/15.

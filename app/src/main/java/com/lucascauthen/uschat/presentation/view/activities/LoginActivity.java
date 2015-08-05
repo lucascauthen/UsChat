@@ -1,52 +1,37 @@
 package com.lucascauthen.uschat.presentation.view.activities;
 
-import android.annotation.SuppressLint;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-
-import com.lucascauthen.uschat.presentation.controller.LoginPresenter;
 import com.lucascauthen.uschat.R;
-import com.lucascauthen.uschat.presentation.navigation.Navigator;
+import com.lucascauthen.uschat.presentation.controller.base.BaseLoginViewPresenter;
+import com.lucascauthen.uschat.util.ActivityNavigator;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 
-public class LoginActivity extends AppCompatActivity implements LoginPresenter.LoginCrudView{
+public class LoginActivity extends BaseActivity implements BaseLoginViewPresenter.LoginView {
 
     @InjectView(R.id.login_username_field) EditText usernameField;
     @InjectView(R.id.login_password_field) EditText passwordField;
-    @InjectView(R.id.login_signin_button)Button loginButton;
-    @InjectView(R.id.login_signup_button) Button signupButton;
-    @InjectView(R.id.login_loading)ProgressBar loading;
+    @InjectView(R.id.login_signin_button) Button loginButton;
+    @InjectView(R.id.login_signup_button) Button signUpButton;
+    @InjectView(R.id.login_loading) ProgressBar loading;
 
-    private LoginPresenter presenter;
-
-    private Navigator navigator = new Navigator();
-
-    public static Intent getCallingIntent(Context context) {
-        return new Intent(context, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    }
+    @Inject BaseLoginViewPresenter presenter;
+    @Inject
+    ActivityNavigator navigator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,38 +42,25 @@ public class LoginActivity extends AppCompatActivity implements LoginPresenter.L
         //Butterknife initialization
         ButterKnife.inject(this);
 
-        Executor backgroundExecutor = Executors.newFixedThreadPool(10);
-
-        final Handler handler = new Handler();
-        Executor foregroundExecutor = new Executor() {
-            @Override
-            public void execute(Runnable command) {
-                handler.post(command);
-            }
-        };
-        presenter = new LoginPresenter(Schedulers.io(), AndroidSchedulers.mainThread(), backgroundExecutor, foregroundExecutor);
+        getApplicationComponent().inject(this);
 
         presenter.attachView(this);
-        presenter.present();
-
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
+
+    public static Intent getCallingIntent(Context context) {
+        return new Intent(context, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     }
 
     @Override
     public void disableAllControls() {
         loginButton.setEnabled(false);
-        signupButton.setEnabled(false);
+        signUpButton.setEnabled(false);
     }
 
     @Override
     public void enableAllControls() {
         loginButton.setEnabled(true);
-        signupButton.setEnabled(true);
+        signUpButton.setEnabled(true);
     }
 
     @Override
@@ -152,5 +124,10 @@ public class LoginActivity extends AppCompatActivity implements LoginPresenter.L
     @OnTextChanged(R.id.login_password_field)
     void onPasswordChanged() {
         presenter.onPasswordChanged(passwordField.getText().toString());
+    }
+
+    @Override
+    public void sendMessage(String msg) {
+        //Empty
     }
 }

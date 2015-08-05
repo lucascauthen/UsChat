@@ -2,7 +2,6 @@ package com.lucascauthen.uschat.presentation.view.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.CountDownTimer;
 import android.view.ViewGroup;

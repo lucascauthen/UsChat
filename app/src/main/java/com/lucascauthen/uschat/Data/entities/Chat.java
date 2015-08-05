@@ -1,6 +1,7 @@
 package com.lucascauthen.uschat.data.entities;
 
 import android.graphics.Bitmap;
+import android.os.Looper;
 
 
 import java.util.List;
@@ -62,17 +63,13 @@ public class Chat {
         return isFromCurrentUser;
     }
 
-    public Chat(String from, List<String> to, String id, ChatType chatType, LoadImageFunction function) {
+    public Chat(String from, List<String> to, String id, ChatType chatType, boolean isFromCurrentUser, LoadImageFunction function) {
         this.from = from;
         this.to = to;
         this.id = id;
         this.chatType = chatType;
+        this.isFromCurrentUser = isFromCurrentUser;
         this.loadFunction = function;
-        if(from.equals(Person.getCurrentUser().getName())) {
-            isFromCurrentUser = true;
-        } else {
-            isFromCurrentUser = false;
-        }
     }
 
     public String getFrom() {
@@ -84,10 +81,14 @@ public class Chat {
     }
 
     public void loadImage(ImageReadyCallback readyCallback, ProgressCallback progressCallback) {
-        if(loadFunction != null) {
-            loadFunction.loadImage(readyCallback, progressCallback);
+        if(Looper.myLooper() == Looper.getMainLooper()) {
+            throw new RuntimeException("Trying to load an image on the UI thread");
         } else {
-            throw new RuntimeException("Trying to load an image without a loading function");
+            if (loadFunction != null) {
+                loadFunction.loadImage(readyCallback, progressCallback);
+            } else {
+                throw new RuntimeException("Trying to load an image without a loading function");
+            }
         }
     }
 
