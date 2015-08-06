@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.view.SurfaceView;
 
+import com.lucascauthen.uschat.data.entities.Person;
 import com.lucascauthen.uschat.data.entities.User;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public interface BaseCameraViewPresenter extends BasePresenter<BaseCameraViewPre
 
     void onTryCapture();
 
-    void onSendChat(List<User> people);
+    void onSendChat(List<Person> people);
 
     void onAcceptPicture();
 
@@ -32,6 +33,8 @@ public interface BaseCameraViewPresenter extends BasePresenter<BaseCameraViewPre
         void hideLoading();
 
         void showPictureConfirmDialog(Bitmap image);
+
+        void closePictureConfirmDialog();
 
         void showFriendSelectDialog();
 

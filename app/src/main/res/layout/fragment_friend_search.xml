@@ -18,9 +18,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_edittext_states"
             android:hint="@string/people_search_hint"
-            android:padding="4dp"/>
+            android:padding="6dp"/>
     </LinearLayout>
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/friend_search_swipe_refresh"
         android:layout_width="match_parent"

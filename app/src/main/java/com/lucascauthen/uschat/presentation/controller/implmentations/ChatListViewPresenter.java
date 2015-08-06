@@ -68,11 +68,6 @@ public class ChatListViewPresenter implements BaseChatListViewPresenter {
     }
 
     @Override
-    public void onSwipe() {
-        //TODO
-    }
-
-    @Override
     public void attachView(ChatListView view) {
         this.view = view;
     }

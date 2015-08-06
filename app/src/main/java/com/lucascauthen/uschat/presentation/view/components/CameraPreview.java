@@ -52,7 +52,6 @@ public class CameraPreview extends SurfaceView {
                 camera.setPreviewDisplay(holder);
                 Camera.Parameters parameters = camera.getParameters();
                 parameters.set("orientation", "portrait");
-                parameters.setRotation(90);
                 List<Camera.Size> sizeList = parameters.getSupportedPictureSizes();
                 int chosenSize = getPictureSizeIndexForHeight(sizeList, HEIGHT);
                 parameters.setPictureSize(sizeList.get(chosenSize).width, sizeList.get(chosenSize).height);

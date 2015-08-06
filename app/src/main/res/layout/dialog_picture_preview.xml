@@ -20,10 +20,10 @@ android:orientation="vertical">
     android:layout_height="wrap_content"
     android:layout_gravity="top|left"
     android:src="@drawable/ic_action_close"
-    android:background="@null"
-    android:layout_margin="4dp" />
+    android:background="@drawable/dark_circle_bg"
+    android:layout_margin="16dp" />
 <LinearLayout
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:layout_gravity="center_horizontal|bottom">
@@ -33,9 +33,8 @@ android:orientation="vertical">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/picture_preview_accept"
         android:layout_margin="8dp"
-        android:background="@null"
+        android:background="@drawable/dark_circle_bg"
         android:src="@drawable/ic_action_check"/>
 
 </LinearLayout>

@@ -20,34 +20,49 @@ public class CachedPersonRepo implements PersonCache {
     private List<Person> searchResults = new ArrayList<>();
 
     @Override
-    public void sendFriendRequest(Person person) {
+    public void sendFriendRequest(Person person, OnCompleteAction callback) {
         person.setState(Person.PersonState.SENT_REQUEST);
         sentRequests.add(person);
+        if(callback != null) {
+            callback.onComplete("");
+        }
     }
 
     @Override
-    public void acceptReceivedRequest(Person person) {
+    public void acceptReceivedRequest(Person person, OnCompleteAction callback) {
         person.setState(Person.PersonState.FRIENDS);
         friends.add(person);
         receivedRequests.remove(person);
+        if(callback != null) {
+            callback.onComplete("");
+        }
     }
 
     @Override
-    public void rejectReceivedRequest(Person person) {
+    public void rejectReceivedRequest(Person person, OnCompleteAction callback) {
         person.setState(Person.PersonState.NOT_FRIENDS);
         receivedRequests.remove(person);
+        if(callback != null) {
+            callback.onComplete("");
+        }
     }
 
     @Override
-    public void deleteSentRequest(Person person) {
+    public void deleteSentRequest(Person person, OnCompleteAction callback) {
         person.setState(Person.PersonState.NOT_FRIENDS);
         sentRequests.remove(person);
+        if(callback != null) {
+            callback.onComplete("");
+        }
     }
 
     @Override
-    public void removeFriend(Person person) {
+    public void removeFriend(Person person, OnCompleteAction callback) {
         person.setState(Person.PersonState.NOT_FRIENDS);
         friends.remove(person);
+        if(callback != null) {
+            callback.onComplete("");
+        }
     }
 
     @Override
@@ -66,6 +81,12 @@ public class CachedPersonRepo implements PersonCache {
             case SEARCH:
                 listToQuery = searchResults;
                 break;
+            case REQUESTS:
+                listToQuery = new ArrayList<>(sentRequests);
+                listToQuery.addAll(receivedRequests);
+                break;
+            default:
+                //EMPTY
         }
         if (request.hasQuery()) {
             List<Person> result = new ArrayList<>();
@@ -132,6 +153,17 @@ public class CachedPersonRepo implements PersonCache {
                 cacheFriends(response.result());
             case SEARCH:
                 cacheSearchResults(response.result());
+                break;
+            case REQUESTS:
+                sentRequests.clear();
+                receivedRequests.clear();
+                for(Person person : response.result()) {
+                    if(person.state() == Person.PersonState.RECIEVED_REQUEST) {
+                        receivedRequests.add(person);
+                    } else if(person.state() == Person.PersonState.SENT_REQUEST) {
+                        sentRequests.add(person);
+                    }
+                }
                 break;
             default:
                 //EMPTY

@@ -53,10 +53,13 @@ public class FriendSearchFragment extends Fragment implements BaseFriendSearchPr
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_friend_search, null);
         ButterKnife.inject(this, v);
-
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-
+        presenter.attachAdapter(adapter);
+        presenter.attachView(this);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            presenter.onSwipe();
+        });
         return v;
     }
 

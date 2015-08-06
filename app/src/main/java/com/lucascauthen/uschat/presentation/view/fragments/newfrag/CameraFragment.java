@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -34,7 +35,8 @@ import butterknife.InjectView;
 public class CameraFragment extends Fragment implements BaseCameraViewPresenter.CameraView {
 
     @InjectView(R.id.camera_preview)FrameLayout previewFrame;
-    @InjectView(R.id.camera_capture_button)Button captureButton;
+    @InjectView(R.id.camera_capture_button)ImageButton captureButton;
+    @InjectView(R.id.camera_switch_button) ImageButton switchButton;
     @InjectView(R.id.camera_loading)ProgressBar loading;
 
     private BaseCameraViewPresenter mainPresenter;
@@ -42,6 +44,10 @@ public class CameraFragment extends Fragment implements BaseCameraViewPresenter.
     private PersonViewAdapter adapter;
     private BaseCameraViewPresenter.CameraPreview cameraPreview;
     private BasePagerViewPresenter.PagerViewChanger pageChanger = NullObject.create(BasePagerViewPresenter.PagerViewChanger.class);
+
+    private SelectFriendsDialog selectFriendsDialog;
+    private PicturePreviewDialog picturePreviewDialog;
+
 
     public static CameraFragment newInstance(BaseCameraViewPresenter mainPresenter, BasePersonListViewPresenter friendSelectPresenter, PersonViewAdapter adapter) {
         CameraFragment f = new CameraFragment();
@@ -54,6 +60,7 @@ public class CameraFragment extends Fragment implements BaseCameraViewPresenter.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_camera, null);
+        v.setClickable(true);
         cameraPreview = new CameraPreview(getActivity()); //Not injected because this requires activity scope and my current DI configuration is not setup for scoping
         ButterKnife.inject(this, v);
         mainPresenter.attachPreview(cameraPreview);
@@ -65,27 +72,10 @@ public class CameraFragment extends Fragment implements BaseCameraViewPresenter.
                 mainPresenter.onTryCapture();
             }
         });
-
-        final GestureDetector gesture = new GestureDetector(getActivity(),
-                new GestureDetector.SimpleOnGestureListener() {
-                    @Override
-                    public boolean onSingleTapUp(MotionEvent e) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onDoubleTap(MotionEvent e) {
-                        mainPresenter.onDoubleTap();
-                        return false;
-                    }
-                });
-
-        v.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return gesture.onTouchEvent(event);
-            }
+        switchButton.setOnClickListener((view) -> {
+            mainPresenter.onDoubleTap();
         });
+
         mainPresenter.attachView(this);
         return v;
     }
@@ -94,11 +84,13 @@ public class CameraFragment extends Fragment implements BaseCameraViewPresenter.
     @Override
     public void enableControls() {
         captureButton.setEnabled(true);
+        switchButton.setEnabled(true);
     }
 
     @Override
     public void disableControls() {
         captureButton.setEnabled(false);
+        switchButton.setEnabled(false);
     }
 
     @Override
@@ -124,16 +116,24 @@ public class CameraFragment extends Fragment implements BaseCameraViewPresenter.
     }
 
     @Override
+    public void closePictureConfirmDialog() {
+        //TODO
+    }
+
+    @Override
     public void showFriendSelectDialog() {
+        //TODO
+        /*
         SelectFriendsDialog dialog = new SelectFriendsDialog(getActivity(), friendSelectPresenter, adapter, people -> {
-            mainPresenter.onSendChat(people);
+            //mainPresenter.onSendChat(people);
         });
         dialog.show();
+        */
     }
 
     @Override
     public void onSendChatComplete() {
-
+        //TODO
     }
 
     @Override

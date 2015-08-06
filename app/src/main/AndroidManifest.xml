@@ -36,7 +36,8 @@
             android:name=".presentation.view.activities.PagerActivity"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateVisible|adjustResize">
         </activity>
         <activity
             android:name=".presentation.view.activities.SignUpActivity"

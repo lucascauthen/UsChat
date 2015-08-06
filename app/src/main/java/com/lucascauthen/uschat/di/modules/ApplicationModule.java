@@ -287,8 +287,8 @@ public class ApplicationModule {
     }
 
     @Provides
-    PersonViewAdapter providePersonViewAdapter() {
-        return new PersonViewAdapter();
+    PersonViewAdapter providePersonViewAdapter(ForegroundExecutor foregroundExecutor) {
+        return new PersonViewAdapter(foregroundExecutor);
     }
     //////////
 

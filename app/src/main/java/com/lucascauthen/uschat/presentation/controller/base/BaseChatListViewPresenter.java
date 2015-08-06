@@ -7,7 +7,7 @@ import com.lucascauthen.uschat.data.entities.Chat;
  */
 
 public interface BaseChatListViewPresenter extends BasePresenter<BaseChatListViewPresenter.ChatListView>, BaseRecyclerViewPresenter<Chat, BaseChatListViewPresenter.ChatListAdapter>,
-        BaseSwipeRefreshViewPresenter, BasePagerViewPresenter.PagerSubView {
+        BasePagerViewPresenter.PagerSubView {
 
     ChatListCardView.OnClickChatListener getOnClickChatListener();
 

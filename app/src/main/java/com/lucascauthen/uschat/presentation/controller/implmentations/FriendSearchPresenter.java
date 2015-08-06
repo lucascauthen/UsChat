@@ -1,5 +1,6 @@
 package com.lucascauthen.uschat.presentation.controller.implmentations;
 
+import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.data.repository.user.PersonRepo;
 import com.lucascauthen.uschat.domain.executor.BackgroundExecutor;
 import com.lucascauthen.uschat.domain.executor.ForegroundExecutor;
@@ -41,6 +42,8 @@ public class FriendSearchPresenter implements BaseFriendSearchPresenter {
     @Override
     public void attachView(BaseFriendSearchView view) {
         this.view = view;
+        this.searchTextObservable = view.bindPersonSearchObservable();
+
         searchTextObservable
                 .map(value -> {
                     foregroundExecutor.execute(() -> view.showLoading());
@@ -50,14 +53,14 @@ public class FriendSearchPresenter implements BaseFriendSearchPresenter {
                 .map(event -> event.text().toString())
                 .observeOn(backgroundScheduler.getScheduler())
                 .subscribe(query -> {
-                    if(query.equals("")) {
+                    if (query.equals("")) {
                         subPresenter.setQuery(null);
                     } else {
                         subPresenter.setQuery(query);
                     }
                     subPresenter.requestUpdate(() -> {
                         view.hideLoading();
-                    });
+                    }, true);
                 });
     }
 
@@ -78,9 +81,7 @@ public class FriendSearchPresenter implements BaseFriendSearchPresenter {
 
     @Override
     public void onSwipe() {
-        subPresenter.requestUpdate(() -> {
-            view.hideLoading();
-        });
+        view.reSendSearch();
     }
 
     @Override
@@ -105,7 +106,7 @@ public class FriendSearchPresenter implements BaseFriendSearchPresenter {
 
     @Override
     public void attachAdapter(BasePersonListViewPresenter.BasePersonListAdapter adapter) {
-        this.subPresenter.attachAdapter(adapter, getSetter());
+        this.subPresenter.attachAdapter(adapter, BasePersonListViewPresenter.BasePersonListBehavior.defaultSetter());
     }
 
     @Override
@@ -113,9 +114,4 @@ public class FriendSearchPresenter implements BaseFriendSearchPresenter {
         this.subPresenter.detachAdapter();
     }
 
-    private BasePersonListViewPresenter.PersonListCardView.InitialStateSetter getSetter() {
-        return (personName, carView) -> {
-
-        };
-    }
 }

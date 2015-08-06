@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.util.Log;
 
+import com.lucascauthen.uschat.data.entities.Person;
 import com.lucascauthen.uschat.data.entities.User;
 import com.lucascauthen.uschat.di.PerActivity;
 import com.lucascauthen.uschat.domain.executor.BackgroundExecutor;
@@ -66,10 +67,12 @@ public class CameraViewPresenter implements BaseCameraViewPresenter {
     @Override
     public void onDoubleTap() {
         view.showLoading();
+        view.disableControls();
         backgroundExecutor.execute(() -> {
             switchCameras();
             foregroundExecutor.execute(() -> {
                 view.hideLoading();
+                view.enableControls();
             });
         });
     }
@@ -89,7 +92,7 @@ public class CameraViewPresenter implements BaseCameraViewPresenter {
     }
 
     @Override
-    public void onSendChat(List<User> names) {
+    public void onSendChat(List<Person> names) {
         //I think this should be separated from the network call, but I couldn't think of how to refactor it
         //TODO
         /*
@@ -178,8 +181,9 @@ public class CameraViewPresenter implements BaseCameraViewPresenter {
         }
         camera.stopPreview();
         camera.release();
+        camera = null;
         camera = getCameraInstance();
-
+        preview.attachCamera(camera);
     }
 
     private Camera getCameraInstance() {

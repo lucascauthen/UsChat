@@ -1,5 +1,7 @@
 package com.lucascauthen.uschat.presentation.controller.implmentations;
 
+import com.lucascauthen.uschat.R;
+import com.lucascauthen.uschat.data.entities.Person;
 import com.lucascauthen.uschat.data.entities.User;
 import com.lucascauthen.uschat.data.repository.user.PersonRepo;
 import com.lucascauthen.uschat.domain.executor.BackgroundExecutor;
@@ -23,7 +25,7 @@ public class PersonListViewPresenter implements BasePersonListViewPresenter {
     private PersonListCardView.InitialStateSetter stateSetter;
     private PersonRepo.Type displayType;
     private boolean repoNeedUpdate = true;
-    private String query = null;
+    private String query = "";
 
 
 
@@ -34,7 +36,7 @@ public class PersonListViewPresenter implements BasePersonListViewPresenter {
     }
 
     @Override
-    public String getItem(int index) {
+    public Person getItem(int index) {
         if(repoNeedUpdate) {
             repoNeedUpdate = false;
             return user.get(new PersonRepo.Request(true, query, displayType)).result().get(index);
@@ -44,9 +46,9 @@ public class PersonListViewPresenter implements BasePersonListViewPresenter {
     }
 
     @Override
-    public void getItemInBackground(int index, OnGetItemCallback<String> callback) {
+    public void getItemInBackground(int index, OnGetItemCallback<Person> callback) {
         backgroundExecutor.execute(() -> {
-            String item = getItem(index);
+            Person item = getItem(index);
             foregroundExecutor.execute(() -> {
                 callback.onGetItem(item);
             });
@@ -109,12 +111,15 @@ public class PersonListViewPresenter implements BasePersonListViewPresenter {
     }
 
     @Override
-    public void updateOnNextRequest() {
-        repoNeedUpdate = true;
+    public void sendAction(Person person, BaseActions action, PersonRepo.OnCompleteAction callback) {
+        backgroundExecutor.execute(() -> {
+            action.execute(person, user, callback);
+        });
     }
 
     @Override
     public void setQuery(String query) {
         this.query = query;
     }
+
 }

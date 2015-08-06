@@ -82,7 +82,7 @@
     <style name="RecyclerView.Tile">
         <item name="android:shadowColor">#7F000000</item>
         <item name="android:shadowDy">-3.5</item>
-        <item name="android:shadowRadius">2</item>
+        <item name="android:shadowRadius">10</item>
     </style>
 
 </resources>

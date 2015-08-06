@@ -13,15 +13,15 @@ import java.util.Objects;
  * Created by lhc on 8/4/15.
  */
 public interface PersonRepo {
-    void sendFriendRequest(Person person);
+    void sendFriendRequest(Person person, OnCompleteAction callback);
 
-    void acceptReceivedRequest(Person person);
+    void acceptReceivedRequest(Person person, OnCompleteAction callback);
 
-    void rejectReceivedRequest(Person person);
+    void rejectReceivedRequest(Person person, OnCompleteAction callback);
 
-    void deleteSentRequest(Person person);
+    void deleteSentRequest(Person person, OnCompleteAction callback);
 
-    void removeFriend(Person person);
+    void removeFriend(Person person, OnCompleteAction callback);
 
     Response get(Request request);
 
@@ -31,7 +31,8 @@ public interface PersonRepo {
         FRIEND,
         SENT_REQUEST,
         RECEIVED_REQUEST,
-        SEARCH
+        SEARCH,
+        REQUESTS
     }
 
     class Request {
@@ -50,7 +51,11 @@ public interface PersonRepo {
             this.skipCache = skipCache;
             this.query = query;
             this.requestType = requestType;
-            hasQuery = (!query.equals(""));
+            if(query != null) {
+                hasQuery = (!query.equals(""));
+            } else {
+                hasQuery = false;
+            }
         }
 
         public boolean skipCache() {
@@ -96,5 +101,9 @@ public interface PersonRepo {
 
     interface GetCallback {
         void onGet(Response response);
+    }
+
+    interface OnCompleteAction {
+        void onComplete(String optionalMessage);
     }
 }

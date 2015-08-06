@@ -2,6 +2,7 @@ package com.lucascauthen.uschat.data.entities;
 
 import com.lucascauthen.uschat.data.repository.user.PersonCache;
 import com.lucascauthen.uschat.data.repository.user.PersonRepo;
+import com.lucascauthen.uschat.data.entities.Person;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,33 +50,33 @@ public class User implements PersonRepo {
     }
 
     @Override
-    public void sendFriendRequest(String person) {
-        cachingRepo.sendFriendRequest(person);
-        secondaryRepo.sendFriendRequest(person);
+    public void sendFriendRequest(Person person, OnCompleteAction callback) {
+        cachingRepo.sendFriendRequest(person, null);
+        secondaryRepo.sendFriendRequest(person, callback);
     }
 
     @Override
-    public void acceptReceivedRequest(String person) {
-        cachingRepo.acceptReceivedRequest(person);
-        secondaryRepo.acceptReceivedRequest(person);
+    public void acceptReceivedRequest(Person person, OnCompleteAction callback) {
+        cachingRepo.acceptReceivedRequest(person, null);
+        secondaryRepo.acceptReceivedRequest(person, callback);
     }
 
     @Override
-    public void rejectReceivedRequest(String person) {
-        cachingRepo.rejectReceivedRequest(person);
-        secondaryRepo.rejectReceivedRequest(person);
+    public void rejectReceivedRequest(Person person, OnCompleteAction callback) {
+        cachingRepo.rejectReceivedRequest(person, null);
+        secondaryRepo.rejectReceivedRequest(person, callback);
     }
 
     @Override
-    public void deleteSentRequest(String person) {
-        cachingRepo.deleteSentRequest(person);
-        secondaryRepo.deleteSentRequest(person);
+    public void deleteSentRequest(Person person, OnCompleteAction callback) {
+        cachingRepo.deleteSentRequest(person, null);
+        secondaryRepo.deleteSentRequest(person, callback);
     }
 
     @Override
-    public void removeFriend(String person) {
-        cachingRepo.removeFriend(person);
-        secondaryRepo.removeFriend(person);
+    public void removeFriend(Person person, OnCompleteAction callback) {
+        cachingRepo.removeFriend(person, null);
+        secondaryRepo.removeFriend(person, callback);
     }
 
     @Override
@@ -104,21 +105,5 @@ public class User implements PersonRepo {
         SENT_REQUEST,
         RECIEVED_REQUEST,
         NOT_FRIENDS
-    }
-
-    public class Person {
-        private final String name;
-        private final PersonState state;
-        public Person(String name, PersonState state) {
-            this.name = name;
-            this.state = state;
-        }
-        public String name() {
-            return name;
-        }
-
-        public PersonState state() {
-            return state;
-        }
     }
 }
