@@ -8,14 +8,11 @@ import rx.android.widget.OnTextChangeEvent;
  */
 public interface BaseFriendSearchPresenter extends BasePresenter<BaseFriendSearchPresenter.BaseFriendSearchView>, BaseSwipeRefreshViewPresenter, BaseRecyclerViewPresenter<String, BasePersonListViewPresenter.BasePersonListAdapter> {
 
-    interface BaseFriendSearchView {
+    interface BaseFriendSearchView extends BaseListView {
         Observable<OnTextChangeEvent> bindPersonSearchObservable();
 
         void reSendSearch();
 
-        void showLoading();
-
-        void hideLoading();
     }
 
 }

@@ -13,14 +13,20 @@ public interface BaseChatListViewPresenter extends BasePresenter<BaseChatListVie
 
     void onChatClose(Chat chat);
 
-    void onLogoutClick(); //Might get rid of this/Move it somewhere else
+    void setDisplayType(Chat.ChatType type);
+
+    void requestUpdate(BaseChatListViewPresenter.OnDoneLoadingCallback callback, boolean repoNeedUpdate);
+
+    interface OnDoneLoadingCallback {
+        void done();
+    }
 
     interface ChatListView extends BaseListView {
         void showChat(Chat chat);
     }
 
     interface ChatListAdapter {
-        void notifyDataUpdate();
+        void notifyDataUpdate(BaseChatListViewPresenter.OnDoneLoadingCallback callback);
 
         void attachPresenter(BaseChatListViewPresenter presenter);
     }

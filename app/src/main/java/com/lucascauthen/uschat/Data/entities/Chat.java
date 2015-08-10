@@ -10,7 +10,7 @@ import java.util.List;
  * Created by lhc on 7/10/15.
  */
 public class Chat {
-    private final String from;
+    private String from;
     private final List<String> to;
     private final String id;
     private final ChatType chatType;
@@ -63,8 +63,7 @@ public class Chat {
         return isFromCurrentUser;
     }
 
-    public Chat(String from, List<String> to, String id, ChatType chatType, boolean isFromCurrentUser, LoadImageFunction function) {
-        this.from = from;
+    public Chat(List<String> to, String id, ChatType chatType, boolean isFromCurrentUser, LoadImageFunction function) {
         this.to = to;
         this.id = id;
         this.chatType = chatType;
@@ -92,6 +91,9 @@ public class Chat {
         }
     }
 
+    public Chat create(List<String> to, String id) {
+        return new Chat(to, id, ChatType.SENT_CHAT, true, null);
+    }
 
     public enum ChatType {
         SENT_CHAT,

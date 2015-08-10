@@ -2,6 +2,7 @@ package com.lucascauthen.uschat.presentation.controller.implmentations;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.util.Log;
 
@@ -56,9 +57,14 @@ public class CameraViewPresenter implements BaseCameraViewPresenter {
             camera.stopPreview();
             lastImageData = data;
             lastImage = BitmapFactory.decodeByteArray(data, 0, data.length);
+            //Matrix matrix = new Matrix();
+            //matrix.preScale(-1, 1);
+            //lastImage = Bitmap.createBitmap(lastImage , 0, 0, lastImage.getWidth(), lastImage.getHeight(), matrix, true);
             foregroundExecutor.execute(() -> {
                 view.hideLoading();
                 view.showPictureConfirmDialog(lastImage);
+                view.enableControls();
+                onResume();
             });
         };
     }

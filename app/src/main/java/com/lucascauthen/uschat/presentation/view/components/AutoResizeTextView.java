@@ -17,6 +17,7 @@ import android.widget.TextView;
  * @author Chase Colburn
  * @since Apr 4, 2011
  */
+
 public class AutoResizeTextView extends TextView {
 
     // Minimum text size for this text view

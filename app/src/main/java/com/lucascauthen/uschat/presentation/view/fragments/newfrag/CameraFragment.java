@@ -1,15 +1,11 @@
 package com.lucascauthen.uschat.presentation.view.fragments.newfrag;
 
-import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -18,10 +14,9 @@ import android.widget.Toast;
 import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.presentation.controller.base.BaseCameraViewPresenter;
 import com.lucascauthen.uschat.presentation.controller.base.BasePagerViewPresenter;
-import com.lucascauthen.uschat.presentation.controller.base.BasePersonListViewPresenter;
+import com.lucascauthen.uschat.presentation.controller.base.BaseSelectFriendsDialogPresenter;
 import com.lucascauthen.uschat.presentation.view.adapters.newadapters.PersonViewAdapter;
-import com.lucascauthen.uschat.presentation.view.components.newcomp.CameraPreview;
-import com.lucascauthen.uschat.presentation.view.dialogs.listeners.OnAcceptListener;
+import com.lucascauthen.uschat.presentation.view.components.CameraPreview;
 import com.lucascauthen.uschat.presentation.view.dialogs.PicturePreviewDialog;
 import com.lucascauthen.uschat.presentation.view.dialogs.SelectFriendsDialog;
 import com.lucascauthen.uschat.util.NullObject;
@@ -39,20 +34,22 @@ public class CameraFragment extends Fragment implements BaseCameraViewPresenter.
     @InjectView(R.id.camera_switch_button) ImageButton switchButton;
     @InjectView(R.id.camera_loading)ProgressBar loading;
 
-    private BaseCameraViewPresenter mainPresenter;
-    private BasePersonListViewPresenter friendSelectPresenter;
-    private PersonViewAdapter adapter;
+    private BaseCameraViewPresenter presenter;
+
     private BaseCameraViewPresenter.CameraPreview cameraPreview;
     private BasePagerViewPresenter.PagerViewChanger pageChanger = NullObject.create(BasePagerViewPresenter.PagerViewChanger.class);
+
+    private BaseSelectFriendsDialogPresenter subPresenter;
+    private PersonViewAdapter adapter;
 
     private SelectFriendsDialog selectFriendsDialog;
     private PicturePreviewDialog picturePreviewDialog;
 
 
-    public static CameraFragment newInstance(BaseCameraViewPresenter mainPresenter, BasePersonListViewPresenter friendSelectPresenter, PersonViewAdapter adapter) {
+    public static CameraFragment newInstance(BaseCameraViewPresenter mainPresenter, BaseSelectFriendsDialogPresenter selectFriendsDialogPresenter, PersonViewAdapter adapter) {
         CameraFragment f = new CameraFragment();
-        f.mainPresenter = mainPresenter;
-        f.friendSelectPresenter = friendSelectPresenter;
+        f.presenter = mainPresenter;
+        f.subPresenter = selectFriendsDialogPresenter;
         f.adapter = adapter;
         return f;
     }
@@ -61,22 +58,23 @@ public class CameraFragment extends Fragment implements BaseCameraViewPresenter.
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_camera, null);
         v.setClickable(true);
+        selectFriendsDialog = new SelectFriendsDialog(getActivity(), subPresenter, adapter); //Not injected with dagger because it requires an activity context
         cameraPreview = new CameraPreview(getActivity()); //Not injected because this requires activity scope and my current DI configuration is not setup for scoping
         ButterKnife.inject(this, v);
-        mainPresenter.attachPreview(cameraPreview);
+        presenter.attachPreview(cameraPreview);
 
         previewFrame.addView(cameraPreview.getView());
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainPresenter.onTryCapture();
+                presenter.onTryCapture();
             }
         });
         switchButton.setOnClickListener((view) -> {
-            mainPresenter.onDoubleTap();
+            presenter.onDoubleTap();
         });
 
-        mainPresenter.attachView(this);
+        presenter.attachView(this);
         return v;
     }
 
@@ -106,12 +104,12 @@ public class CameraFragment extends Fragment implements BaseCameraViewPresenter.
     @Override
     public void showPictureConfirmDialog(Bitmap image) {
         PicturePreviewDialog dialog = new PicturePreviewDialog(getActivity(), image);
-        dialog.setOnAcceptListener(new OnAcceptListener() {
-            @Override
-            public void accept(Dialog dialog) {
-                mainPresenter.onAcceptPicture();
-            }
+        dialog.setOnAcceptPictureListener((bitmap) -> {
+            dialog.hide();
+            dialog.cancel();
+            presenter.onAcceptPicture();
         });
+
         dialog.show();
     }
 
@@ -122,13 +120,8 @@ public class CameraFragment extends Fragment implements BaseCameraViewPresenter.
 
     @Override
     public void showFriendSelectDialog() {
-        //TODO
-        /*
-        SelectFriendsDialog dialog = new SelectFriendsDialog(getActivity(), friendSelectPresenter, adapter, people -> {
-            //mainPresenter.onSendChat(people);
-        });
-        dialog.show();
-        */
+        selectFriendsDialog.show();
+        selectFriendsDialog.update();
     }
 
     @Override
@@ -144,16 +137,16 @@ public class CameraFragment extends Fragment implements BaseCameraViewPresenter.
     @Override
     public void onResume() {
         super.onResume();
-        if(mainPresenter != null) {
-            mainPresenter.onResume();
+        if(presenter != null) {
+            presenter.onResume();
         }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if(mainPresenter != null) {
-            mainPresenter.onPause();
+        if(presenter != null) {
+            presenter.onPause();
         }
     }
 }

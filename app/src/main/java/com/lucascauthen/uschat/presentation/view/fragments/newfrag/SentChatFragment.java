@@ -11,9 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lucascauthen.uschat.R;
-import com.lucascauthen.uschat.data.entities.Chat;
-import com.lucascauthen.uschat.presentation.controller.base.BaseChatListViewPresenter;
-import com.lucascauthen.uschat.presentation.controller.base.BaseChatReceivedPresenter;
+import com.lucascauthen.uschat.presentation.controller.base.BaseChatSentPresenter;
 import com.lucascauthen.uschat.presentation.view.adapters.newadapters.ChatViewAdapter;
 
 import butterknife.ButterKnife;
@@ -22,17 +20,17 @@ import butterknife.InjectView;
 /**
  * Created by lhc on 8/5/15.
  */
-public class ChatReceivedFragment extends Fragment implements BaseChatReceivedPresenter.BaseReceivedChatView, BaseChatListViewPresenter.ChatListView {
+public class SentChatFragment extends Fragment implements BaseChatSentPresenter.BaseSentChatView {
 
-    @InjectView(R.id.chat_received_list_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-    @InjectView(R.id.chat_received_list_rv) RecyclerView recyclerView;
+    @InjectView(R.id.chat_sent_list_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+    @InjectView(R.id.chat_sent_list_rv) RecyclerView recyclerView;
 
-    private BaseChatReceivedPresenter presenter;
+    private BaseChatSentPresenter presenter;
     private ChatViewAdapter adapter;
     private LinearLayoutManager layoutManager;
 
-    public static ChatReceivedFragment newInstance(BaseChatReceivedPresenter presenter, ChatViewAdapter adapter) {
-        ChatReceivedFragment f = new ChatReceivedFragment();
+    public static SentChatFragment newInstance(BaseChatSentPresenter presenter, ChatViewAdapter adapter) {
+        SentChatFragment f = new SentChatFragment();
         f.presenter = presenter;
         f.adapter = adapter;
         return f;
@@ -47,7 +45,7 @@ public class ChatReceivedFragment extends Fragment implements BaseChatReceivedPr
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_chat_received, null);
+        View v = inflater.inflate(R.layout.fragment_chat_sent, null);
         ButterKnife.inject(this, v);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -61,16 +59,11 @@ public class ChatReceivedFragment extends Fragment implements BaseChatReceivedPr
 
     @Override
     public void showLoading() {
-        this.swipeRefreshLayout.setRefreshing(true);
+
     }
 
     @Override
     public void hideLoading() {
-        this.swipeRefreshLayout.setRefreshing(false);
-    }
-
-    @Override
-    public void showChat(Chat chat) {
 
     }
 }

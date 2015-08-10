@@ -30,6 +30,9 @@ public class ChatListViewPresenter implements BaseChatListViewPresenter {
     private final BackgroundExecutor backgroundExecutor;
     private final ForegroundExecutor foregroundExecutor;
     private final ChatRepo repository;
+    private boolean repoNeedUpdate = true;
+
+    private ChatRepo.RequestType displayType;
 
     public ChatListViewPresenter(BackgroundExecutor backgroundExecutor, ForegroundExecutor foregroundExecutor, ChatRepo repository) {
         this.backgroundExecutor = backgroundExecutor;
@@ -39,22 +42,42 @@ public class ChatListViewPresenter implements BaseChatListViewPresenter {
 
     @Override
     public Chat getItem(int index) {
-        return null;//TODO
+        if(repoNeedUpdate) {
+            repoNeedUpdate = false;
+            return repository.get(new ChatRepo.Request(true, displayType)).result().get(index);
+        } else {
+            return repository.get(new ChatRepo.Request(false, displayType)).result().get(index);
+        }
     }
 
     @Override
     public void getItemInBackground(int index, OnGetItemCallback<Chat> callback) {
-        //TODO
+        backgroundExecutor.execute(() -> {
+            Chat item = getItem(index);
+            foregroundExecutor.execute(() -> {
+                callback.onGetItem(item);
+            });
+        });
     }
 
     @Override
     public int getSize() {
-        return 0; //TODO
+        if(repoNeedUpdate) {
+            repoNeedUpdate = false;
+            return repository.get(new ChatRepo.Request(true, displayType)).result().size();
+        } else {
+            return repository.get(new ChatRepo.Request(false, displayType)).result().size();
+        }
     }
 
     @Override
     public void getSizeInBackground(OnGetSizeCallback callback) {
-        //TODO
+        backgroundExecutor.execute(() -> {
+            int size = getSize();
+            foregroundExecutor.execute(() -> {
+                callback.onGetSize(size);
+            });
+        });
     }
 
     @Override
@@ -132,6 +155,18 @@ public class ChatListViewPresenter implements BaseChatListViewPresenter {
     }
 
     @Override
+    public void setDisplayType(Chat.ChatType type) {
+        this.displayType = displayType;
+    }
+
+    @Override
+    public void requestUpdate(OnDoneLoadingCallback callback, boolean repoNeedUpdate) {
+        this.repoNeedUpdate = repoNeedUpdate;
+        adapter.notifyDataUpdate(callback);
+    }
+
+    /*
+    @Override
     public void onLogoutClick() {
         ParseUser.logOutInBackground(new LogOutCallback() {
             @Override
@@ -144,6 +179,7 @@ public class ChatListViewPresenter implements BaseChatListViewPresenter {
             }
         });
     }
+    */
 
     @Override
     public void attachPageChanger(BasePagerViewPresenter.PagerViewChanger changer) {

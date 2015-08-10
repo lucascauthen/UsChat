@@ -4,31 +4,41 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.lucascauthen.uschat.R;
+import com.lucascauthen.uschat.presentation.controller.base.BaseCameraViewPresenter;
 import com.lucascauthen.uschat.presentation.view.dialogs.listeners.OnAcceptListener;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * Created by lhc on 7/2/15.
  */
-public class PicturePreviewDialog extends Dialog {
+public class PicturePreviewDialog extends Dialog implements BaseCameraViewPresenter.PicturePreview{
     private Bitmap image;
-    private NullOnAcceptListener NULL_LISTENER = new NullOnAcceptListener();
-    private OnAcceptListener onAcceptListener = NULL_LISTENER;
-    private ImageView imageView;
+    private BaseCameraViewPresenter.PicturePreview.OnAcceptPicture onAccept;
+    private BaseCameraViewPresenter.PicturePreview.OnRejectPicture onReject;
+
+    @InjectView(R.id.preview_image_view) ImageView imageView;
+    @InjectView(R.id.picture_preview_accept) ImageButton accept;
+    @InjectView(R.id.picture_preview_reject) ImageButton reject;
 
     public PicturePreviewDialog(Context context, Bitmap theImage) {
-        super(context, R.style.DialogSlideStyle);
-        this.image = theImage;
+        super(context, R.style.DialogSlideAnimation);
         setContentView(R.layout.dialog_picture_preview);
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-        findViewById(R.id.picture_preview_accept).setOnClickListener(view -> {
-            getWindow().getAttributes().windowAnimations = R.style.DialogNoAnimation;
-            onAcceptListener.accept(this);
+        this.image = theImage;
+        ButterKnife.inject(this);
+
+
+        accept.setOnClickListener(view -> {
+            onAccept.accept(image);
         });
-        findViewById(R.id.picture_preview_reject).setOnClickListener(view -> {
-            cancel();
+        reject.setOnClickListener(view -> {
+            this.dismiss();
         });
         imageView = ((ImageView) findViewById(R.id.preview_image_view));
         imageView.setImageBitmap(image);
@@ -38,15 +48,13 @@ public class PicturePreviewDialog extends Dialog {
 
     }
 
-    public void setOnAcceptListener(OnAcceptListener onAcceptListener) {
-        this.onAcceptListener = onAcceptListener;
+    @Override
+    public void setOnAcceptPictureListener(OnAcceptPicture onAccept) {
+        this.onAccept = onAccept;
     }
 
-    private static class NullOnAcceptListener implements OnAcceptListener {
-
-        @Override
-        public void accept(Dialog dialog) {
-            dialog.cancel();
-        }
+    @Override
+    public void setOnRejectPictureListener(OnRejectPicture onReject) {
+        this.onReject = onReject;
     }
 }

@@ -1,5 +1,6 @@
 package com.lucascauthen.uschat.presentation.controller.implmentations;
 
+import com.lucascauthen.uschat.data.entities.User;
 import com.lucascauthen.uschat.presentation.controller.base.BaseLoginViewPresenter;
 import com.lucascauthen.uschat.util.NullObject;
 import com.parse.LogInCallback;
@@ -61,6 +62,7 @@ public class LoginViewPresenter implements BaseLoginViewPresenter {
         });
         if (ParseUser.getCurrentUser() != null) {
             view.notifyLoginSuccess();
+            User.login(ParseUser.getCurrentUser().getUsername());
         }
     }
 
@@ -83,6 +85,7 @@ public class LoginViewPresenter implements BaseLoginViewPresenter {
                 view.hideLoading();
                 if (parseUser != null) {
                     view.notifyLoginSuccess();
+                    User.login(ParseUser.getCurrentUser().getUsername());
                 } else {
                     view.notifyLoginFailure(e.getMessage());
                 }

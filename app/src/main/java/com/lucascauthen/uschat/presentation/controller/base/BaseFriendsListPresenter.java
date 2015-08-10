@@ -5,9 +5,6 @@ package com.lucascauthen.uschat.presentation.controller.base;
  */
 public interface BaseFriendsListPresenter extends BasePresenter<BaseFriendsListPresenter.BaseFriendListView>, BaseSwipeRefreshViewPresenter, BaseRecyclerViewPresenter<String, BasePersonListViewPresenter.BasePersonListAdapter>{
 
-    interface BaseFriendListView {
-        void showLoading();
-
-        void hideLoading();
+    interface BaseFriendListView extends BaseListView {
     }
 }

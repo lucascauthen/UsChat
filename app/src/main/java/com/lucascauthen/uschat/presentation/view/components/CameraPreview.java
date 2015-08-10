@@ -1,33 +1,32 @@
 package com.lucascauthen.uschat.presentation.view.components;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.Display;
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
 import com.lucascauthen.uschat.R;
+import com.lucascauthen.uschat.presentation.controller.base.BaseCameraViewPresenter;
 
 import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class CameraPreview extends SurfaceView {
+public class CameraPreview extends SurfaceView implements BaseCameraViewPresenter.CameraPreview{
     private SurfaceHolder holder;
     private Camera camera;
-    int curCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
-    private static int HEIGHT;
+    private final int HEIGHT;
 
-    @Inject
-    public CameraPreview(Activity context) {
+    public CameraPreview(Context context) {
         super(context);
+        this.camera = camera;
+
         // Install a SurfaceHolder.Callback so we get notified when the
         // underlying surface is created and destroyed.
         holder = getHolder();
@@ -39,20 +38,13 @@ public class CameraPreview extends SurfaceView {
         display.getSize(size);
         HEIGHT = size.y;
     }
-
-
-    public void reloadPreview(Camera camera) {
-        this.camera = camera;
-        loadPreview(getHolder());
-    }
-
     private void loadPreview(SurfaceHolder holder) {
         if (camera != null) {
             try {
                 camera.setPreviewDisplay(holder);
                 Camera.Parameters parameters = camera.getParameters();
-                parameters.set("orientation", "portrait");
                 List<Camera.Size> sizeList = parameters.getSupportedPictureSizes();
+                parameters.setRotation(270);
                 int chosenSize = getPictureSizeIndexForHeight(sizeList, HEIGHT);
                 parameters.setPictureSize(sizeList.get(chosenSize).width, sizeList.get(chosenSize).height);
                 camera.setParameters(parameters);
@@ -78,31 +70,26 @@ public class CameraPreview extends SurfaceView {
         }
         return chosenHeight;
     }
-    public void surfaceDestroyed(SurfaceHolder holder) {
-        // empty. Take care of releasing the CameraFragment preview in your activity.
-    }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
         if(camera != null) {
-            // If your preview can change or rotate, take care of those events here.
-            // Make sure to stop the preview before resizing or reformatting it.
+            //If your preview can change or rotate, take care of those events here.
+            //Make sure to stop the preview before resizing or reformatting it.
 
-            if (this.holder.getSurface() == null) {
-                // preview surface does not exist
+            if (this.holder.getSurface() == null) { //preview surface does not exist
                 return;
             }
 
-            // stop preview before making changes
+            //stop preview before making changes
             try {
                 camera.stopPreview();
             } catch (Exception e) {
                 // ignore: tried to stop a non-existent preview
             }
 
-            // set preview size and make any resize, rotate or
-            // reformatting changes here
-
-            // start preview with new settings
+            //set preview size and make any resize, rotate or
+            //reformatting changes here
+            //start preview with new settings
             try {
                 camera.setPreviewDisplay(this.holder);
                 camera.startPreview();
@@ -111,5 +98,16 @@ public class CameraPreview extends SurfaceView {
                 Log.d(getContext().getString(R.string.camera_log_tag), "Error starting camera preview: " + e.getMessage());
             }
         }
+    }
+
+    @Override
+    public void attachCamera(Camera camera) {
+        this.camera = camera;
+        loadPreview(getHolder());
+    }
+
+    @Override
+    public SurfaceView getView() {
+        return this;
     }
 }

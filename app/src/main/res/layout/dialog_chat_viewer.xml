@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/timer_bg"
-            android:textColor="@color/text_color_light"
+            android:textColor="@color/text_color_white"
             android:textSize="30sp"/>
 
     </LinearLayout>

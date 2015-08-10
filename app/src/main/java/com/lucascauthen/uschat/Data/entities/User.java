@@ -26,8 +26,8 @@ public class User implements PersonRepo {
         return name;
     }
 
-    public void login(String name) {
-        this.name = name;
+    public static void login(String name) {
+        User.name = name;
     }
 
     public void logout() {

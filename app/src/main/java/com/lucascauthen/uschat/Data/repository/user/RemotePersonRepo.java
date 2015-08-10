@@ -3,6 +3,8 @@ package com.lucascauthen.uschat.data.repository.user;
 import android.util.Log;
 
 import com.lucascauthen.uschat.data.entities.Person;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -11,7 +13,10 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by lhc on 8/4/15.
@@ -28,7 +33,31 @@ public class RemotePersonRepo implements PersonRepo {
         user.add("sentRequests", person.name());
         try {
             user.save();
-            callback.onComplete("");
+            //////////////
+            //Cloud Code//
+            //////////////
+            /*
+
+            Because the client can only modify its own data, this request is sent to the server to update the other user that this operation affects
+
+             */
+            Map<String, String> map = new HashMap<>();
+            map.put("toUser", person.name());
+            map.put("fromUser", user.getUsername());
+            ParseCloud.callFunctionInBackground("sendRequest", map, new FunctionCallback<Object>() {
+                public void done(Object object, ParseException e) {
+                    if (e == null){
+                        String msg = object.toString();
+                        Log.d("UsChat", msg);
+                        callback.onComplete(msg);
+                    } else {
+                        Log.d("UsChat", e.getMessage());
+                        callback.onComplete(e.getMessage());
+                    }
+                }
+            });
+            //////////////
+            //////////////
         } catch (ParseException e) {
             e.printStackTrace();
             callback.onComplete(e.getMessage());
@@ -48,7 +77,31 @@ public class RemotePersonRepo implements PersonRepo {
         user.addUnique("friends", person.name());
         try {
             user.save();
-            callback.onComplete("");
+            //////////////
+            //Cloud Code//
+            //////////////
+            /*
+
+            Because the client can only modify its own data, this request is sent to the server to update the other user that this operation affects
+
+             */
+            Map<String, String> map = new HashMap<>();
+            map.put("fromUser", person.name());
+            map.put("toUser", user.getUsername());
+            ParseCloud.callFunctionInBackground("acceptRequest", map, new FunctionCallback<Object>() {
+                public void done(Object object, ParseException e) {
+                    if (e == null){
+                        String msg = object.toString();
+                        Log.d("UsChat", msg);
+                        callback.onComplete(msg);
+                    } else {
+                        Log.d("UsChat", e.getMessage());
+                        callback.onComplete(e.getMessage());
+                    }
+                }
+            });
+            //////////////
+            //////////////
         } catch (ParseException e) {
             e.printStackTrace();
             callback.onComplete(e.getMessage());
@@ -66,7 +119,31 @@ public class RemotePersonRepo implements PersonRepo {
         user.removeAll("receivedRequests", Collections.singletonList(person.name()));
         try {
             user.save();
-            callback.onComplete("");
+            //////////////
+            //Cloud Code//
+            //////////////
+            /*
+
+            Because the client can only modify its own data, this request is sent to the server to update the other user that this operation affects
+
+             */
+            Map<String, String> map = new HashMap<>();
+            map.put("fromUser", person.name());
+            map.put("toUser", user.getUsername());
+            ParseCloud.callFunctionInBackground("rejectRequest", map, new FunctionCallback<Object>() {
+                public void done(Object object, ParseException e) {
+                    if (e == null){
+                        String msg = object.toString();
+                        Log.d("UsChat", msg);
+                        callback.onComplete(msg);
+                    } else {
+                        Log.d("UsChat", e.getMessage());
+                        callback.onComplete(e.getMessage());
+                    }
+                }
+            });
+            //////////////
+            //////////////
         } catch (ParseException e) {
             e.printStackTrace();
             callback.onComplete(e.getMessage());
@@ -84,7 +161,31 @@ public class RemotePersonRepo implements PersonRepo {
         user.removeAll("sentRequests", Collections.singletonList(person.name()));
         try {
             user.save();
-            callback.onComplete("");
+            //////////////
+            //Cloud Code//
+            //////////////
+            /*
+
+            Because the client can only modify its own data, this request is sent to the server to update the other user that this operation affects
+
+             */
+            Map<String, String> map = new HashMap<>();
+            map.put("toUser", person.name());
+            map.put("fromUser", user.getUsername());
+            ParseCloud.callFunctionInBackground("cancelRequest", map, new FunctionCallback<Object>() {
+                public void done(Object object, ParseException e) {
+                    if (e == null){
+                        String msg = object.toString();
+                        Log.d("UsChat", msg);
+                        callback.onComplete(msg);
+                    } else {
+                        Log.d("UsChat", e.getMessage());
+                        callback.onComplete(e.getMessage());
+                    }
+                }
+            });
+            //////////////
+            //////////////
         } catch (ParseException e) {
             e.printStackTrace();
             callback.onComplete(e.getMessage());
@@ -102,7 +203,31 @@ public class RemotePersonRepo implements PersonRepo {
         user.removeAll("friends", Collections.singletonList(person.name()));
         try {
             user.save();
-            callback.onComplete("");
+            //////////////
+            //Cloud Code//
+            //////////////
+            /*
+
+            Because the client can only modify its own data, this request is sent to the server to update the other user that this operation affects
+
+             */
+            Map<String, String> map = new HashMap<>();
+            map.put("toUser", person.name());
+            map.put("fromUser", user.getUsername());
+            ParseCloud.callFunctionInBackground("removeFriend", map, new FunctionCallback<Object>() {
+                public void done(Object object, ParseException e) {
+                    if (e == null){
+                        String msg = object.toString();
+                        Log.d("UsChat", msg);
+                        callback.onComplete(msg);
+                    } else {
+                        Log.d("UsChat", e.getMessage());
+                        callback.onComplete(e.getMessage());
+                    }
+                }
+            });
+            //////////////
+            //////////////
         } catch (ParseException e) {
             e.printStackTrace();
             callback.onComplete(e.getMessage());

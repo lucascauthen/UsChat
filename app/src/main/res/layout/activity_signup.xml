@@ -34,16 +34,16 @@
                             android:maxLines="1"
                             android:singleLine="true"
                             android:layout_marginBottom="10dp"
-                            android:textColorHint="@color/text_color_light"
-                            android:textColor="@color/text_color_light" />
+                            android:textColorHint="@color/text_color_white"
+                            android:textColor="@color/text_color_white" />
 
                         <EditText android:id="@+id/register_email" android:layout_width="match_parent"
                             android:layout_height="wrap_content" android:hint="@string/prompt_email"
                             android:inputType="textEmailAddress" android:maxLines="1"
                             android:singleLine="true"
                             android:layout_marginBottom="10dp"
-                            android:textColorHint="@color/text_color_light"
-                            android:textColor="@color/text_color_light" />
+                            android:textColorHint="@color/text_color_white"
+                            android:textColor="@color/text_color_white" />
 
                         <EditText
                             android:id="@+id/register_email_again"
@@ -54,8 +54,8 @@
                             android:maxLines="1"
                             android:singleLine="true"
                             android:layout_marginBottom="10dp"
-                            android:textColorHint="@color/text_color_light"
-                            android:textColor="@color/text_color_light" />
+                            android:textColorHint="@color/text_color_white"
+                            android:textColor="@color/text_color_white" />
 
                         <EditText android:id="@+id/register_password"
                             android:layout_width="match_parent"
@@ -65,8 +65,8 @@
                             android:imeOptions="actionUnspecified" android:inputType="textPassword"
                             android:maxLines="1" android:singleLine="true"
                             android:layout_marginBottom="10dp"
-                            android:textColorHint="@color/text_color_light"
-                            android:textColor="@color/text_color_light" />
+                            android:textColorHint="@color/text_color_white"
+                            android:textColor="@color/text_color_white" />
 
                         <EditText
                             android:id="@+id/register_password_again"
@@ -79,14 +79,14 @@
                             android:maxLines="1"
                             android:singleLine="true"
                             android:layout_marginBottom="10dp"
-                            android:textColorHint="@color/text_color_light"
-                            android:textColor="@color/text_color_light" />
+                            android:textColorHint="@color/text_color_white"
+                            android:textColor="@color/text_color_white" />
 
                         <Button android:id="@+id/register_button" style="?android:textAppearanceSmall"
                             android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:layout_marginTop="16dp" android:text="@string/action_register"
                             android:textStyle="bold"
-                            android:textColor="@color/text_color_light"
+                            android:textColor="@color/text_color_white"
                             android:background="@drawable/button_bg"
                             />
 

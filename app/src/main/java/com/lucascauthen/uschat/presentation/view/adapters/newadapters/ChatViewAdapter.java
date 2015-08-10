@@ -27,6 +27,7 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ChatVi
 
     private BaseChatListViewPresenter presenter;
     private BaseChatListViewPresenter.ChatListCardView.OnClickChatListener onClickChatListener;
+    private int numItems = 0;
 
     @Inject
     public ChatViewAdapter() {
@@ -49,12 +50,16 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ChatVi
 
     @Override
     public int getItemCount() {
-        return presenter.getSize();
+        return numItems;
     }
 
     @Override
-    public void notifyDataUpdate() {
-        notifyDataSetChanged();
+    public void notifyDataUpdate(BaseChatListViewPresenter.OnDoneLoadingCallback callback) {
+        presenter.getSizeInBackground((size) -> {
+            callback.done();
+            this.numItems = size;
+            this.notifyDataSetChanged();
+        });
     }
 
     @Override

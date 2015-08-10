@@ -32,6 +32,7 @@ import com.lucascauthen.uschat.presentation.controller.base.BasePeopleTabViewPre
 import com.lucascauthen.uschat.presentation.controller.base.BaseLoginViewPresenter;
 import com.lucascauthen.uschat.presentation.controller.base.BasePagerViewPresenter;
 import com.lucascauthen.uschat.presentation.controller.base.BasePersonListViewPresenter;
+import com.lucascauthen.uschat.presentation.controller.base.BaseSelectFriendsDialogPresenter;
 import com.lucascauthen.uschat.presentation.controller.base.BaseSignUpViewPresenter;
 import com.lucascauthen.uschat.presentation.controller.implmentations.CameraViewPresenter;
 import com.lucascauthen.uschat.presentation.controller.implmentations.ChatListViewPresenter;
@@ -45,10 +46,11 @@ import com.lucascauthen.uschat.presentation.controller.implmentations.PeopleTabV
 import com.lucascauthen.uschat.presentation.controller.implmentations.LoginViewPresenter;
 import com.lucascauthen.uschat.presentation.controller.implmentations.PagerViewPresenter;
 import com.lucascauthen.uschat.presentation.controller.implmentations.PersonListViewPresenter;
+import com.lucascauthen.uschat.presentation.controller.implmentations.SelectFriendsDialogPresenter;
 import com.lucascauthen.uschat.presentation.controller.implmentations.SignUpViewPresenter;
 import com.lucascauthen.uschat.presentation.view.adapters.newadapters.PersonViewAdapter;
 import com.lucascauthen.uschat.presentation.view.fragments.newfrag.ChatReceivedFragment;
-import com.lucascauthen.uschat.presentation.view.fragments.newfrag.ChatSentFragment;
+import com.lucascauthen.uschat.presentation.view.fragments.newfrag.SentChatFragment;
 import com.lucascauthen.uschat.presentation.view.fragments.newfrag.ChatTabFragment;
 import com.lucascauthen.uschat.presentation.view.fragments.newfrag.FriendRequestsFragment;
 import com.lucascauthen.uschat.presentation.view.fragments.newfrag.FriendSearchFragment;
@@ -188,6 +190,10 @@ public class ApplicationModule {
     BaseChatSentPresenter provideChatSentPresenter(BackgroundExecutor backgroundExecutor, ForegroundExecutor foregroundExecutor, BaseChatListViewPresenter subPresenter) {
         return new ChatSentPresenter(backgroundExecutor, foregroundExecutor, subPresenter);
     }
+    @Provides
+    BaseSelectFriendsDialogPresenter provideSelectFriendsDialogPresenter(BackgroundExecutor backgroundExecutor, ForegroundExecutor foregroundExecutor, BasePersonListViewPresenter subPresenter, @Named("MainChatRepo")ChatRepo repo) {
+        return new SelectFriendsDialogPresenter(backgroundExecutor, foregroundExecutor, subPresenter, repo);
+    }
     //////////
 
 
@@ -236,7 +242,7 @@ public class ApplicationModule {
     //Fragments//
     @Provides
     @Singleton
-    CameraFragment provideCameraFragment(BaseCameraViewPresenter mainPresenter, BasePersonListViewPresenter subPresenter, PersonViewAdapter adapter) {
+    CameraFragment provideCameraFragment(BaseCameraViewPresenter mainPresenter, BaseSelectFriendsDialogPresenter subPresenter, PersonViewAdapter adapter) {
         return CameraFragment.newInstance(mainPresenter, subPresenter, adapter);
     }
 
@@ -269,7 +275,7 @@ public class ApplicationModule {
     @Provides
     @Named("ChatSent")
     Fragment provideSentChatFragment(BaseChatSentPresenter presenter, ChatViewAdapter adapter) {
-        return ChatSentFragment.newInstance(presenter, adapter);
+        return SentChatFragment.newInstance(presenter, adapter);
     }
     @Provides
     @Named("ChatReceived")
@@ -291,7 +297,5 @@ public class ApplicationModule {
         return new PersonViewAdapter(foregroundExecutor);
     }
     //////////
-
-
 
 }

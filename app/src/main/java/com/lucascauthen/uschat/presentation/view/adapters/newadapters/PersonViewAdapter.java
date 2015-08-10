@@ -1,6 +1,8 @@
 package com.lucascauthen.uschat.presentation.view.adapters.newadapters;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lucascauthen.uschat.R;
@@ -83,12 +86,16 @@ public class PersonViewAdapter extends RecyclerView.Adapter<PersonViewAdapter.Pe
         @InjectView(R.id.person_card_state_image)ImageView stateImage;
         @InjectView(R.id.person_card_action_container)LinearLayout actionContainer;
         @InjectView(R.id.person_card_progress_bar)ProgressBar progressBar;
+        @InjectView(R.id.person_cv) CardView cv;
+        @InjectView(R.id.person_card_parent_layout) RelativeLayout background;
 
         private final HashMap<String, ImageButton> actionButtons = new LinkedHashMap<>();
         private final InitialStateSetter setter;
         private final BasePersonListViewPresenter presenter;
         private final ForegroundExecutor foregroundExecutor;
         private Person person;
+
+
 
 
         private final Context context;
@@ -100,6 +107,7 @@ public class PersonViewAdapter extends RecyclerView.Adapter<PersonViewAdapter.Pe
             this.setter = setter;
             this.presenter = presenter;
             this.foregroundExecutor = foregroundExecutor;
+
         }
 
         @Override
@@ -153,6 +161,7 @@ public class PersonViewAdapter extends RecyclerView.Adapter<PersonViewAdapter.Pe
                 this.stateImage.setImageResource(iconId);
             });
         }
+
 
         @Override
         public void showLoading() {

@@ -27,7 +27,7 @@
                 android:text="@string/app_title"
                 android:id="@+id/login_title"
                 android:textSize="30dp"
-                android:textColor="@color/text_color_light" />
+                android:textColor="@color/text_color_white" />
 
 
         </LinearLayout>
@@ -53,8 +53,8 @@
                             android:inputType="textEmailAddress" android:maxLines="1"
                             android:singleLine="true"
                             android:layout_marginBottom="10dp"
-                            android:textColorHint="@color/text_color_light"
-                            android:textColor="@color/text_color_light"
+                            android:textColorHint="@color/text_color_white"
+                            android:textColor="@color/text_color_white"
                             android:text="lucas" />
 
                         <EditText android:id="@+id/login_password_field" android:layout_width="match_parent"
@@ -63,8 +63,8 @@
                             android:imeOptions="actionUnspecified" android:inputType="textPassword"
                             android:maxLines="1" android:singleLine="true"
                             android:layout_marginBottom="10dp"
-                            android:textColorHint="@color/text_color_light"
-                            android:textColor="@color/text_color_light"
+                            android:textColorHint="@color/text_color_white"
+                            android:textColor="@color/text_color_white"
                             android:text="password" />
 
                         <LinearLayout
@@ -77,7 +77,7 @@
                                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                                 android:text="@string/action_sign_in"
                                 android:textStyle="bold"
-                                android:textColor="@color/text_color_light"
+                                android:textColor="@color/text_color_white"
                                 android:background="@drawable/button_bg"
                                 android:layout_weight="1" />
 
@@ -86,7 +86,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/action_signup"
                                 android:id="@+id/login_signup_button"
-                                android:textColor="@color/text_color_light"
+                                android:textColor="@color/text_color_white"
                                 android:background="@drawable/button_bg"
                                 android:layout_weight="1"
                                 android:layout_marginLeft="16dp"></Button>

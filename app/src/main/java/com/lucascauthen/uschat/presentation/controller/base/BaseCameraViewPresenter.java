@@ -45,4 +45,16 @@ public interface BaseCameraViewPresenter extends BasePresenter<BaseCameraViewPre
 
         SurfaceView getView();
     }
+    interface PicturePreview {
+        void setOnAcceptPictureListener(OnAcceptPicture onAcceot);
+
+        void setOnRejectPictureListener(OnRejectPicture onReject);
+
+        interface OnAcceptPicture {
+            void accept(Bitmap image);
+        }
+        interface OnRejectPicture {
+            void reject();
+        }
+    }
 }

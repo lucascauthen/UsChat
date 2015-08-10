@@ -1,6 +1,9 @@
 package com.lucascauthen.uschat.data.repository.chat;
 
 import com.lucascauthen.uschat.data.entities.Chat;
+import com.lucascauthen.uschat.data.entities.Person;
+
+import java.util.List;
 
 /**
  * Created by lhc on 8/4/15.
