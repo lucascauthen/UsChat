@@ -1,4 +1,4 @@
-package com.lucascauthen.uschat.presentation.view.fragments.newfrag;
+package com.lucascauthen.uschat.presentation.view.fragments;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

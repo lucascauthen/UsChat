@@ -1,4 +1,4 @@
-package com.lucascauthen.uschat.presentation.view.fragments.newfrag;
+package com.lucascauthen.uschat.presentation.view.fragments;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;

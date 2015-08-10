@@ -1,4 +1,4 @@
-package com.lucascauthen.uschat.presentation.view.fragments.newfrag;
+package com.lucascauthen.uschat.presentation.view.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,7 +12,8 @@ import android.view.ViewGroup;
 
 import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.presentation.controller.base.BaseChatSentPresenter;
-import com.lucascauthen.uschat.presentation.view.adapters.newadapters.ChatViewAdapter;
+import com.lucascauthen.uschat.presentation.view.adapters.ChatViewAdapter;
+
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

@@ -11,9 +11,9 @@ import android.support.v4.view.ViewPager;
 
 import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.presentation.controller.base.BasePagerViewPresenter;
-import com.lucascauthen.uschat.presentation.view.fragments.newfrag.CameraFragment;
-import com.lucascauthen.uschat.presentation.view.fragments.newfrag.ChatTabFragment;
-import com.lucascauthen.uschat.presentation.view.fragments.newfrag.FriendTabFragment;
+import com.lucascauthen.uschat.presentation.view.fragments.CameraFragment;
+import com.lucascauthen.uschat.presentation.view.fragments.ChatTabFragment;
+import com.lucascauthen.uschat.presentation.view.fragments.FriendTabFragment;
 
 import javax.inject.Inject;
 

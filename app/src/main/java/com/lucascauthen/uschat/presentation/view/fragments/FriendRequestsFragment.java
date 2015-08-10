@@ -1,4 +1,4 @@
-package com.lucascauthen.uschat.presentation.view.fragments.newfrag;
+package com.lucascauthen.uschat.presentation.view.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,32 +11,31 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lucascauthen.uschat.R;
-import com.lucascauthen.uschat.data.entities.Chat;
-import com.lucascauthen.uschat.presentation.controller.base.BaseChatListViewPresenter;
-import com.lucascauthen.uschat.presentation.controller.base.BaseChatReceivedPresenter;
-import com.lucascauthen.uschat.presentation.view.adapters.newadapters.ChatViewAdapter;
+import com.lucascauthen.uschat.presentation.controller.base.BaseFriendRequestPresenter;
+import com.lucascauthen.uschat.presentation.view.adapters.newadapters.PersonViewAdapter;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
- * Created by lhc on 8/5/15.
+ * Created by lhc on 8/4/15.
  */
-public class ChatReceivedFragment extends Fragment implements BaseChatReceivedPresenter.BaseReceivedChatView, BaseChatListViewPresenter.ChatListView {
+public class FriendRequestsFragment extends Fragment implements BaseFriendRequestPresenter.BaseRequestListView{
+    private BaseFriendRequestPresenter presenter;
+    private PersonViewAdapter adapter;
 
-    @InjectView(R.id.chat_received_list_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-    @InjectView(R.id.chat_received_list_rv) RecyclerView recyclerView;
-
-    private BaseChatReceivedPresenter presenter;
-    private ChatViewAdapter adapter;
     private LinearLayoutManager layoutManager;
 
-    public static ChatReceivedFragment newInstance(BaseChatReceivedPresenter presenter, ChatViewAdapter adapter) {
-        ChatReceivedFragment f = new ChatReceivedFragment();
+    @InjectView(R.id.friend_requests_rv)RecyclerView recyclerView;
+    @InjectView(R.id.friend_requests_swipe_refresh)SwipeRefreshLayout swipeRefreshLayout;
+
+    public static FriendRequestsFragment newInstance(BaseFriendRequestPresenter presenter, PersonViewAdapter adapter) {
+        FriendRequestsFragment f = new FriendRequestsFragment();
         f.presenter = presenter;
         f.adapter = adapter;
         return f;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +46,7 @@ public class ChatReceivedFragment extends Fragment implements BaseChatReceivedPr
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_chat_received, null);
+        View v = inflater.inflate(R.layout.fragment_friend_requests, null);
         ButterKnife.inject(this, v);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -67,10 +66,5 @@ public class ChatReceivedFragment extends Fragment implements BaseChatReceivedPr
     @Override
     public void hideLoading() {
         this.swipeRefreshLayout.setRefreshing(false);
-    }
-
-    @Override
-    public void showChat(Chat chat) {
-
     }
 }

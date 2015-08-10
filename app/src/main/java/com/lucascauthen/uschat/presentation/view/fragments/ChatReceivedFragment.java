@@ -1,4 +1,4 @@
-package com.lucascauthen.uschat.presentation.view.fragments.newfrag;
+package com.lucascauthen.uschat.presentation.view.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,38 +9,34 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import com.lucascauthen.uschat.R;
-import com.lucascauthen.uschat.presentation.controller.base.BaseFriendSearchPresenter;
-import com.lucascauthen.uschat.presentation.view.adapters.newadapters.PersonViewAdapter;
+import com.lucascauthen.uschat.data.entities.Chat;
+import com.lucascauthen.uschat.presentation.controller.base.BaseChatListViewPresenter;
+import com.lucascauthen.uschat.presentation.controller.base.BaseChatReceivedPresenter;
+import com.lucascauthen.uschat.presentation.view.adapters.ChatViewAdapter;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import rx.Observable;
-import rx.android.widget.OnTextChangeEvent;
-import rx.android.widget.WidgetObservable;
 
 /**
- * Created by lhc on 8/4/15.
+ * Created by lhc on 8/5/15.
  */
-public class FriendSearchFragment extends Fragment implements BaseFriendSearchPresenter.BaseFriendSearchView {
-    private BaseFriendSearchPresenter presenter;
-    private PersonViewAdapter adapter;
+public class ChatReceivedFragment extends Fragment implements BaseChatReceivedPresenter.BaseReceivedChatView, BaseChatListViewPresenter.ChatListView {
 
+    @InjectView(R.id.chat_received_list_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+    @InjectView(R.id.chat_received_list_rv) RecyclerView recyclerView;
+
+    private BaseChatReceivedPresenter presenter;
+    private ChatViewAdapter adapter;
     private LinearLayoutManager layoutManager;
 
-    @InjectView(R.id.friend_search_rv)RecyclerView recyclerView;
-    @InjectView(R.id.friend_search_swipe_refresh)SwipeRefreshLayout swipeRefreshLayout;
-    @InjectView(R.id.friend_search_search_field)EditText searchField;
-
-    public static FriendSearchFragment newInstance(BaseFriendSearchPresenter presenter, PersonViewAdapter adapter) {
-        FriendSearchFragment f = new FriendSearchFragment();
+    public static ChatReceivedFragment newInstance(BaseChatReceivedPresenter presenter, ChatViewAdapter adapter) {
+        ChatReceivedFragment f = new ChatReceivedFragment();
         f.presenter = presenter;
         f.adapter = adapter;
         return f;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +47,7 @@ public class FriendSearchFragment extends Fragment implements BaseFriendSearchPr
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_friend_search, null);
+        View v = inflater.inflate(R.layout.fragment_chat_received, null);
         ButterKnife.inject(this, v);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -64,16 +60,6 @@ public class FriendSearchFragment extends Fragment implements BaseFriendSearchPr
     }
 
     @Override
-    public Observable<OnTextChangeEvent> bindPersonSearchObservable() {
-        return WidgetObservable.text(searchField);
-    }
-
-    @Override
-    public void reSendSearch() {
-        this.searchField.setText(searchField.getText().toString());
-    }
-
-    @Override
     public void showLoading() {
         this.swipeRefreshLayout.setRefreshing(true);
     }
@@ -81,5 +67,10 @@ public class FriendSearchFragment extends Fragment implements BaseFriendSearchPr
     @Override
     public void hideLoading() {
         this.swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void showChat(Chat chat) {
+
     }
 }

@@ -49,16 +49,16 @@ import com.lucascauthen.uschat.presentation.controller.implmentations.PersonList
 import com.lucascauthen.uschat.presentation.controller.implmentations.SelectFriendsDialogPresenter;
 import com.lucascauthen.uschat.presentation.controller.implmentations.SignUpViewPresenter;
 import com.lucascauthen.uschat.presentation.view.adapters.newadapters.PersonViewAdapter;
-import com.lucascauthen.uschat.presentation.view.fragments.newfrag.ChatReceivedFragment;
-import com.lucascauthen.uschat.presentation.view.fragments.newfrag.SentChatFragment;
-import com.lucascauthen.uschat.presentation.view.fragments.newfrag.ChatTabFragment;
-import com.lucascauthen.uschat.presentation.view.fragments.newfrag.FriendRequestsFragment;
-import com.lucascauthen.uschat.presentation.view.fragments.newfrag.FriendSearchFragment;
-import com.lucascauthen.uschat.presentation.view.fragments.newfrag.FriendListFragment;
-import com.lucascauthen.uschat.presentation.view.fragments.newfrag.FriendTabFragment;
+import com.lucascauthen.uschat.presentation.view.fragments.ChatReceivedFragment;
+import com.lucascauthen.uschat.presentation.view.fragments.ChatTabFragment;
+import com.lucascauthen.uschat.presentation.view.fragments.FriendRequestsFragment;
+import com.lucascauthen.uschat.presentation.view.fragments.FriendSearchFragment;
+import com.lucascauthen.uschat.presentation.view.fragments.FriendListFragment;
+import com.lucascauthen.uschat.presentation.view.fragments.FriendTabFragment;
+import com.lucascauthen.uschat.presentation.view.fragments.SentChatFragment;
 import com.lucascauthen.uschat.util.ActivityNavigator;
-import com.lucascauthen.uschat.presentation.view.adapters.newadapters.ChatViewAdapter;
-import com.lucascauthen.uschat.presentation.view.fragments.newfrag.CameraFragment;
+import com.lucascauthen.uschat.presentation.view.adapters.ChatViewAdapter;
+import com.lucascauthen.uschat.presentation.view.fragments.CameraFragment;
 
 import javax.inject.Named;
 import javax.inject.Singleton;

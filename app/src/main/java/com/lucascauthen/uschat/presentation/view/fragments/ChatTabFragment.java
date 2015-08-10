@@ -1,17 +1,12 @@
-package com.lucascauthen.uschat.presentation.view.fragments.newfrag;
+package com.lucascauthen.uschat.presentation.view.fragments;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lucascauthen.uschat.R;
-import com.lucascauthen.uschat.data.entities.Chat;
 import com.lucascauthen.uschat.presentation.controller.base.BaseChatTabViewPresenter;
 import com.lucascauthen.uschat.presentation.view.components.NestedViewPager;
-import com.lucascauthen.uschat.presentation.view.dialogs.ChatViewDialog;
 import com.lucascauthen.uschat.util.ActivityNavigator;
 
 

@@ -5,9 +5,9 @@ import com.lucascauthen.uschat.presentation.view.activities.LoginActivity;
 import com.lucascauthen.uschat.presentation.view.activities.PagerActivity;
 import com.lucascauthen.uschat.presentation.view.activities.SignUpActivity;
 
-import com.lucascauthen.uschat.presentation.view.fragments.newfrag.CameraFragment;
-import com.lucascauthen.uschat.presentation.view.fragments.newfrag.ChatTabFragment;
-import com.lucascauthen.uschat.presentation.view.fragments.newfrag.FriendTabFragment;
+import com.lucascauthen.uschat.presentation.view.fragments.CameraFragment;
+import com.lucascauthen.uschat.presentation.view.fragments.ChatTabFragment;
+import com.lucascauthen.uschat.presentation.view.fragments.FriendTabFragment;
 
 
 import javax.inject.Singleton;
