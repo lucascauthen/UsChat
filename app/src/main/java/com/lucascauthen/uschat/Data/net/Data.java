@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * Created by lhc on 6/17/15.
  */
-public class Data implements DataObject{
+public class Data implements DataObject {
     private String objectId;
     private String parentKey;
     private HashMap<String, Object> data = new HashMap<String, Object>();
@@ -39,7 +39,6 @@ public class Data implements DataObject{
     }
 
 
-
     @Override
     public Object get(String key) {
         return data.get(key);
@@ -48,7 +47,7 @@ public class Data implements DataObject{
     @Override
     public String getString(String key) {
         try {
-            return (String)data.get(key);
+            return (String) data.get(key);
         } catch (ClassCastException e) {
             e.printStackTrace();
             return null;
@@ -58,7 +57,7 @@ public class Data implements DataObject{
     @Override
     public int getInt(String key) {
         try {
-            return (int)data.get(key);
+            return (int) data.get(key);
         } catch (ClassCastException e) {
             e.printStackTrace();
             return 0;
@@ -68,7 +67,7 @@ public class Data implements DataObject{
     @Override
     public boolean getBoolean(String key) {
         try {
-            return (boolean)data.get(key);
+            return (boolean) data.get(key);
         } catch (ClassCastException e) {
             e.printStackTrace();
             return false;
@@ -78,7 +77,7 @@ public class Data implements DataObject{
     @Override
     public float getFloat(String key) {
         try {
-            return (float)data.get(key);
+            return (float) data.get(key);
         } catch (ClassCastException e) {
             e.printStackTrace();
             return 0;
@@ -88,7 +87,7 @@ public class Data implements DataObject{
     @Override
     public double getDouble(String key) {
         try {
-            return (Double)data.get(key);
+            return (Double) data.get(key);
         } catch (ClassCastException e) {
             e.printStackTrace();
             return 0;
@@ -100,7 +99,7 @@ public class Data implements DataObject{
     @Override
     public DataObject child(String key) throws DataException {
         try {
-            ParseObject parseObject = ((ParseObject)data.get(key)).fetchIfNeeded();
+            ParseObject parseObject = ((ParseObject) data.get(key)).fetchIfNeeded();
             return ParseNetworkInterface.convertObjectFromParse(parseObject);
         } catch (ParseException e) {
             throw new DataException(e.getCode(), e.getMessage());

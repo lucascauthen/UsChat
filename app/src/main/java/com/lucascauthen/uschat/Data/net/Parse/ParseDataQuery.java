@@ -41,6 +41,7 @@ public class ParseDataQuery<T extends ParseObject> implements DataQuery {
         this.mainQuery = (ParseQuery<T>) ParseQuery.getQuery(ParseUser.class);
         return this;
     }
+
     @Override
     public DataQuery whereEqualTo(String key, Object value) {
         getQuery().whereEqualTo(key, value);
@@ -92,7 +93,7 @@ public class ParseDataQuery<T extends ParseObject> implements DataQuery {
     @Override
     public DataQuery whereOr(DataQuery other) {
         ParseQuery<T> beforeQuery = mainQuery;
-        ParseQuery<T> otherQuery = ((ParseDataQuery<T>)other).getQuery();
+        ParseQuery<T> otherQuery = ((ParseDataQuery<T>) other).getQuery();
         List<ParseQuery<T>> queries = new ArrayList<ParseQuery<T>>();
         queries.add(beforeQuery);
         queries.add(otherQuery);
@@ -114,7 +115,7 @@ public class ParseDataQuery<T extends ParseObject> implements DataQuery {
 
     @Override
     public boolean isValid() {
-        if(!parentKey.equals("")) {
+        if (!parentKey.equals("")) {
             return true;
         }
         return false;

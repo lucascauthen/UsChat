@@ -17,7 +17,7 @@ import java.util.Set;
 /**
  * Created by lhc on 6/15/15.
  */
-public class ParseUserObject implements UserObject{
+public class ParseUserObject implements UserObject {
     private String username;
     private String password;
     private String email;
@@ -26,6 +26,7 @@ public class ParseUserObject implements UserObject{
     public ParseUserObject() {
         //Assume already initialized
     }
+
     @Override
     public String getUsername() {
         return null;
@@ -38,7 +39,7 @@ public class ParseUserObject implements UserObject{
 
     @Override
     public UserObject login(String username, String password) throws DataException {
-        if(ParseUser.getCurrentUser() != null) {
+        if (ParseUser.getCurrentUser() != null) {
             logOut();
         }
         try {
@@ -124,7 +125,7 @@ public class ParseUserObject implements UserObject{
 
     @Override
     public boolean isLoggedIn() {
-        if(ParseUser.getCurrentUser() != null) {
+        if (ParseUser.getCurrentUser() != null) {
             return true;
         }
         return false;
@@ -162,7 +163,7 @@ public class ParseUserObject implements UserObject{
 
     @Override
     public float getFloat(String key) {
-        return (float)getDouble(key);
+        return (float) getDouble(key);
     }
 
     @Override
@@ -184,7 +185,7 @@ public class ParseUserObject implements UserObject{
         ParseUser.getCurrentUser().getParseObject(key).fetchIfNeededInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject parseObject, ParseException e) {
-                if(e != null) {
+                if (e != null) {
                     //Failure
                     callback.done(null, new DataException(e.getCode(), e.getMessage()));
                 } else {

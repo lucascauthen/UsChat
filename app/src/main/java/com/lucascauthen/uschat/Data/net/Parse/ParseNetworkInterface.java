@@ -2,18 +2,16 @@ package com.lucascauthen.uschat.data.net.Parse;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-
+import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.data.net.Callbacks.DeleteDataCallback;
 import com.lucascauthen.uschat.data.net.Callbacks.GetDataCallback;
 import com.lucascauthen.uschat.data.net.Callbacks.SaveDataCallback;
 import com.lucascauthen.uschat.data.net.Callbacks.UpdateDataCallback;
 import com.lucascauthen.uschat.data.net.DataObject;
-
-import com.lucascauthen.uschat.data.net.Exceptions.DataException;
 import com.lucascauthen.uschat.data.net.DataQuery;
+import com.lucascauthen.uschat.data.net.Exceptions.DataException;
 import com.lucascauthen.uschat.data.net.NetworkInterface;
 import com.lucascauthen.uschat.data.net.UserObject;
-import com.lucascauthen.uschat.R;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -39,6 +37,38 @@ public class ParseNetworkInterface implements NetworkInterface {
         init();
     }
 
+    public static List<DataObject> convertObjectsFromParse(@NonNull List<ParseObject> list) {
+        List<DataObject> newList = new ArrayList<DataObject>();
+        for (ParseObject item : list) {
+            ParseDataObject data = (ParseDataObject) convertObjectFromParse(item);
+            newList.add(data);
+        }
+        return newList;
+    }
+
+    public static DataObject convertObjectFromParse(@NonNull ParseObject item) {
+        ParseDataObject data = new ParseDataObject(item.getClassName());
+        for (String key : item.keySet()) {
+            data.put(key, item.get(key));
+            data.setObjectId(item.getObjectId());
+        }
+        return data;
+
+    }
+
+    public static ParseObject convertObjectToParse(@NonNull ParseDataObject data) {
+        ParseObject object = ParseObject.create(data.getParentKey());
+        for (String key : data.getKeySet()) {
+            if (data.get(key) instanceof ParseDataObject) {
+                object.put(key, convertObjectToParse((ParseDataObject) data.get(key)));
+            } else {
+                object.put(key, data.get(key));
+            }
+        }
+        object.setObjectId(data.getObjectId());
+        return object;
+    }
+
     @Override
     public boolean init() {
         Parse.initialize(context, context.getString(R.string.parse_app_id), context.getString(R.string.parse_client_key));
@@ -50,7 +80,7 @@ public class ParseNetworkInterface implements NetworkInterface {
         ParseDataQuery query = (ParseDataQuery) params;
         List<ParseObject> list = null;
         try {
-            list = (List<ParseObject>)query.getQuery().find();
+            list = (List<ParseObject>) query.getQuery().find();
         } catch (ParseException e) {
             throw new DataException(e.getCode(), e.getMessage());
         }
@@ -60,7 +90,7 @@ public class ParseNetworkInterface implements NetworkInterface {
     @Override
     public void getDataAsync(DataQuery params, final GetDataCallback callback) {
         ParseDataQuery query = (ParseDataQuery) params;
-        ((ParseQuery<ParseObject>)query.getQuery()).findInBackground(new FindCallback<ParseObject>() {
+        ((ParseQuery<ParseObject>) query.getQuery()).findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
                 if (e != null) {
@@ -79,7 +109,7 @@ public class ParseNetworkInterface implements NetworkInterface {
     public void updateData(DataObject object) throws DataException {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(object.getParentKey());
         try {
-            query.get(((ParseDataObject)object).getObjectId());
+            query.get(((ParseDataObject) object).getObjectId());
         } catch (ParseException e) {
             throw new DataException(e.getCode(), e.getMessage());
         }
@@ -97,7 +127,7 @@ public class ParseNetworkInterface implements NetworkInterface {
         query.getInBackground(((ParseDataObject) object).getObjectId(), new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject parseObject, ParseException e) {
-                if(e != null) {
+                if (e != null) {
                     //Failed
                     callback.done(new DataException(e.getCode(), e.getMessage()));
                 } else {
@@ -163,7 +193,7 @@ public class ParseNetworkInterface implements NetworkInterface {
         object.deleteInBackground(new DeleteCallback() {
             @Override
             public void done(ParseException e) {
-                if(e != null) {
+                if (e != null) {
                     //Failed
                     callback.done(new DataException(e.getCode(), e.getMessage()));
                 } else {
@@ -176,9 +206,9 @@ public class ParseNetworkInterface implements NetworkInterface {
 
     @Override
     public DataQuery newDataQuery(Class c) {
-        if(c == UserObject.class) {
+        if (c == UserObject.class) {
             return new ParseDataQuery<ParseUser>();
-        } else if(c == DataObject.class) {
+        } else if (c == DataObject.class) {
             return new ParseDataQuery<ParseObject>();
         } else {
             throw new IllegalArgumentException("DataQuery's can only be of class type UserObject or DataObject");
@@ -188,37 +218,5 @@ public class ParseNetworkInterface implements NetworkInterface {
     @Override
     public DataObject newDataObject(String parentKey) {
         return new ParseDataObject(parentKey);
-    }
-
-
-
-    public static List<DataObject> convertObjectsFromParse(@NonNull List<ParseObject> list){
-        List<DataObject> newList = new ArrayList<DataObject>();
-        for (ParseObject item : list) {
-            ParseDataObject data = (ParseDataObject)convertObjectFromParse(item);
-            newList.add(data);
-        }
-        return newList;
-    }
-    public static DataObject convertObjectFromParse(@NonNull ParseObject item) {
-        ParseDataObject data = new ParseDataObject(item.getClassName());
-        for (String key : item.keySet()) {
-            data.put(key, item.get(key));
-            data.setObjectId(item.getObjectId());
-        }
-        return data;
-
-    }
-    public static ParseObject convertObjectToParse(@NonNull ParseDataObject data) {
-        ParseObject object = ParseObject.create(data.getParentKey());
-        for(String key : data.getKeySet()) {
-            if(data.get(key) instanceof ParseDataObject) {
-                object.put(key, convertObjectToParse((ParseDataObject)data.get(key)));
-            } else {
-                object.put(key, data.get(key));
-            }
-        }
-        object.setObjectId(data.getObjectId());
-        return object;
     }
 }

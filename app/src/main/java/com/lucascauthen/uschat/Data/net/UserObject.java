@@ -13,17 +13,23 @@ import com.lucascauthen.uschat.data.net.Exceptions.DataException;
 public interface UserObject extends DataObject {
 
     String getUsername();
+
     String getEmail();
 
     UserObject login(String username, String password) throws DataException;
+
     void logInAsync(String username, String password, LogInCallback callback);
 
     void logOut();
+
     void logOutAsync();
+
     void logOutAsync(LogOutCallback callback);
 
     void signUp(String username, String email, String password) throws DataException;
+
     void signUpAsync(String username, String email, String password);
+
     void signUpAsync(String username, String email, String password, SignUpCallback callback);
 
 

@@ -14,10 +14,15 @@ public interface DataObject {
     String getParentKey();
 
     Object get(String key);
+
     String getString(String key);
+
     int getInt(String key);
+
     boolean getBoolean(String key);
+
     float getFloat(String key);
+
     double getDouble(String key);
 
     //These are special because the object can be loaded or not loaded so you might not want to run it on the UI thread

@@ -2,7 +2,6 @@ package com.lucascauthen.uschat.data.repository.chat;
 
 import com.lucascauthen.uschat.data.entities.Chat;
 
-
 import java.util.List;
 
 /**
@@ -23,9 +22,14 @@ public interface ChatRepo {
         COMBINED
     }
 
+    interface GetCallback {
+        void onGet(Response response);
+    }
+
     class Request {
         private final boolean skipCache;
         private final RequestType requestType;
+
         public Request(boolean skipCache, RequestType requestType) {
             this.skipCache = skipCache;
             this.requestType = requestType;
@@ -43,6 +47,7 @@ public interface ChatRepo {
     class Response {
         private final List<Chat> result;
         private final RequestType requestType;
+
         public Response(List<Chat> result, RequestType requestType) {
             this.result = result;
             this.requestType = requestType;
@@ -55,9 +60,5 @@ public interface ChatRepo {
         public List<Chat> result() {
             return result;
         }
-    }
-
-    interface GetCallback {
-        void onGet(Response response);
     }
 }

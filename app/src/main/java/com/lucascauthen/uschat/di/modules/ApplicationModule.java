@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.support.v4.app.Fragment;
-
 import com.lucascauthen.uschat.AndroidApplication;
 import com.lucascauthen.uschat.data.entities.User;
 import com.lucascauthen.uschat.data.repository.chat.CachedChatRepo;
@@ -25,12 +24,12 @@ import com.lucascauthen.uschat.presentation.controller.base.BaseChatListViewPres
 import com.lucascauthen.uschat.presentation.controller.base.BaseChatReceivedPresenter;
 import com.lucascauthen.uschat.presentation.controller.base.BaseChatSentPresenter;
 import com.lucascauthen.uschat.presentation.controller.base.BaseChatTabViewPresenter;
-import com.lucascauthen.uschat.presentation.controller.base.BaseFriendSearchPresenter;
 import com.lucascauthen.uschat.presentation.controller.base.BaseFriendRequestPresenter;
+import com.lucascauthen.uschat.presentation.controller.base.BaseFriendSearchPresenter;
 import com.lucascauthen.uschat.presentation.controller.base.BaseFriendsListPresenter;
-import com.lucascauthen.uschat.presentation.controller.base.BasePeopleTabViewPresenter;
 import com.lucascauthen.uschat.presentation.controller.base.BaseLoginViewPresenter;
 import com.lucascauthen.uschat.presentation.controller.base.BasePagerViewPresenter;
+import com.lucascauthen.uschat.presentation.controller.base.BasePeopleTabViewPresenter;
 import com.lucascauthen.uschat.presentation.controller.base.BasePersonListViewPresenter;
 import com.lucascauthen.uschat.presentation.controller.base.BaseSelectFriendsDialogPresenter;
 import com.lucascauthen.uschat.presentation.controller.base.BaseSignUpViewPresenter;
@@ -39,35 +38,34 @@ import com.lucascauthen.uschat.presentation.controller.implmentations.ChatListVi
 import com.lucascauthen.uschat.presentation.controller.implmentations.ChatReceivedPresenter;
 import com.lucascauthen.uschat.presentation.controller.implmentations.ChatSentPresenter;
 import com.lucascauthen.uschat.presentation.controller.implmentations.ChatTabViewPresenter;
-import com.lucascauthen.uschat.presentation.controller.implmentations.FriendSearchPresenter;
 import com.lucascauthen.uschat.presentation.controller.implmentations.FriendListPresenter;
 import com.lucascauthen.uschat.presentation.controller.implmentations.FriendRequestPresenter;
-import com.lucascauthen.uschat.presentation.controller.implmentations.PeopleTabViewPresenter;
+import com.lucascauthen.uschat.presentation.controller.implmentations.FriendSearchPresenter;
 import com.lucascauthen.uschat.presentation.controller.implmentations.LoginViewPresenter;
 import com.lucascauthen.uschat.presentation.controller.implmentations.PagerViewPresenter;
+import com.lucascauthen.uschat.presentation.controller.implmentations.PeopleTabViewPresenter;
 import com.lucascauthen.uschat.presentation.controller.implmentations.PersonListViewPresenter;
 import com.lucascauthen.uschat.presentation.controller.implmentations.SelectFriendsDialogPresenter;
 import com.lucascauthen.uschat.presentation.controller.implmentations.SignUpViewPresenter;
+import com.lucascauthen.uschat.presentation.view.adapters.ChatViewAdapter;
 import com.lucascauthen.uschat.presentation.view.adapters.newadapters.PersonViewAdapter;
+import com.lucascauthen.uschat.presentation.view.fragments.CameraFragment;
 import com.lucascauthen.uschat.presentation.view.fragments.ChatReceivedFragment;
 import com.lucascauthen.uschat.presentation.view.fragments.ChatTabFragment;
+import com.lucascauthen.uschat.presentation.view.fragments.FriendListFragment;
 import com.lucascauthen.uschat.presentation.view.fragments.FriendRequestsFragment;
 import com.lucascauthen.uschat.presentation.view.fragments.FriendSearchFragment;
-import com.lucascauthen.uschat.presentation.view.fragments.FriendListFragment;
 import com.lucascauthen.uschat.presentation.view.fragments.FriendTabFragment;
 import com.lucascauthen.uschat.presentation.view.fragments.SentChatFragment;
 import com.lucascauthen.uschat.util.ActivityNavigator;
-import com.lucascauthen.uschat.presentation.view.adapters.ChatViewAdapter;
-import com.lucascauthen.uschat.presentation.view.fragments.CameraFragment;
-
-import javax.inject.Named;
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+
+import javax.inject.Named;
+import javax.inject.Singleton;
 
 /**
  * Created by lhc on 7/29/15.
@@ -120,6 +118,7 @@ public class ApplicationModule {
             }
         };
     }
+
     @Provides
     @Singleton
     ForegroundScheduler provideForegroundScheduler() {
@@ -131,7 +130,6 @@ public class ApplicationModule {
         };
     }
     //////////
-
 
 
     //Presenters//
@@ -154,48 +152,57 @@ public class ApplicationModule {
     BaseChatListViewPresenter provideChatListViewPresenter(BackgroundExecutor foregroundExecutor, ForegroundExecutor backgroundExecutor, @Named("MainChatRepo") ChatRepo repo) {
         return new ChatListViewPresenter(foregroundExecutor, backgroundExecutor, repo);
     }
+
     @Provides
     BasePersonListViewPresenter providePersonListViewPresenter(BackgroundExecutor backgroundExecutor, ForegroundExecutor foregroundExecutor, User user) {
         return new PersonListViewPresenter(foregroundExecutor, backgroundExecutor, user);
     }
+
     @Provides
     BasePeopleTabViewPresenter provideTabViewPresenter(BackgroundExecutor backgroundExecutor, ForegroundExecutor foregroundExecutor, BackgroundScheduler backgroundScheduler) {
         return new PeopleTabViewPresenter(backgroundExecutor, foregroundExecutor, backgroundScheduler);
     }
+
     @Provides
     BaseCameraViewPresenter provideCameraViewPresenter(BackgroundExecutor backgroundExecutor, ForegroundExecutor foregroundExecutor) {
         return new CameraViewPresenter(backgroundExecutor, foregroundExecutor);
     }
+
     @Provides
     BaseFriendsListPresenter provideFriendsListPresenter(BackgroundExecutor backgroundExecutor, ForegroundExecutor foregroundExecutor, BasePersonListViewPresenter subPresenter) {
         return new FriendListPresenter(backgroundExecutor, foregroundExecutor, subPresenter);
     }
+
     @Provides
     BaseFriendRequestPresenter provideRequestListPresenter(BackgroundExecutor backgroundExecutor, ForegroundExecutor foregroundExecutor, BasePersonListViewPresenter subPresenter) {
         return new FriendRequestPresenter(backgroundExecutor, foregroundExecutor, subPresenter);
     }
+
     @Provides
     BaseFriendSearchPresenter provideFriendFinderPresenter(BackgroundExecutor backgroundExecutor, ForegroundExecutor foregroundExecutor, BackgroundScheduler backgroundScheduler, BasePersonListViewPresenter subPresenter) {
         return new FriendSearchPresenter(backgroundExecutor, foregroundExecutor, backgroundScheduler, subPresenter);
     }
+
     @Provides
     BaseChatTabViewPresenter provideChatTabViewPresenter(BackgroundExecutor backgroundExecutor, ForegroundExecutor foregroundExecutor) {
         return new ChatTabViewPresenter(backgroundExecutor, foregroundExecutor);
     }
+
     @Provides
     BaseChatReceivedPresenter provideChatReceivedPresenter(BackgroundExecutor backgroundExecutor, ForegroundExecutor foregroundExecutor, BaseChatListViewPresenter subPresenter) {
         return new ChatReceivedPresenter(backgroundExecutor, foregroundExecutor, subPresenter);
     }
+
     @Provides
     BaseChatSentPresenter provideChatSentPresenter(BackgroundExecutor backgroundExecutor, ForegroundExecutor foregroundExecutor, BaseChatListViewPresenter subPresenter) {
         return new ChatSentPresenter(backgroundExecutor, foregroundExecutor, subPresenter);
     }
+
     @Provides
-    BaseSelectFriendsDialogPresenter provideSelectFriendsDialogPresenter(BackgroundExecutor backgroundExecutor, ForegroundExecutor foregroundExecutor, BasePersonListViewPresenter subPresenter, @Named("MainChatRepo")ChatRepo repo) {
+    BaseSelectFriendsDialogPresenter provideSelectFriendsDialogPresenter(BackgroundExecutor backgroundExecutor, ForegroundExecutor foregroundExecutor, BasePersonListViewPresenter subPresenter, @Named("MainChatRepo") ChatRepo repo) {
         return new SelectFriendsDialogPresenter(backgroundExecutor, foregroundExecutor, subPresenter, repo);
     }
     //////////
-
 
 
     //Repositories//
@@ -204,6 +211,7 @@ public class ApplicationModule {
     User provideUser(PersonCache cache, PersonRepo secondaryRepo) {
         return new User(cache, secondaryRepo);
     }
+
     @Provides
     @Singleton
     PersonCache providePersonCache() {
@@ -238,7 +246,6 @@ public class ApplicationModule {
     //////////
 
 
-
     //Fragments//
     @Provides
     @Singleton
@@ -256,11 +263,13 @@ public class ApplicationModule {
     Fragment provideSearchFriendsFragment(BaseFriendSearchPresenter presenter, PersonViewAdapter adapter) {
         return FriendSearchFragment.newInstance(presenter, adapter);
     }
+
     @Provides
     @Named("FriendList")
     Fragment provideFriendsListFragment(BaseFriendsListPresenter presenter, PersonViewAdapter adapter) {
         return FriendListFragment.newInstance(presenter, adapter);
     }
+
     @Provides
     @Named("FriendRequests")
     Fragment provideFriendRequestsFragment(BaseFriendRequestPresenter presenter, PersonViewAdapter adapter) {
@@ -277,13 +286,13 @@ public class ApplicationModule {
     Fragment provideSentChatFragment(BaseChatSentPresenter presenter, ChatViewAdapter adapter) {
         return SentChatFragment.newInstance(presenter, adapter);
     }
+
     @Provides
     @Named("ChatReceived")
     Fragment provideReceivedChatFragment(BaseChatReceivedPresenter presenter, ChatViewAdapter adapter) {
         return ChatReceivedFragment.newInstance(presenter, adapter);
     }
     //////////
-
 
 
     //Adapters//

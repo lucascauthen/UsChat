@@ -5,6 +5,7 @@ package com.lucascauthen.uschat.data.net.Exceptions;
  */
 public class DataException extends Exception {
     private int code;
+
     public DataException(int theCode, String theMessage) {
         super(theMessage);
         this.code = theCode;

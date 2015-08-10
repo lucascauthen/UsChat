@@ -23,7 +23,7 @@ public class CachedPersonRepo implements PersonCache {
     public void sendFriendRequest(Person person, OnCompleteAction callback) {
         person.setState(Person.PersonState.SENT_REQUEST);
         sentRequests.add(person);
-        if(callback != null) {
+        if (callback != null) {
             callback.onComplete("");
         }
     }
@@ -33,7 +33,7 @@ public class CachedPersonRepo implements PersonCache {
         person.setState(Person.PersonState.FRIENDS);
         friends.add(person);
         receivedRequests.remove(person);
-        if(callback != null) {
+        if (callback != null) {
             callback.onComplete("");
         }
     }
@@ -42,7 +42,7 @@ public class CachedPersonRepo implements PersonCache {
     public void rejectReceivedRequest(Person person, OnCompleteAction callback) {
         person.setState(Person.PersonState.NOT_FRIENDS);
         receivedRequests.remove(person);
-        if(callback != null) {
+        if (callback != null) {
             callback.onComplete("");
         }
     }
@@ -51,7 +51,7 @@ public class CachedPersonRepo implements PersonCache {
     public void deleteSentRequest(Person person, OnCompleteAction callback) {
         person.setState(Person.PersonState.NOT_FRIENDS);
         sentRequests.remove(person);
-        if(callback != null) {
+        if (callback != null) {
             callback.onComplete("");
         }
     }
@@ -60,7 +60,7 @@ public class CachedPersonRepo implements PersonCache {
     public void removeFriend(Person person, OnCompleteAction callback) {
         person.setState(Person.PersonState.NOT_FRIENDS);
         friends.remove(person);
-        if(callback != null) {
+        if (callback != null) {
             callback.onComplete("");
         }
     }
@@ -157,10 +157,10 @@ public class CachedPersonRepo implements PersonCache {
             case REQUESTS:
                 sentRequests.clear();
                 receivedRequests.clear();
-                for(Person person : response.result()) {
-                    if(person.state() == Person.PersonState.RECIEVED_REQUEST) {
+                for (Person person : response.result()) {
+                    if (person.state() == Person.PersonState.RECIEVED_REQUEST) {
                         receivedRequests.add(person);
-                    } else if(person.state() == Person.PersonState.SENT_REQUEST) {
+                    } else if (person.state() == Person.PersonState.SENT_REQUEST) {
                         sentRequests.add(person);
                     }
                 }

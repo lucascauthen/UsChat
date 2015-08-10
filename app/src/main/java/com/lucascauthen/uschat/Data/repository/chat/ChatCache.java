@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by lhc on 8/4/15.
  */
-public interface ChatCache extends ChatRepo{
+public interface ChatCache extends ChatRepo {
     void cacheSentChat(Chat chat);
 
     void cacheReceivedChat(Chat chat);

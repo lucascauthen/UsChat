@@ -8,9 +8,11 @@ import java.util.concurrent.Executors;
  */
 public class BackgroundExecutor implements Executor {
     private final Executor executor;
+
     public BackgroundExecutor() {
         executor = Executors.newFixedThreadPool(10);
     }
+
     @Override
     public void execute(Runnable command) {
         executor.execute(command);

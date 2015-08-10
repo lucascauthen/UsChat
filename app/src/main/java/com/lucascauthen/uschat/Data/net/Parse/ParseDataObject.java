@@ -3,7 +3,6 @@ package com.lucascauthen.uschat.data.net.Parse;
 import com.lucascauthen.uschat.data.net.Callbacks.GetObjectCallback;
 import com.lucascauthen.uschat.data.net.Data;
 import com.lucascauthen.uschat.data.net.DataObject;
-
 import com.lucascauthen.uschat.data.net.Exceptions.DataException;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -15,9 +14,9 @@ import java.util.Set;
  * Created by lhc on 6/15/15.
  */
 public class ParseDataObject implements DataObject {
+    private final Data data;
     private String objectId;
     private String parentKey;
-    private final Data data;
 
     public ParseDataObject(String parentKey) {
         this.parentKey = parentKey;
@@ -41,7 +40,6 @@ public class ParseDataObject implements DataObject {
     public String getParentKey() {
         return parentKey;
     }
-
 
 
     @Override
@@ -79,7 +77,7 @@ public class ParseDataObject implements DataObject {
     @Override
     public DataObject child(String key) throws DataException {
         try {
-            ParseObject parseObject = ((ParseObject)data.get(key)).fetchIfNeeded();
+            ParseObject parseObject = ((ParseObject) data.get(key)).fetchIfNeeded();
             return ParseNetworkInterface.convertObjectFromParse(parseObject);
         } catch (ParseException e) {
             throw new DataException(e.getCode(), e.getMessage());
@@ -87,7 +85,7 @@ public class ParseDataObject implements DataObject {
     }
 
     public void child(String key, final GetObjectCallback callback) {
-        ((ParseObject)data.get(key)).fetchIfNeededInBackground(new GetCallback<ParseObject>() {
+        ((ParseObject) data.get(key)).fetchIfNeededInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject parseObject, ParseException e) {
                 if (e != null) {

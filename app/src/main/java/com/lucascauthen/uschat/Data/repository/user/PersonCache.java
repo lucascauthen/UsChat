@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by lhc on 8/4/15.
  */
-public interface PersonCache extends PersonRepo{
+public interface PersonCache extends PersonRepo {
     void cacheFriends(List<Person> people);
 
     void cacheSentRequests(List<Person> people);

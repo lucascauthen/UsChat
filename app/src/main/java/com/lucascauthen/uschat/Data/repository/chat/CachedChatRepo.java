@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by lhc on 8/4/15.
  */
-public class CachedChatRepo implements ChatCache{
+public class CachedChatRepo implements ChatCache {
     private List<Chat> sentChats = new ArrayList<>();
 
     private List<Chat> receivedChats = new ArrayList<>();
@@ -26,7 +26,7 @@ public class CachedChatRepo implements ChatCache{
 
     @Override
     public void cacheSentChats(List<Chat> chats) {
-        if(chats != null) {
+        if (chats != null) {
             sentChats = chats;
         } else {
             sentChats.clear();
@@ -35,7 +35,7 @@ public class CachedChatRepo implements ChatCache{
 
     @Override
     public void cacheReceivedChats(List<Chat> chats) {
-        if(chats != null) {
+        if (chats != null) {
             receivedChats = chats;
         } else {
             sentChats.clear();
@@ -44,7 +44,7 @@ public class CachedChatRepo implements ChatCache{
 
     @Override
     public void cache(Response response) {
-        switch(response.requestType()) {
+        switch (response.requestType()) {
             case SENT:
                 cacheSentChats(response.result());
                 break;
@@ -53,8 +53,8 @@ public class CachedChatRepo implements ChatCache{
                 break;
             case COMBINED:
                 clear();
-                for(Chat chat : response.result()) {
-                    if(chat.isFromCurrentUser()) {
+                for (Chat chat : response.result()) {
+                    if (chat.isFromCurrentUser()) {
                         sentChats.add(chat);
                     } else {
                         receivedChats.add(chat);
@@ -86,7 +86,7 @@ public class CachedChatRepo implements ChatCache{
     public Response get(Request request) {
         Response response;
         List<Chat> listToSend = null;
-        switch(request.requestType()) {
+        switch (request.requestType()) {
             case SENT:
                 listToSend = Collections.unmodifiableList(sentChats);
                 break;

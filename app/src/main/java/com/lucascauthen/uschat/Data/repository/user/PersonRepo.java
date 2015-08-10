@@ -1,13 +1,10 @@
 package com.lucascauthen.uschat.data.repository.user;
 
 import android.support.annotation.NonNull;
-
-
 import com.lucascauthen.uschat.data.entities.Person;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by lhc on 8/4/15.
@@ -35,6 +32,14 @@ public interface PersonRepo {
         REQUESTS
     }
 
+    interface GetCallback {
+        void onGet(Response response);
+    }
+
+    interface OnCompleteAction {
+        void onComplete(String optionalMessage);
+    }
+
     class Request {
         private final boolean skipCache;
         private final String query;
@@ -47,11 +52,12 @@ public interface PersonRepo {
             this.requestType = requestType;
             hasQuery = false;
         }
+
         public Request(boolean skipCache, String query, Type requestType) {
             this.skipCache = skipCache;
             this.query = query;
             this.requestType = requestType;
-            if(query != null) {
+            if (query != null) {
                 hasQuery = (!query.equals(""));
             } else {
                 hasQuery = false;
@@ -81,7 +87,7 @@ public interface PersonRepo {
         private final Type responseType;
 
         public Response(List<Person> result, @NonNull Type responseType) {
-            if(result != null) {
+            if (result != null) {
                 this.result = result;
             } else {
                 this.result = new ArrayList<>();
@@ -97,13 +103,5 @@ public interface PersonRepo {
             return responseType;
         }
 
-    }
-
-    interface GetCallback {
-        void onGet(Response response);
-    }
-
-    interface OnCompleteAction {
-        void onComplete(String optionalMessage);
     }
 }

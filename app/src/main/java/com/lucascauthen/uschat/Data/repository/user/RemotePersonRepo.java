@@ -1,22 +1,18 @@
 package com.lucascauthen.uschat.data.repository.user;
 
 import android.util.Log;
-
 import com.lucascauthen.uschat.data.entities.Person;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Created by lhc on 8/4/15.
@@ -46,7 +42,7 @@ public class RemotePersonRepo implements PersonRepo {
             map.put("fromUser", user.getUsername());
             ParseCloud.callFunctionInBackground("sendRequest", map, new FunctionCallback<Object>() {
                 public void done(Object object, ParseException e) {
-                    if (e == null){
+                    if (e == null) {
                         String msg = object.toString();
                         Log.d("UsChat", msg);
                         callback.onComplete(msg);
@@ -90,7 +86,7 @@ public class RemotePersonRepo implements PersonRepo {
             map.put("toUser", user.getUsername());
             ParseCloud.callFunctionInBackground("acceptRequest", map, new FunctionCallback<Object>() {
                 public void done(Object object, ParseException e) {
-                    if (e == null){
+                    if (e == null) {
                         String msg = object.toString();
                         Log.d("UsChat", msg);
                         callback.onComplete(msg);
@@ -132,7 +128,7 @@ public class RemotePersonRepo implements PersonRepo {
             map.put("toUser", user.getUsername());
             ParseCloud.callFunctionInBackground("rejectRequest", map, new FunctionCallback<Object>() {
                 public void done(Object object, ParseException e) {
-                    if (e == null){
+                    if (e == null) {
                         String msg = object.toString();
                         Log.d("UsChat", msg);
                         callback.onComplete(msg);
@@ -174,7 +170,7 @@ public class RemotePersonRepo implements PersonRepo {
             map.put("fromUser", user.getUsername());
             ParseCloud.callFunctionInBackground("cancelRequest", map, new FunctionCallback<Object>() {
                 public void done(Object object, ParseException e) {
-                    if (e == null){
+                    if (e == null) {
                         String msg = object.toString();
                         Log.d("UsChat", msg);
                         callback.onComplete(msg);
@@ -216,7 +212,7 @@ public class RemotePersonRepo implements PersonRepo {
             map.put("fromUser", user.getUsername());
             ParseCloud.callFunctionInBackground("removeFriend", map, new FunctionCallback<Object>() {
                 public void done(Object object, ParseException e) {
-                    if (e == null){
+                    if (e == null) {
                         String msg = object.toString();
                         Log.d("UsChat", msg);
                         callback.onComplete(msg);
@@ -241,7 +237,7 @@ public class RemotePersonRepo implements PersonRepo {
             user.fetch();
             List<String> raw;
             List<Person> result = null;
-            switch(request.requestType()) {
+            switch (request.requestType()) {
                 case RECEIVED_REQUEST:
                     raw = user.getList("receivedRequests");
                     result = formatList(raw, Person.PersonState.RECIEVED_REQUEST);
@@ -281,36 +277,38 @@ public class RemotePersonRepo implements PersonRepo {
 
     private List<Person> formatLists(List<String> friends, List<String> sentRequests, List<String> receivedRequests) {
         List<Person> persons = new ArrayList<>();
-        for(String name : friends) {
+        for (String name : friends) {
             persons.add(new Person(name, Person.PersonState.FRIENDS));
         }
-        for(String name : sentRequests) {
+        for (String name : sentRequests) {
             persons.add(new Person(name, Person.PersonState.SENT_REQUEST));
         }
-        for(String name : receivedRequests) {
+        for (String name : receivedRequests) {
             persons.add(new Person(name, Person.PersonState.RECIEVED_REQUEST));
         }
         return persons;
     }
+
     private List<Person> formatList(List<String> items, Person.PersonState type) {
         List<Person> results = new ArrayList<>();
-        if(items != null) {
+        if (items != null) {
             for (String item : items) {
                 results.add(new Person(item, type));
             }
         }
         return results;
     }
+
     private List<Person> formatQueryResults(List<ParseUser> queryResult, ParseUser user) {
         //Yaa kinda a sorting algorithm
         List<String> friends = user.getList("friends");
         List<String> sentRequests = user.getList("sentRequests");
-        List<String> receivedRequests =  user.getList("receivedRequests");
+        List<String> receivedRequests = user.getList("receivedRequests");
         List<Person> result = new ArrayList<>();
-        for(ParseUser theUser : queryResult) {
+        for (ParseUser theUser : queryResult) {
             String name = theUser.getUsername();
             boolean found = false; //Used to skip loops if the person was found in one of the previous searches
-            if(friends != null) {
+            if (friends != null) {
                 for (String friendName : friends) {
                     if (name.equals(friendName)) {
                         found = true;
@@ -320,8 +318,8 @@ public class RemotePersonRepo implements PersonRepo {
                     }
                 }
             }
-            if(!found) { //If the user wasn't found to be a friend, search the next list, otherwise skip
-                if(sentRequests != null) {
+            if (!found) { //If the user wasn't found to be a friend, search the next list, otherwise skip
+                if (sentRequests != null) {
                     for (String sentRequestName : sentRequests) {
                         if (name.equals(sentRequestName)) {
                             found = true;
@@ -331,8 +329,8 @@ public class RemotePersonRepo implements PersonRepo {
                         }
                     }
                 }
-                if(!found) { //If the user was not a friend/sentRequest, then search the last list, otherwise skip
-                    if(receivedRequests != null) {
+                if (!found) { //If the user was not a friend/sentRequest, then search the last list, otherwise skip
+                    if (receivedRequests != null) {
                         for (String receivedRequestName : receivedRequests) {
                             if (name.equals(receivedRequestName)) {
                                 found = true;
@@ -342,7 +340,7 @@ public class RemotePersonRepo implements PersonRepo {
                             }
                         }
                     }
-                    if(!found) { //If the user was not in any of the lists, he/she must not be a friend
+                    if (!found) { //If the user was not in any of the lists, he/she must not be a friend
                         result.add(new Person(name, Person.PersonState.NOT_FRIENDS));
                     }
                 }

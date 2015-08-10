@@ -1,9 +1,6 @@
 package com.lucascauthen.uschat.data.repository.chat;
 
 import com.lucascauthen.uschat.data.entities.Chat;
-import com.lucascauthen.uschat.data.entities.Person;
-
-import java.util.List;
 
 /**
  * Created by lhc on 8/4/15.
@@ -32,7 +29,7 @@ public class MultiLevelChatRepo implements ChatRepo {
 
     @Override
     public Response get(Request request) {
-        if(request.skipCache()) {
+        if (request.skipCache()) {
             return secondaryRepo.get(request);
         } else {
             return cache.get(request);
