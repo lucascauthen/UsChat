@@ -9,16 +9,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.lucascauthen.uschat.R;
-import com.lucascauthen.uschat.presentation.controller.base.BaseSignUpViewPresenter;
-
-import javax.inject.Inject;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+import com.lucascauthen.uschat.R;
+import com.lucascauthen.uschat.presentation.controller.base.BaseSignUpViewPresenter;
+
+import javax.inject.Inject;
 
 public class SignUpActivity extends BaseActivity implements BaseSignUpViewPresenter.SignUpView {
 

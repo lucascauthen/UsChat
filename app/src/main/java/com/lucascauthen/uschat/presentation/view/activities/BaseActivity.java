@@ -1,7 +1,6 @@
 package com.lucascauthen.uschat.presentation.view.activities;
 
 import android.support.v7.app.AppCompatActivity;
-
 import com.lucascauthen.uschat.AndroidApplication;
 import com.lucascauthen.uschat.di.components.ApplicationComponent;
 

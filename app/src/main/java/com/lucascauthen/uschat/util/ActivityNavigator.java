@@ -2,7 +2,6 @@ package com.lucascauthen.uschat.util;
 
 import android.content.Context;
 import android.content.Intent;
-
 import com.lucascauthen.uschat.presentation.view.activities.LoginActivity;
 import com.lucascauthen.uschat.presentation.view.activities.PagerActivity;
 import com.lucascauthen.uschat.presentation.view.activities.SignUpActivity;

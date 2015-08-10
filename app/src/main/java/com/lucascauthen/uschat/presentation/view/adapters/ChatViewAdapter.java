@@ -9,16 +9,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.data.entities.Chat;
 import com.lucascauthen.uschat.presentation.controller.base.BaseChatListViewPresenter;
 import com.lucascauthen.uschat.util.NullObject;
 
 import javax.inject.Inject;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by lhc on 6/10/15.
@@ -68,7 +66,7 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ChatVi
         //TODO set fields
     }
 
-    public static class ChatViewHolder extends RecyclerView.ViewHolder implements BaseChatListViewPresenter.ChatListCardView{
+    public static class ChatViewHolder extends RecyclerView.ViewHolder implements BaseChatListViewPresenter.ChatListCardView {
         private final int RECEIVED_ID = R.drawable.ic_action_file_download;
         private final int SENT_ID = R.drawable.ic_action_file_upload;
 
@@ -100,20 +98,20 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ChatVi
 
         private void init(Chat chat) {
             this.chat = chat;
-            if(chat.getChatType() == Chat.ChatType.RECEIVED_CHAT) {
+            if (chat.getChatType() == Chat.ChatType.RECEIVED_CHAT) {
                 personName.setText(chat.getFrom());
                 chatType.setImageResource(RECEIVED_ID);
                 cv.setCardBackgroundColor(context.getResources().getColor(R.color.accent_dark));
             } else {
                 chatType.setImageResource(SENT_ID);
                 String name = "";
-                for(String person : chat.getTo()) {
+                for (String person : chat.getTo()) {
                     name += person + ", ";
                 }
                 name = name.substring(0, name.length() - 2); //This should never throw an exception because the max number of characters in a username is greater than 2
                 personName.setText(name);
             }
-            if(chat.isFromCurrentUser()) {
+            if (chat.isFromCurrentUser()) {
                 msg.setText(SENT_MSG);
             } else {
                 msg.setText(RECEIVED_MSG);
@@ -122,7 +120,7 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ChatVi
 
         @Override
         public void toggleLoading() {
-            if(loading.getVisibility() == View.VISIBLE) {
+            if (loading.getVisibility() == View.VISIBLE) {
                 loading.setVisibility(View.INVISIBLE);
             } else {
                 loading.setVisibility(View.VISIBLE);

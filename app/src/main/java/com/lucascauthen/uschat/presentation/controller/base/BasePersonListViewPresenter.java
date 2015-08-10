@@ -1,7 +1,6 @@
 package com.lucascauthen.uschat.presentation.controller.base;
 
 import android.support.annotation.Nullable;
-
 import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.data.entities.Person;
 import com.lucascauthen.uschat.data.repository.user.PersonRepo;
@@ -57,7 +56,8 @@ public interface BasePersonListViewPresenter extends BaseRecyclerViewPresenter<P
             void setState(Person person, PersonListCardView view);
         }
     }
-    enum BaseActions{
+
+    enum BaseActions {
         ADD_FRIEND {
             @Override
             public void execute(Person person, PersonRepo repo, PersonRepo.OnCompleteAction callback) {
@@ -94,6 +94,7 @@ public interface BasePersonListViewPresenter extends BaseRecyclerViewPresenter<P
 
         public abstract void execute(Person person, PersonRepo repo, PersonRepo.OnCompleteAction callback);
     }
+
     class BaseIcons {
         //State icons
         public static final int PERSON_STATE_FRIEND = R.drawable.ic_friend;
@@ -119,6 +120,7 @@ public interface BasePersonListViewPresenter extends BaseRecyclerViewPresenter<P
                 });
             };
         }
+
         private static PersonListCardView.OnClickActionListener addFriend() {
             return (person, cardView, presenter) -> {
                 cardView.showLoading();
@@ -130,6 +132,7 @@ public interface BasePersonListViewPresenter extends BaseRecyclerViewPresenter<P
                 });
             };
         }
+
         private static PersonListCardView.OnClickActionListener removeFriend() {
             return (person, cardView, presenter) -> {
                 cardView.showLoading();
@@ -142,6 +145,7 @@ public interface BasePersonListViewPresenter extends BaseRecyclerViewPresenter<P
 
             };
         }
+
         private static PersonListCardView.OnClickActionListener acceptRequest() {
             return (person, cardView, presenter) -> {
                 cardView.showLoading();
@@ -153,6 +157,7 @@ public interface BasePersonListViewPresenter extends BaseRecyclerViewPresenter<P
                 });
             };
         }
+
         private static PersonListCardView.OnClickActionListener rejectRequest() {
             return (person, cardView, presenter) -> {
                 cardView.showLoading();

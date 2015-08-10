@@ -2,7 +2,6 @@ package com.lucascauthen.uschat.data.entities;
 
 import com.lucascauthen.uschat.data.repository.user.PersonCache;
 import com.lucascauthen.uschat.data.repository.user.PersonRepo;
-import com.lucascauthen.uschat.data.entities.Person;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,12 +21,12 @@ public class User implements PersonRepo {
         this.secondaryRepo = secondaryRepo;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public static void login(String name) {
         User.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void logout() {
@@ -81,7 +80,7 @@ public class User implements PersonRepo {
 
     @Override
     public Response get(Request request) {
-        if(request.query() == null) { //Clear the cache
+        if (request.query() == null) { //Clear the cache
             cachingRepo.clear();
             return new Response(Collections.unmodifiableList(new ArrayList<>()), request.requestType());
         } else {
@@ -100,6 +99,7 @@ public class User implements PersonRepo {
     public void get(Request request, GetCallback callback) {
         callback.onGet(get(request));
     }
+
     public enum PersonState {
         FRIENDS,
         SENT_REQUEST,
