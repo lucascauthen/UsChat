@@ -1,7 +1,9 @@
 package com.lucascauthen.uschat.presentation.controller.implmentations;
 
+import android.util.Log;
 import com.lucascauthen.uschat.data.entities.Chat;
 import com.lucascauthen.uschat.data.entities.Person;
+import com.lucascauthen.uschat.data.entities.User;
 import com.lucascauthen.uschat.data.repository.chat.ChatRepo;
 import com.lucascauthen.uschat.data.repository.user.PersonRepo;
 import com.lucascauthen.uschat.domain.executor.BackgroundExecutor;
@@ -28,6 +30,7 @@ public class SelectFriendsDialogPresenter implements BaseSelectFriendsDialogPres
     private final ForegroundExecutor foregroundExecutor;
     private final BasePersonListViewPresenter subPresenter;
     private final ChatRepo repo;
+    private byte[] pictureData;
 
     private List<Person> listToSend = new ArrayList<>();
 
@@ -128,13 +131,14 @@ public class SelectFriendsDialogPresenter implements BaseSelectFriendsDialogPres
     @Override
     public void onSend() {
         backgroundExecutor.execute(() -> {
-            //TODO
-            foregroundExecutor.execute(() -> {
-                //DONE
-                listToSend.clear();
-                subPresenter.requestUpdate(() -> {
-                    //Empty
-                }, true);
+            Chat chat = new Chat(listToSend, User.getName(), Chat.ChatType.SENT_CHAT, null);
+            chat.setChatData(pictureData);
+            repo.sendChat(chat, (msg) -> {
+                foregroundExecutor.execute(() -> {
+                    //DONE
+                    Log.d("UsChat", "Chat sent successfully!");
+                    listToSend.clear();
+                });
             });
         });
 
@@ -145,5 +149,10 @@ public class SelectFriendsDialogPresenter implements BaseSelectFriendsDialogPres
         subPresenter.requestUpdate(() -> {
             //Empty
         }, true);
+    }
+
+    @Override
+    public void attachPictureData(byte[] data) {
+        this.pictureData = data;
     }
 }

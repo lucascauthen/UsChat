@@ -158,7 +158,7 @@ public class CachedPersonRepo implements PersonCache {
                 sentRequests.clear();
                 receivedRequests.clear();
                 for (Person person : response.result()) {
-                    if (person.state() == Person.PersonState.RECIEVED_REQUEST) {
+                    if (person.state() == Person.PersonState.RECEIVED_REQUEST) {
                         receivedRequests.add(person);
                     } else if (person.state() == Person.PersonState.SENT_REQUEST) {
                         sentRequests.add(person);

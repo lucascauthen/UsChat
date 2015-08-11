@@ -178,7 +178,7 @@ public interface BasePersonListViewPresenter extends BaseRecyclerViewPresenter<P
                         cardView.setStateIcon(BaseIcons.PERSON_STATE_SENT_REQUEST);
                         cardView.addActionButton("cancelRequest", BaseIcons.ACTION_REMOVE, cancelRequest());
                         break;
-                    case RECIEVED_REQUEST:
+                    case RECEIVED_REQUEST:
                         cardView.setStateIcon(BaseIcons.PERSON_STATE_RECEIVED_REQUEST);
                         cardView.addActionButton("acceptRequest", BaseIcons.ACTION_ACCEPT, acceptRequest());
                         cardView.addActionButton("rejectRequest", BaseIcons.ACTION_REMOVE, rejectRequest());

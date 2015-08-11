@@ -85,7 +85,8 @@ public class SelectFriendsDialog extends Dialog implements SelectFriendsDialogPr
         progress.setVisibility(View.GONE);
     }
 
-    public void update() {
+    public void update(byte[] data) {
+        this.presenter.attachPictureData(data);
         this.presenter.updateRequested();
     }
 }

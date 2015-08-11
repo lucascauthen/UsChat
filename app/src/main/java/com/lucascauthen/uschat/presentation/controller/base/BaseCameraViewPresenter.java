@@ -19,8 +19,6 @@ public interface BaseCameraViewPresenter extends BasePresenter<BaseCameraViewPre
 
     void onTryCapture();
 
-    void onSendChat(List<Person> people);
-
     void onAcceptPicture();
 
     interface CameraView extends BaseView {
@@ -36,7 +34,7 @@ public interface BaseCameraViewPresenter extends BasePresenter<BaseCameraViewPre
 
         void closePictureConfirmDialog();
 
-        void showFriendSelectDialog();
+        void showFriendSelectDialog(byte[] data); //This is probably not the best way to pass the data from the picture
 
         void onSendChatComplete();
     }

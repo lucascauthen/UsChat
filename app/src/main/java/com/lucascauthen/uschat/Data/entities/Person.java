@@ -27,7 +27,8 @@ public class Person {
     public enum PersonState {
         FRIENDS,
         SENT_REQUEST,
-        RECIEVED_REQUEST,
+        RECEIVED_REQUEST,
         NOT_FRIENDS
     }
+
 }

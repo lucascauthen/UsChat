@@ -1,6 +1,7 @@
 package com.lucascauthen.uschat.presentation.controller.implmentations;
 
 import com.lucascauthen.uschat.data.entities.Chat;
+import com.lucascauthen.uschat.data.repository.chat.ChatRepo;
 import com.lucascauthen.uschat.domain.executor.BackgroundExecutor;
 import com.lucascauthen.uschat.domain.executor.ForegroundExecutor;
 import com.lucascauthen.uschat.presentation.controller.base.BaseChatListViewPresenter;
@@ -70,6 +71,7 @@ public class ChatReceivedPresenter implements BaseChatReceivedPresenter {
     @Override
     public void attachAdapter(BaseChatListViewPresenter.ChatListAdapter adapter) {
         this.subPresenter.attachAdapter(adapter);
+        subPresenter.setDisplayType(ChatRepo.RequestType.RECEIVED);
     }
 
     @Override

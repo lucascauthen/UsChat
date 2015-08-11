@@ -8,9 +8,9 @@ import java.util.List;
  * Created by lhc on 8/4/15.
  */
 public interface ChatRepo {
-    void sendChat(Chat chat);
+    void sendChat(Chat chat, OnCompleteAction callback);
 
-    void openChat(Chat chat);
+    void openChat(Chat chat, OnCompleteAction callback);
 
     Response get(Request request);
 
@@ -24,6 +24,10 @@ public interface ChatRepo {
 
     interface GetCallback {
         void onGet(Response response);
+    }
+
+    interface OnCompleteAction {
+        void onComplete(String optionalMessage);
     }
 
     class Request {

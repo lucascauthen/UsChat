@@ -21,7 +21,7 @@ import butterknife.InjectView;
 /**
  * Created by lhc on 8/5/15.
  */
-public class SentChatFragment extends Fragment implements BaseChatSentPresenter.BaseSentChatView {
+public class ChatSentFragment extends Fragment implements BaseChatSentPresenter.BaseSentChatView {
 
     @InjectView(R.id.chat_sent_list_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @InjectView(R.id.chat_sent_list_rv) RecyclerView recyclerView;
@@ -30,8 +30,8 @@ public class SentChatFragment extends Fragment implements BaseChatSentPresenter.
     private ChatViewAdapter adapter;
     private LinearLayoutManager layoutManager;
 
-    public static SentChatFragment newInstance(BaseChatSentPresenter presenter, ChatViewAdapter adapter) {
-        SentChatFragment f = new SentChatFragment();
+    public static ChatSentFragment newInstance(BaseChatSentPresenter presenter, ChatViewAdapter adapter) {
+        ChatSentFragment f = new ChatSentFragment();
         f.presenter = presenter;
         f.adapter = adapter;
         return f;
@@ -60,11 +60,11 @@ public class SentChatFragment extends Fragment implements BaseChatSentPresenter.
 
     @Override
     public void showLoading() {
-
+        this.swipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
     public void hideLoading() {
-
+        this.swipeRefreshLayout.setRefreshing(false);
     }
 }

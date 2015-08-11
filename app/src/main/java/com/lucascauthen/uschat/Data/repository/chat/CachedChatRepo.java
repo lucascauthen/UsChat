@@ -73,12 +73,12 @@ public class CachedChatRepo implements ChatCache {
     }
 
     @Override
-    public void sendChat(Chat chat) {
+    public void sendChat(Chat chat, OnCompleteAction callback) {
         sentChats.add(chat);
     }
 
     @Override
-    public void openChat(Chat chat) {
+    public void openChat(Chat chat, OnCompleteAction callback) {
         receivedChats.remove(chat);
     }
 

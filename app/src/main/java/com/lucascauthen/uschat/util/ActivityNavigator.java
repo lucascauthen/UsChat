@@ -11,16 +11,12 @@ import com.lucascauthen.uschat.presentation.view.activities.SignUpActivity;
  */
 public class ActivityNavigator {
     public void navigateToSignUp(Context context) {
-        if(context != null) {
-            Intent intentToLaunch = SignUpActivity.getCallingIntent(context);
-            context.startActivity(intentToLaunch);
-        }
+        Intent intentToLaunch = SignUpActivity.getCallingIntent(context);
+        context.startActivity(intentToLaunch);
     }
     public void navigateToMain(Context context) {
-        if(context != null) {
-            Intent intentToLaunch = PagerActivity.getCallingIntent(context);
-            context.startActivity(intentToLaunch);
-        }
+        Intent intentToLaunch = PagerActivity.getCallingIntent(context);
+        context.startActivity(intentToLaunch);
     }
     public void navigateToLogin(Context context) {
         Intent intentToLaunch = LoginActivity.getCallingIntent(context);

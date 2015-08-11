@@ -16,24 +16,32 @@ public class MultiLevelChatRepo implements ChatRepo {
     }
 
     @Override
-    public void sendChat(Chat chat) {
-        cache.sendChat(chat);
-        secondaryRepo.sendChat(chat);
+    public void sendChat(Chat chat, OnCompleteAction callback) {
+        //The cached version of the chats does not contain a valid id, so it needs to be edited by the secondary repo when it is done
+        OnCompleteAction cacheCallback = (msg) -> {
+            chat.setId(msg);
+            callback.onComplete(msg);
+        };
+        cache.sendChat(chat, null);
+        secondaryRepo.sendChat(chat, cacheCallback);
     }
 
     @Override
-    public void openChat(Chat chat) {
-        cache.openChat(chat);
-        secondaryRepo.openChat(chat);
+    public void openChat(Chat chat, OnCompleteAction callback) {
+        cache.openChat(chat, null); //This does not need a callback
+        secondaryRepo.openChat(chat, callback);
     }
 
     @Override
     public Response get(Request request) {
+        Response response;
         if (request.skipCache()) {
-            return secondaryRepo.get(request);
+            response = secondaryRepo.get(request);
+            cache.cache(response);
         } else {
-            return cache.get(request);
+            response = cache.get(request);
         }
+        return response;
     }
 
     @Override

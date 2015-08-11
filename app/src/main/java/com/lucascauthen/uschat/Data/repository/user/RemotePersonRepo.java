@@ -240,7 +240,7 @@ public class RemotePersonRepo implements PersonRepo {
             switch (request.requestType()) {
                 case RECEIVED_REQUEST:
                     raw = user.getList("receivedRequests");
-                    result = formatList(raw, Person.PersonState.RECIEVED_REQUEST);
+                    result = formatList(raw, Person.PersonState.RECEIVED_REQUEST);
                     break;
                 case SENT_REQUEST:
                     raw = user.getList("sentRequests");
@@ -258,7 +258,7 @@ public class RemotePersonRepo implements PersonRepo {
                     break;
                 case REQUESTS:
                     result = formatList(user.getList("sentRequests"), Person.PersonState.SENT_REQUEST);
-                    result.addAll(formatList(user.getList("receivedRequests"), Person.PersonState.RECIEVED_REQUEST));
+                    result.addAll(formatList(user.getList("receivedRequests"), Person.PersonState.RECEIVED_REQUEST));
                     break;
                 default:
                     //EMPTY
@@ -284,7 +284,7 @@ public class RemotePersonRepo implements PersonRepo {
             persons.add(new Person(name, Person.PersonState.SENT_REQUEST));
         }
         for (String name : receivedRequests) {
-            persons.add(new Person(name, Person.PersonState.RECIEVED_REQUEST));
+            persons.add(new Person(name, Person.PersonState.RECEIVED_REQUEST));
         }
         return persons;
     }
@@ -334,7 +334,7 @@ public class RemotePersonRepo implements PersonRepo {
                         for (String receivedRequestName : receivedRequests) {
                             if (name.equals(receivedRequestName)) {
                                 found = true;
-                                result.add(new Person(name, Person.PersonState.RECIEVED_REQUEST));
+                                result.add(new Person(name, Person.PersonState.RECEIVED_REQUEST));
                                 receivedRequests.remove(receivedRequestName); //This prevents the search from comparing someone we know has already been sorted
                                 break; //Exit the loop because we found a match
                             }

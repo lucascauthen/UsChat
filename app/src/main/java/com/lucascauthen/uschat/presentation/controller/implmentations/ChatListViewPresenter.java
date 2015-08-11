@@ -9,9 +9,6 @@ import com.lucascauthen.uschat.domain.executor.ForegroundExecutor;
 import com.lucascauthen.uschat.presentation.controller.base.BaseChatListViewPresenter;
 import com.lucascauthen.uschat.presentation.controller.base.BasePagerViewPresenter;
 import com.lucascauthen.uschat.util.NullObject;
-import com.parse.LogOutCallback;
-import com.parse.ParseException;
-import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -20,11 +17,11 @@ import java.util.List;
  */
 public class ChatListViewPresenter implements BaseChatListViewPresenter {
     private static final ChatListAdapter NULL_ADAPTER = NullObject.create(ChatListAdapter.class);
-    private static final ChatListView NULL_VIEW = NullObject.create(ChatListView.class);
+    private static final ChatDisplayView NULL_VIEW = NullObject.create(ChatDisplayView.class);
     private static final BasePagerViewPresenter.PagerViewChanger NULL_PAGER_CHANGER = NullObject.create(BasePagerViewPresenter.PagerViewChanger.class);
 
     private ChatListAdapter adapter = NULL_ADAPTER;
-    private ChatListView view = NULL_VIEW;
+    private ChatDisplayView view = NULL_VIEW;
     private BasePagerViewPresenter.PagerViewChanger changer = NULL_PAGER_CHANGER;
 
     private final BackgroundExecutor backgroundExecutor;
@@ -46,7 +43,8 @@ public class ChatListViewPresenter implements BaseChatListViewPresenter {
             repoNeedUpdate = false;
             return repository.get(new ChatRepo.Request(true, displayType)).result().get(index);
         } else {
-            return repository.get(new ChatRepo.Request(false, displayType)).result().get(index);
+            List<Chat> result = repository.get(new ChatRepo.Request(false, displayType)).result();
+            return result.get(index);
         }
     }
 
@@ -83,6 +81,7 @@ public class ChatListViewPresenter implements BaseChatListViewPresenter {
     @Override
     public void attachAdapter(ChatListAdapter adapter) {
         this.adapter = adapter;
+        adapter.attachPresenter(this, getOnClickChatListener());
     }
 
     @Override
@@ -91,7 +90,7 @@ public class ChatListViewPresenter implements BaseChatListViewPresenter {
     }
 
     @Override
-    public void attachView(ChatListView view) {
+    public void attachView(ChatDisplayView view) {
         this.view = view;
     }
 
@@ -151,12 +150,18 @@ public class ChatListViewPresenter implements BaseChatListViewPresenter {
 
     @Override
     public void onChatClose(Chat chat) {
-        //TODO
+        backgroundExecutor.execute(() -> {
+            repository.openChat(chat, (msg) -> {
+                requestUpdate(() -> {
+                    //Empty
+                }, false);
+            });
+        });
     }
 
     @Override
-    public void setDisplayType(Chat.ChatType type) {
-        this.displayType = displayType;
+    public void setDisplayType(ChatRepo.RequestType type) {
+        this.displayType = type;
     }
 
     @Override

@@ -25,22 +25,12 @@ public class User implements PersonRepo {
         User.name = name;
     }
 
-    public String getName() {
+    public static String getName() {
         return name;
     }
 
     public void logout() {
         cachingRepo.clear();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o.getClass() != User.class) {
-            return false;
-        } else if (!((User) o).getName().equals(this.getName())) {
-            return false;
-        }
-        return true;
     }
 
     @Override

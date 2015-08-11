@@ -3,27 +3,30 @@ package com.lucascauthen.uschat.data.entities;
 import android.graphics.Bitmap;
 import android.os.Looper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by lhc on 7/10/15.
  */
 public class Chat {
-    private final List<String> to;
-    private final String id;
+    private final List<Person> to;
     private final ChatType chatType;
-    private final boolean isFromCurrentUser;
     private final LoadImageFunction loadFunction;
-    private String from;
+    private final String from;
+
     private Bitmap image = null;
     private boolean isImageLoaded = false;
     private boolean isLoadingImage = false;
+    private String id = "null";
+    private boolean isIdSet = false;
 
-    public Chat(List<String> to, String id, ChatType chatType, boolean isFromCurrentUser, LoadImageFunction function) {
+    private byte[] chatData;
+
+    public Chat(List<Person> to, String from, ChatType chatType, LoadImageFunction function) {
         this.to = to;
-        this.id = id;
+        this.from = from;
         this.chatType = chatType;
-        this.isFromCurrentUser = isFromCurrentUser;
         this.loadFunction = function;
     }
 
@@ -38,6 +41,11 @@ public class Chat {
         this.image = image;
     }
 
+    public void setId(String id) {
+        this.id = id;
+        this.isIdSet = true;
+    }
+
     public void setIsImageLoaded(boolean isImageLoaded) {
         this.isImageLoaded = isImageLoaded;
     }
@@ -50,8 +58,16 @@ public class Chat {
         this.isLoadingImage = isLoadingImage;
     }
 
-    public List<String> getTo() {
+    public List<Person> getTo() {
         return to;
+    }
+
+    public List<String> getToString() {
+        List<String> names = new ArrayList<>();
+        for(Person person : this.to) {
+            names.add(person.name());
+        }
+        return names;
     }
 
     public String getId() {
@@ -63,7 +79,7 @@ public class Chat {
     }
 
     public boolean isFromCurrentUser() {
-        return isFromCurrentUser;
+        return chatType == ChatType.SENT_CHAT;
     }
 
     public String getFrom() {
@@ -73,6 +89,15 @@ public class Chat {
     public boolean isImageLoaded() {
         return isImageLoaded;
     }
+
+    public byte[] getChatData() {
+        return chatData;
+    }
+
+    public void setChatData(byte[] chatData) {
+        this.chatData = chatData;
+    }
+
 
     public void loadImage(ImageReadyCallback readyCallback, ProgressCallback progressCallback) {
         if (Looper.myLooper() == Looper.getMainLooper()) {
@@ -86,19 +111,28 @@ public class Chat {
         }
     }
 
-    public Chat create(List<String> to, String id) {
-        return new Chat(to, id, ChatType.SENT_CHAT, true, null);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o.getClass() != Chat.class) {
             return false;
         }
-        if (((Chat) o).getId().equals(this.getId())) {
-            return true;
+        if(((Chat)o).isIdSet) {
+            if (((Chat) o).getId().equals(this.getId())) {
+                return true;
+            }
+        } else {
+            return super.equals(o);
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        if(isIdSet) {
+            return getId().hashCode();
+        } else {
+            return super.hashCode();
+        }
     }
 
     public enum ChatType {

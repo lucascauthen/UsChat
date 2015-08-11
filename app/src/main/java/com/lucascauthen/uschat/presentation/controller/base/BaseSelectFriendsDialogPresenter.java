@@ -9,6 +9,8 @@ public interface BaseSelectFriendsDialogPresenter extends BasePresenter<BaseSele
 
     void updateRequested();
 
+    void attachPictureData(byte[] data);
+
     interface BaseSelectFriendsDialog {
         void enableSend();
 

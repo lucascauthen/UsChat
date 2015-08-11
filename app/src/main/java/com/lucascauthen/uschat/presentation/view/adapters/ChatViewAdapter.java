@@ -61,16 +61,16 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ChatVi
     }
 
     @Override
-    public void attachPresenter(BaseChatListViewPresenter presenter) {
+    public void attachPresenter(BaseChatListViewPresenter presenter, BaseChatListViewPresenter.ChatListCardView.OnClickChatListener clickChatListener) {
         this.presenter = presenter;
-        //TODO set fields
+        this.onClickChatListener = clickChatListener;
     }
 
     public static class ChatViewHolder extends RecyclerView.ViewHolder implements BaseChatListViewPresenter.ChatListCardView {
         private final int RECEIVED_ID = R.drawable.ic_action_file_download;
         private final int SENT_ID = R.drawable.ic_action_file_upload;
 
-        private final String SENT_MSG = "The chat will disappear when all of the recipients open the chat";
+        private final String SENT_MSG = "Chat sent";
         private final String RECEIVED_MSG = "Tap to load";
 
         @InjectView(R.id.chatcard_cv) CardView cv;
@@ -105,10 +105,12 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ChatVi
             } else {
                 chatType.setImageResource(SENT_ID);
                 String name = "";
-                for (String person : chat.getTo()) {
+                for (String person : chat.getToString()) {
                     name += person + ", ";
                 }
-                name = name.substring(0, name.length() - 2); //This should never throw an exception because the max number of characters in a username is greater than 2
+                if(name.endsWith(", ")) {
+                    name = name.substring(0, name.length() - 2);
+                }
                 personName.setText(name);
             }
             if (chat.isFromCurrentUser()) {

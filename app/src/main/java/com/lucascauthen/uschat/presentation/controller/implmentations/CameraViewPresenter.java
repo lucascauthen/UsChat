@@ -98,48 +98,8 @@ public class CameraViewPresenter implements BaseCameraViewPresenter {
     }
 
     @Override
-    public void onSendChat(List<Person> names) {
-        //I think this should be separated from the network call, but I couldn't think of how to refactor it
-        //TODO
-        /*
-        backgroundExecutor.execute(() -> {
-            if (lastImageData != null) {
-                ParseFile file = new ParseFile(lastImageData);
-                file.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (e != null) {
-                            view.sendMessage(e.getMessage());
-                            e.printStackTrace();
-                        } else {
-                            //view.sendUpdateMessage("File saved successfully!");
-                            ParseObject chat = new ParseObject("Chats");
-                            chat.put("file", file);
-                            chat.put("to", names);
-                            chat.put("from", User.getCurrentUser().getName());
-                            chat.saveInBackground(new SaveCallback() {
-                                @Override
-                                public void done(ParseException e) {
-                                    if (e == null) {
-                                        view.sendMessage("Image uploaded successfully!");
-                                        changer.changePage(BasePagerViewPresenter.PagerView.Pages.CHAT);
-                                    } else {
-                                        view.sendMessage(e.getMessage());
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
-                        }
-                    }
-                });
-            }
-        });
-        */
-    }
-
-    @Override
     public void onAcceptPicture() {
-        view.showFriendSelectDialog();
+        view.showFriendSelectDialog(lastImageData);
     }
 
     public void attachView(CameraView view) {

@@ -51,12 +51,12 @@ import com.lucascauthen.uschat.presentation.view.adapters.ChatViewAdapter;
 import com.lucascauthen.uschat.presentation.view.adapters.newadapters.PersonViewAdapter;
 import com.lucascauthen.uschat.presentation.view.fragments.CameraFragment;
 import com.lucascauthen.uschat.presentation.view.fragments.ChatReceivedFragment;
+import com.lucascauthen.uschat.presentation.view.fragments.ChatSentFragment;
 import com.lucascauthen.uschat.presentation.view.fragments.ChatTabFragment;
 import com.lucascauthen.uschat.presentation.view.fragments.FriendListFragment;
 import com.lucascauthen.uschat.presentation.view.fragments.FriendRequestsFragment;
 import com.lucascauthen.uschat.presentation.view.fragments.FriendSearchFragment;
 import com.lucascauthen.uschat.presentation.view.fragments.FriendTabFragment;
-import com.lucascauthen.uschat.presentation.view.fragments.SentChatFragment;
 import com.lucascauthen.uschat.util.ActivityNavigator;
 import dagger.Module;
 import dagger.Provides;
@@ -248,7 +248,6 @@ public class ApplicationModule {
 
     //Fragments//
     @Provides
-    @Singleton
     CameraFragment provideCameraFragment(BaseCameraViewPresenter mainPresenter, BaseSelectFriendsDialogPresenter subPresenter, PersonViewAdapter adapter) {
         return CameraFragment.newInstance(mainPresenter, subPresenter, adapter);
     }
@@ -284,7 +283,7 @@ public class ApplicationModule {
     @Provides
     @Named("ChatSent")
     Fragment provideSentChatFragment(BaseChatSentPresenter presenter, ChatViewAdapter adapter) {
-        return SentChatFragment.newInstance(presenter, adapter);
+        return ChatSentFragment.newInstance(presenter, adapter);
     }
 
     @Provides

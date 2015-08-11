@@ -119,9 +119,9 @@ public class CameraFragment extends Fragment implements BaseCameraViewPresenter.
     }
 
     @Override
-    public void showFriendSelectDialog() {
+    public void showFriendSelectDialog(byte[] data) {
         selectFriendsDialog.show();
-        selectFriendsDialog.update();
+        selectFriendsDialog.update(data);
     }
 
     @Override
