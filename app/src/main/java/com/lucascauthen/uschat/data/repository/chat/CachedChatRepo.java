@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by lhc on 8/4/15.
- */
+
 public class CachedChatRepo implements ChatCache {
     private List<Chat> sentChats = new ArrayList<>();
 

@@ -2,8 +2,10 @@ package com.lucascauthen.uschat.presentation.view.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
@@ -13,9 +15,8 @@ import android.widget.TextView;
 import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.presentation.view.dialogs.listeners.OnCloseListener;
 
-/**
- * Created by lhc on 7/23/15.
- */
+
+
 public class ChatViewDialog extends Dialog {
     private Bitmap image;
     private NullOnAcceptListener NULL_LISTENER = new NullOnAcceptListener();
@@ -38,10 +39,10 @@ public class ChatViewDialog extends Dialog {
         timerText = ((TextView)findViewById(R.id.chat_timer_text));
         timerText.setText(String.valueOf((int)(duration / 1000)));
 
-        timer = new CountDownTimer(duration, 1000) {
+        timer = new CountDownTimer(duration, 250) {
             @Override
             public void onTick(long millisUntilFinished) {
-                timerText.setText(String.valueOf((int)(millisUntilFinished / 1000)));
+                timerText.setText(String.valueOf(((float)millisUntilFinished / 1000f)));
             }
 
             @Override
@@ -49,6 +50,11 @@ public class ChatViewDialog extends Dialog {
                 close();
             }
         };
+        /*
+        this.setOnShowListener((theDialog) -> {
+            timer.start();
+        });
+        */
     }
 
     @Override
@@ -62,6 +68,7 @@ public class ChatViewDialog extends Dialog {
                 .getChildAt(0).startAnimation(AnimationUtils.loadAnimation(
                 getContext(), R.anim.slide_out_bottom));
         cancel();
+        image = null;
         onCloseListener.close(this);
     }
     public void setOnCloseListener(OnCloseListener onCloseListener) {

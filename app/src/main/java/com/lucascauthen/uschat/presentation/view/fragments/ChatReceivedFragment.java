@@ -14,10 +14,11 @@ import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.data.entities.Chat;
 import com.lucascauthen.uschat.presentation.controller.base.BaseChatListViewPresenter;
 import com.lucascauthen.uschat.presentation.controller.base.BaseChatReceivedPresenter;
-import com.lucascauthen.uschat.presentation.view.adapters.ChatViewAdapter;
+import com.lucascauthen.uschat.presentation.view.components.ChatViewAdapter;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.lucascauthen.uschat.presentation.view.dialogs.ChatViewDialog;
 
 /**
  * Created by lhc on 8/5/15.
@@ -71,6 +72,10 @@ public class ChatReceivedFragment extends Fragment implements BaseChatReceivedPr
 
     @Override
     public void showChat(Chat chat) {
-
+        ChatViewDialog dialog = new ChatViewDialog(getActivity(), chat.getImage(), 10000);
+        dialog.setOnCloseListener((theDialog) -> {
+            presenter.onOpenChatComplete(chat);
+        });
+        dialog.show();
     }
 }

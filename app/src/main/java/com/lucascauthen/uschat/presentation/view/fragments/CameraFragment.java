@@ -15,7 +15,7 @@ import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.presentation.controller.base.BaseCameraViewPresenter;
 import com.lucascauthen.uschat.presentation.controller.base.BasePagerViewPresenter;
 import com.lucascauthen.uschat.presentation.controller.base.BaseSelectFriendsDialogPresenter;
-import com.lucascauthen.uschat.presentation.view.adapters.newadapters.PersonViewAdapter;
+import com.lucascauthen.uschat.presentation.view.components.PersonViewAdapter;
 import com.lucascauthen.uschat.presentation.view.components.CameraPreview;
 import com.lucascauthen.uschat.presentation.view.dialogs.PicturePreviewDialog;
 import com.lucascauthen.uschat.presentation.view.dialogs.SelectFriendsDialog;

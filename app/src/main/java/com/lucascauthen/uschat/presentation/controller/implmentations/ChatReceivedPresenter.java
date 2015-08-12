@@ -72,6 +72,10 @@ public class ChatReceivedPresenter implements BaseChatReceivedPresenter {
     public void attachAdapter(BaseChatListViewPresenter.ChatListAdapter adapter) {
         this.subPresenter.attachAdapter(adapter);
         subPresenter.setDisplayType(ChatRepo.RequestType.RECEIVED);
+        view.showLoading();
+        subPresenter.requestUpdate(() -> {
+            view.hideLoading();
+        }, true);
     }
 
     @Override
@@ -84,5 +88,10 @@ public class ChatReceivedPresenter implements BaseChatReceivedPresenter {
         subPresenter.requestUpdate(() -> {
             view.hideLoading();
         }, true);
+    }
+
+    @Override
+    public void onOpenChatComplete(Chat chat) {
+        subPresenter.onChatClose(chat);
     }
 }

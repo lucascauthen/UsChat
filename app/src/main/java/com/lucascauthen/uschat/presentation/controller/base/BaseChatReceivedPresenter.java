@@ -7,6 +7,8 @@ import com.lucascauthen.uschat.data.entities.Chat;
  */
 public interface BaseChatReceivedPresenter extends BasePresenter<BaseChatReceivedPresenter.BaseReceivedChatView>, BaseRecyclerViewPresenter<Chat, BaseChatListViewPresenter.ChatListAdapter>, BaseSwipeRefreshViewPresenter {
 
+    void onOpenChatComplete(Chat chat);
+
     interface BaseReceivedChatView extends BaseListView, BaseChatListViewPresenter.ChatDisplayView {
 
     }

@@ -2,6 +2,7 @@ package com.lucascauthen.uschat.domain.executor;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
 
 import java.util.concurrent.Executor;
 
@@ -11,8 +12,8 @@ import java.util.concurrent.Executor;
 public class ForegroundExecutor implements Executor {
     private final Executor executor;
 
-    public ForegroundExecutor(Context application) {
-        Handler mainHandler = new Handler(application.getMainLooper());
+    public ForegroundExecutor() {
+        Handler mainHandler = new Handler(Looper.getMainLooper());
         executor = command -> {
             mainHandler.post(command);
         };

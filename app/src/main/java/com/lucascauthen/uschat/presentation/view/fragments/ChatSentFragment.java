@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.presentation.controller.base.BaseChatSentPresenter;
-import com.lucascauthen.uschat.presentation.view.adapters.ChatViewAdapter;
+import com.lucascauthen.uschat.presentation.view.components.ChatViewAdapter;
 
 
 import butterknife.ButterKnife;

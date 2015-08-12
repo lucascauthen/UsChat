@@ -6,19 +6,15 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
 import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.data.entities.Person;
-import com.lucascauthen.uschat.data.entities.User;
-import com.lucascauthen.uschat.presentation.controller.base.BasePersonListViewPresenter;
 import com.lucascauthen.uschat.presentation.controller.base.BaseSelectFriendsDialogPresenter;
 import com.lucascauthen.uschat.presentation.controller.implmentations.SelectFriendsDialogPresenter;
-import com.lucascauthen.uschat.presentation.view.adapters.newadapters.PersonViewAdapter;
+import com.lucascauthen.uschat.presentation.view.components.PersonViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

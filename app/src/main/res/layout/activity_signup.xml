@@ -1,105 +1,130 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="match_parent" android:layout_width="match_parent">
-    <LinearLayout
-        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-        android:layout_height="match_parent" android:gravity="center_vertical|center_horizontal"
-        android:orientation="vertical" android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin" tools:context=".MainActivity"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@color/accent_light"
         android:descendantFocusability="beforeDescendants"
-        android:focusableInTouchMode="true">
+        android:focusableInTouchMode="true"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context=".MainActivity">
 
         <LinearLayout
-            android:id="@+id/ll2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.66666666666"
             android:gravity="center_vertical|center_horizontal">
-            <ProgressBar android:id="@+id/login_progress" style="?android:attr/progressBarStyleLarge"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:visibility="gone" />
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/signUpForm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <LinearLayout android:id="@+id/email_login_form" android:layout_width="match_parent"
-                        android:layout_height="wrap_content" android:orientation="vertical">
+                    <EditText
+                        android:id="@+id/username"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:hint="@string/register_username_hint"
+                        android:inputType="textPersonName"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColor="@color/text_color_white"
+                        android:textColorHint="@color/text_color_white" />
 
-                        <EditText
-                            android:id="@+id/register_username"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/register_username_hint"
-                            android:inputType="textPersonName"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:layout_marginBottom="10dp"
-                            android:textColorHint="@color/text_color_white"
-                            android:textColor="@color/text_color_white" />
+                    <EditText
+                        android:id="@+id/email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:hint="@string/prompt_email"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColor="@color/text_color_white"
+                        android:textColorHint="@color/text_color_white" />
 
-                        <EditText android:id="@+id/register_email" android:layout_width="match_parent"
-                            android:layout_height="wrap_content" android:hint="@string/prompt_email"
-                            android:inputType="textEmailAddress" android:maxLines="1"
-                            android:singleLine="true"
-                            android:layout_marginBottom="10dp"
-                            android:textColorHint="@color/text_color_white"
-                            android:textColor="@color/text_color_white" />
+                    <EditText
+                        android:id="@+id/emailAgain"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:hint="@string/prompt_email_again"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColor="@color/text_color_white"
+                        android:textColorHint="@color/text_color_white" />
 
-                        <EditText
-                            android:id="@+id/register_email_again"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/prompt_email_again"
-                            android:inputType="textEmailAddress"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:layout_marginBottom="10dp"
-                            android:textColorHint="@color/text_color_white"
-                            android:textColor="@color/text_color_white" />
+                    <EditText
+                        android:id="@+id/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:hint="@string/prompt_password"
+                        android:imeActionLabel="@string/action_sign_in"
+                        android:imeOptions="actionUnspecified"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColor="@color/text_color_white"
+                        android:textColorHint="@color/text_color_white" />
 
-                        <EditText android:id="@+id/register_password"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/prompt_password"
-                            android:imeActionLabel="@string/action_sign_in"
-                            android:imeOptions="actionUnspecified" android:inputType="textPassword"
-                            android:maxLines="1" android:singleLine="true"
-                            android:layout_marginBottom="10dp"
-                            android:textColorHint="@color/text_color_white"
-                            android:textColor="@color/text_color_white" />
+                    <EditText
+                        android:id="@+id/passwordAgain"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:hint="@string/prompt_password_again"
+                        android:imeActionLabel="@string/action_sign_in"
+                        android:imeOptions="actionUnspecified"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColor="@color/text_color_white"
+                        android:textColorHint="@color/text_color_white" />
 
-                        <EditText
-                            android:id="@+id/register_password_again"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/prompt_password_again"
-                            android:imeActionLabel="@string/action_sign_in"
-                            android:imeOptions="actionUnspecified"
-                            android:inputType="textPassword"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:layout_marginBottom="10dp"
-                            android:textColorHint="@color/text_color_white"
-                            android:textColor="@color/text_color_white" />
+                    <Button
+                        android:id="@+id/registerButton"
+                        style="?android:textAppearanceSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/button_bg"
+                        android:text="@string/action_register"
+                        android:textColor="@color/text_color_white"
+                        android:textStyle="bold" />
 
-                        <Button android:id="@+id/register_button" style="?android:textAppearanceSmall"
-                            android:layout_width="match_parent" android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp" android:text="@string/action_register"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_color_white"
-                            android:background="@drawable/button_bg"
-                            />
-
-                    </LinearLayout>
                 </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+
     <ProgressBar
-        android:id="@+id/register_loading"
+        android:id="@+id/loadingBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:indeterminate="true"
-        android:visibility="gone"
         android:background="#ccffffff"
-        />
+        android:indeterminate="true"
+        android:visibility="gone" />
 </RelativeLayout>

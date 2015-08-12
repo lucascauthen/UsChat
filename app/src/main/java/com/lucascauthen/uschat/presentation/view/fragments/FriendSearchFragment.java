@@ -13,7 +13,7 @@ import android.widget.EditText;
 
 import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.presentation.controller.base.BaseFriendSearchPresenter;
-import com.lucascauthen.uschat.presentation.view.adapters.newadapters.PersonViewAdapter;
+import com.lucascauthen.uschat.presentation.view.components.PersonViewAdapter;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

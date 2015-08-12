@@ -32,7 +32,12 @@ public class Chat {
 
     public Bitmap getImage() {
         if (isImageLoaded) {
-            return image;
+            isImageLoaded = false;
+            //This ensures that the managing of the bitmap is now put on the requester of the image
+            //When this function looses scope, reference will no longer exist meaning that this object no longer has a reference to the image
+            Bitmap reference = image;
+            image = null;
+            return reference;
         }
         throw new RuntimeException("Trying to get an image that is not loaded");
     }

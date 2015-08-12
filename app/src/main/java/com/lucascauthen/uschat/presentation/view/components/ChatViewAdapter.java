@@ -1,4 +1,4 @@
-package com.lucascauthen.uschat.presentation.view.adapters;
+package com.lucascauthen.uschat.presentation.view.components;
 
 import android.content.Context;
 import android.support.v7.widget.CardView;
@@ -18,9 +18,7 @@ import com.lucascauthen.uschat.util.NullObject;
 
 import javax.inject.Inject;
 
-/**
- * Created by lhc on 6/10/15.
- */
+
 public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ChatViewHolder> implements BaseChatListViewPresenter.ChatListAdapter {
 
     private BaseChatListViewPresenter presenter;

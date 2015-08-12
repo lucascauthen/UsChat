@@ -24,13 +24,6 @@
     <style name="RobotoEditTextStyle" parent="android:Widget.EditText">
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
-    <color name="accent_light">#4CAF50</color>
-    <color name="accent">#795548</color>
-    <color name="accent_dark">#0D2E0F</color>
-    <color name="text_color_white">#FFFFFF</color>
-    <color name="light_background">#FAFAFA</color>
-    <color name="primary">#9E9E9E</color>
-    <color name="primary_dark">#616161</color>
 
     <style name="DialogSlideAnimation">
         <!-- <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item> -->
@@ -38,7 +31,7 @@
         <item name="android:windowExitAnimation">@anim/slide_out_right</item>
     </style>
     <!-- Animation for dialog box -->
-    <style name="DialogSlideStyle" parent="Theme.AppCompat.NoActionBar">
+    <style name="DialogSlideStyle" parent="AppTheme">
         <item name="android:windowAnimationStyle">@style/DialogSlideAnimation</item>
     </style>
 

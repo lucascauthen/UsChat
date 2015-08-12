@@ -4,6 +4,7 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 import com.lucascauthen.uschat.data.entities.Chat;
 import com.lucascauthen.uschat.data.entities.Person;
+import com.lucascauthen.uschat.util.Reversed;
 import com.parse.FunctionCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseCloud;
@@ -140,7 +141,7 @@ public class RemoteChatRepo implements ChatRepo {
             }
             List<Chat> formattedChatList = new ArrayList<>();
             if(chatIdList != null) {
-                for (String id : chatIdList) {
+                for (String id : Reversed.reversed(chatIdList)) {
                     ParseQuery<ParseObject> query = ParseQuery.getQuery("Chats");
                     ParseObject chat = query.get(id); //Network call
                     List<Person> toPeople = new ArrayList<>();
@@ -177,7 +178,7 @@ public class RemoteChatRepo implements ChatRepo {
                     }
 
                 }
-                return new Response(Collections.unmodifiableList(formattedChatList), request.requestType());
+                return new Response(formattedChatList, request.requestType()); //Not returning an unmodifiable list because the user never directly has access to it
             } else {
                 return new Response(new ArrayList<>(), request.requestType()); //Essentially a "safe" null return
             }

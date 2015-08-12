@@ -22,7 +22,7 @@ import javax.inject.Inject;
 public class PagerActivity extends BaseActivity implements BasePagerViewPresenter.PagerView, BasePagerViewPresenter.PagerViewChanger {
     private final int NUM_PAGES = 3;
 
-    @InjectView(R.id.main_pager)ViewPager pager;
+    @InjectView(R.id.mainPager)ViewPager pager;
 
     @Inject ChatTabFragment chatTabFragment;
     @Inject CameraFragment cameraFragment;

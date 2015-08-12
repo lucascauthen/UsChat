@@ -14,7 +14,6 @@
         android:focusableInTouchMode="true">
 
         <LinearLayout
-            android:id="@+id/ll1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.666666666"
@@ -25,7 +24,6 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="@string/app_title"
-                android:id="@+id/login_title"
                 android:textSize="30dp"
                 android:textColor="@color/text_color_white" />
 
@@ -38,17 +36,17 @@
             android:layout_height="match_parent"
             android:layout_weight="0.333333333"
             android:gravity="center_vertical|center_horizontal">
-            <ProgressBar android:id="@+id/login_progress" style="?android:attr/progressBarStyleLarge"
+            <ProgressBar android:id="@+id/progressBar" style="?android:attr/progressBarStyleLarge"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:visibility="gone" />
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <LinearLayout android:id="@+id/email_login_form" android:layout_width="match_parent"
+                    <LinearLayout android:id="@+id/signUpForm" android:layout_width="match_parent"
                         android:layout_height="0dp" android:orientation="vertical"
                         android:layout_weight="1">
 
-                        <EditText android:id="@+id/login_username_field" android:layout_width="match_parent"
+                        <EditText android:id="@+id/usernameField" android:layout_width="match_parent"
                             android:layout_height="wrap_content" android:hint="@string/prompt_username"
                             android:inputType="textEmailAddress" android:maxLines="1"
                             android:singleLine="true"
@@ -57,7 +55,7 @@
                             android:textColor="@color/text_color_white"
                             android:text="lucas" />
 
-                        <EditText android:id="@+id/login_password_field" android:layout_width="match_parent"
+                        <EditText android:id="@+id/passwordField" android:layout_width="match_parent"
                             android:layout_height="wrap_content" android:hint="@string/prompt_password"
                             android:imeActionLabel="@string/action_sign_in"
                             android:imeOptions="actionUnspecified" android:inputType="textPassword"
@@ -73,7 +71,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal">
 
-                            <Button android:id="@+id/login_signin_button" style="?android:textAppearanceSmall"
+                            <Button android:id="@+id/loginButton" style="?android:textAppearanceSmall"
                                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                                 android:text="@string/action_sign_in"
                                 android:textStyle="bold"
@@ -85,7 +83,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/action_signup"
-                                android:id="@+id/login_signup_button"
+                                android:id="@+id/signUpButton"
                                 android:textColor="@color/text_color_white"
                                 android:background="@drawable/button_bg"
                                 android:layout_weight="1"
@@ -97,7 +95,7 @@
         </LinearLayout>
     </LinearLayout>
     <ProgressBar
-        android:id="@+id/login_loading"
+        android:id="@+id/progressBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:indeterminate="true"

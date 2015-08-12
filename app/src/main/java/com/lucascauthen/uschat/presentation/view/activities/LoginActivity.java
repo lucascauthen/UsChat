@@ -23,11 +23,11 @@ import butterknife.OnTextChanged;
 
 public class LoginActivity extends BaseActivity implements BaseLoginViewPresenter.LoginView {
 
-    @InjectView(R.id.login_username_field) EditText usernameField;
-    @InjectView(R.id.login_password_field) EditText passwordField;
-    @InjectView(R.id.login_signin_button) Button loginButton;
-    @InjectView(R.id.login_signup_button) Button signUpButton;
-    @InjectView(R.id.login_loading) ProgressBar loading;
+    @InjectView(R.id.usernameField) EditText usernameField;
+    @InjectView(R.id.passwordField) EditText passwordField;
+    @InjectView(R.id.loginButton) Button loginButton;
+    @InjectView(R.id.signUpButton) Button signUpButton;
+    @InjectView(R.id.progressBar) ProgressBar loading;
 
     @Inject BaseLoginViewPresenter presenter;
     @Inject
@@ -104,23 +104,23 @@ public class LoginActivity extends BaseActivity implements BaseLoginViewPresente
     }
 
     //Button actions
-    @OnClick(R.id.login_signin_button)
+    @OnClick(R.id.loginButton)
     void onButtonSignInClick() {
         presenter.tryLogin(usernameField.getText().toString(), passwordField.getText().toString());
     }
 
-    @OnClick(R.id.login_signup_button)
+    @OnClick(R.id.signUpButton)
     void onButtonSignupClick() {
         navigator.navigateToSignUp(getApplicationContext());
     }
 
     //Text field actions
-    @OnTextChanged(R.id.login_username_field)
+    @OnTextChanged(R.id.usernameField)
     void onUsernameChanged() {
         presenter.onUsernameChanged(usernameField.getText().toString());
     }
 
-    @OnTextChanged(R.id.login_password_field)
+    @OnTextChanged(R.id.passwordField)
     void onPasswordChanged() {
         presenter.onPasswordChanged(passwordField.getText().toString());
     }

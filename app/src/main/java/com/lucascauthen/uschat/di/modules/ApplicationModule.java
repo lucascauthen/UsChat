@@ -47,8 +47,8 @@ import com.lucascauthen.uschat.presentation.controller.implmentations.PeopleTabV
 import com.lucascauthen.uschat.presentation.controller.implmentations.PersonListViewPresenter;
 import com.lucascauthen.uschat.presentation.controller.implmentations.SelectFriendsDialogPresenter;
 import com.lucascauthen.uschat.presentation.controller.implmentations.SignUpViewPresenter;
-import com.lucascauthen.uschat.presentation.view.adapters.ChatViewAdapter;
-import com.lucascauthen.uschat.presentation.view.adapters.newadapters.PersonViewAdapter;
+import com.lucascauthen.uschat.presentation.view.components.ChatViewAdapter;
+import com.lucascauthen.uschat.presentation.view.components.PersonViewAdapter;
 import com.lucascauthen.uschat.presentation.view.fragments.CameraFragment;
 import com.lucascauthen.uschat.presentation.view.fragments.ChatReceivedFragment;
 import com.lucascauthen.uschat.presentation.view.fragments.ChatSentFragment;
@@ -105,7 +105,7 @@ public class ApplicationModule {
     @Provides
     @Singleton
     ForegroundExecutor provideForegroundExecutor() {
-        return new ForegroundExecutor(application);
+        return new ForegroundExecutor();
     }
 
     @Provides

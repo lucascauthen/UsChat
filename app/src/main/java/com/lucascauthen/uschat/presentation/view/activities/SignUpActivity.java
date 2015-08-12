@@ -20,13 +20,13 @@ import javax.inject.Inject;
 
 public class SignUpActivity extends BaseActivity implements BaseSignUpViewPresenter.SignUpView {
 
-    @InjectView(R.id.register_username) EditText usernameField;
-    @InjectView(R.id.register_email) EditText emailField;
-    @InjectView(R.id.register_email_again) EditText emailAgainField;
-    @InjectView(R.id.register_password) EditText passwordField;
-    @InjectView(R.id.register_password_again) EditText passwordAgainField;
-    @InjectView(R.id.register_button) Button registerButton;
-    @InjectView(R.id.register_loading) ProgressBar loading;
+    @InjectView(R.id.username) EditText usernameField;
+    @InjectView(R.id.email) EditText emailField;
+    @InjectView(R.id.emailAgain) EditText emailAgainField;
+    @InjectView(R.id.password) EditText passwordField;
+    @InjectView(R.id.passwordAgain) EditText passwordAgainField;
+    @InjectView(R.id.registerButton) Button registerButton;
+    @InjectView(R.id.loadingBar) ProgressBar loading;
 
     @Inject BaseSignUpViewPresenter presenter;
 
@@ -88,33 +88,33 @@ public class SignUpActivity extends BaseActivity implements BaseSignUpViewPresen
         onBackPressed();
     }
 
-    @OnClick(R.id.register_button)
+    @OnClick(R.id.registerButton)
     void onRegisterClicked() {
         presenter.trySignUp(usernameField.getText().toString(), emailField.getText().toString(), passwordField.getText().toString());
     }
 
     //Text changed actions
-    @OnTextChanged(R.id.register_username)
+    @OnTextChanged(R.id.username)
     void onUsernameChanged() {
         presenter.onUsernameChanged(usernameField.getText().toString());
     }
 
-    @OnTextChanged(R.id.register_email)
+    @OnTextChanged(R.id.email)
     void onEmailChanged() {
         presenter.onEmailChanged(emailField.getText().toString());
     }
 
-    @OnTextChanged(R.id.register_email_again)
+    @OnTextChanged(R.id.emailAgain)
     void onEmailAgainChanged() {
         presenter.onEmailAgainChanged(emailAgainField.getText().toString());
     }
 
-    @OnTextChanged(R.id.register_password)
+    @OnTextChanged(R.id.password)
     void onPasswordChanged() {
         presenter.onPasswordChanged(passwordField.getText().toString());
     }
 
-    @OnTextChanged(R.id.register_password_again)
+    @OnTextChanged(R.id.passwordAgain)
     void onPasswordAgainChanged() {
         presenter.onPasswordAgainChanged(passwordAgainField.getText().toString());
     }

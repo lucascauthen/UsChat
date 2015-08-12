@@ -64,7 +64,7 @@ public class CameraViewPresenter implements BaseCameraViewPresenter {
                 view.hideLoading();
                 view.showPictureConfirmDialog(lastImage);
                 view.enableControls();
-                onResume();
+                reloadCamera();
             });
         };
     }
@@ -122,6 +122,9 @@ public class CameraViewPresenter implements BaseCameraViewPresenter {
 
     @Override
     public void onResume() {
+        reloadCamera();
+    }
+    private void reloadCamera() {
         view.showLoading();
         backgroundExecutor.execute(() -> {
             if (camera == null) {

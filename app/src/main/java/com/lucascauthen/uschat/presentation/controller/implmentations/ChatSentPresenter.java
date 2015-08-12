@@ -70,6 +70,10 @@ public class ChatSentPresenter  implements BaseChatSentPresenter{
     public void attachAdapter(BaseChatListViewPresenter.ChatListAdapter adapter) {
         this.subPresenter.attachAdapter(adapter);
         subPresenter.setDisplayType(ChatRepo.RequestType.SENT);
+        view.showLoading();
+        subPresenter.requestUpdate(() -> {
+            view.hideLoading();
+        }, true);
     }
 
     @Override
