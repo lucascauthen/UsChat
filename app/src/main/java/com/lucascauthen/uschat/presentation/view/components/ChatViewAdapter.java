@@ -96,7 +96,7 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ChatVi
 
         private void init(Chat chat) {
             this.chat = chat;
-            if (chat.getChatType() == Chat.ChatType.RECEIVED_CHAT) {
+            if (chat.getChatType() == Chat.ChatType.RECEIVED) {
                 personName.setText(chat.getFrom());
                 chatType.setImageResource(RECEIVED_ID);
                 cv.setCardBackgroundColor(context.getResources().getColor(R.color.accent_dark));

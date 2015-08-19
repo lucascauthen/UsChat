@@ -34,11 +34,11 @@ public class RemotePersonRepo implements PersonRepo {
             //////////////
             /*
 
-            Because the client can only modify its own data, this request is sent to the server to update the other user that this operation affects
+            Because the client can only modify its own data, this request is sent to the server to init the other user that this operation affects
 
              */
             Map<String, String> map = new HashMap<>();
-            map.put("toUser", person.name());
+            map.put("toUsers", person.name());
             map.put("fromUser", user.getUsername());
             ParseCloud.callFunctionInBackground("sendRequest", map, new FunctionCallback<Object>() {
                 public void done(Object object, ParseException e) {
@@ -78,7 +78,7 @@ public class RemotePersonRepo implements PersonRepo {
             //////////////
             /*
 
-            Because the client can only modify its own data, this request is sent to the server to update the other user that this operation affects
+            Because the client can only modify its own data, this request is sent to the server to init the other user that this operation affects
 
              */
             Map<String, String> map = new HashMap<>();
@@ -120,7 +120,7 @@ public class RemotePersonRepo implements PersonRepo {
             //////////////
             /*
 
-            Because the client can only modify its own data, this request is sent to the server to update the other user that this operation affects
+            Because the client can only modify its own data, this request is sent to the server to init the other user that this operation affects
 
              */
             Map<String, String> map = new HashMap<>();
@@ -162,7 +162,7 @@ public class RemotePersonRepo implements PersonRepo {
             //////////////
             /*
 
-            Because the client can only modify its own data, this request is sent to the server to update the other user that this operation affects
+            Because the client can only modify its own data, this request is sent to the server to init the other user that this operation affects
 
              */
             Map<String, String> map = new HashMap<>();
@@ -204,7 +204,7 @@ public class RemotePersonRepo implements PersonRepo {
             //////////////
             /*
 
-            Because the client can only modify its own data, this request is sent to the server to update the other user that this operation affects
+            Because the client can only modify its own data, this request is sent to the server to init the other user that this operation affects
 
              */
             Map<String, String> map = new HashMap<>();
@@ -240,15 +240,15 @@ public class RemotePersonRepo implements PersonRepo {
             switch (request.requestType()) {
                 case RECEIVED_REQUEST:
                     raw = user.getList("receivedRequests");
-                    result = formatList(raw, Person.PersonState.RECEIVED_REQUEST);
+                    result = formatList(raw, Person.PersonType.RECEIVED_REQUEST);
                     break;
                 case SENT_REQUEST:
                     raw = user.getList("sentRequests");
-                    result = formatList(raw, Person.PersonState.SENT_REQUEST);
+                    result = formatList(raw, Person.PersonType.SENT_REQUEST);
                     break;
                 case FRIEND:
                     raw = user.getList("friends");
-                    result = formatList(raw, Person.PersonState.FRIENDS);
+                    result = formatList(raw, Person.PersonType.FRIEND);
                     break;
                 case SEARCH:
                     ParseQuery<ParseUser> query = ParseUser.getQuery();
@@ -257,8 +257,8 @@ public class RemotePersonRepo implements PersonRepo {
                     result = formatQueryResults(query.find(), user);
                     break;
                 case REQUESTS:
-                    result = formatList(user.getList("sentRequests"), Person.PersonState.SENT_REQUEST);
-                    result.addAll(formatList(user.getList("receivedRequests"), Person.PersonState.RECEIVED_REQUEST));
+                    result = formatList(user.getList("sentRequests"), Person.PersonType.SENT_REQUEST);
+                    result.addAll(formatList(user.getList("receivedRequests"), Person.PersonType.RECEIVED_REQUEST));
                     break;
                 default:
                     //EMPTY
@@ -278,18 +278,18 @@ public class RemotePersonRepo implements PersonRepo {
     private List<Person> formatLists(List<String> friends, List<String> sentRequests, List<String> receivedRequests) {
         List<Person> persons = new ArrayList<>();
         for (String name : friends) {
-            persons.add(new Person(name, Person.PersonState.FRIENDS));
+            persons.add(new Person(name, Person.PersonType.FRIEND));
         }
         for (String name : sentRequests) {
-            persons.add(new Person(name, Person.PersonState.SENT_REQUEST));
+            persons.add(new Person(name, Person.PersonType.SENT_REQUEST));
         }
         for (String name : receivedRequests) {
-            persons.add(new Person(name, Person.PersonState.RECEIVED_REQUEST));
+            persons.add(new Person(name, Person.PersonType.RECEIVED_REQUEST));
         }
         return persons;
     }
 
-    private List<Person> formatList(List<String> items, Person.PersonState type) {
+    private List<Person> formatList(List<String> items, Person.PersonType type) {
         List<Person> results = new ArrayList<>();
         if (items != null) {
             for (String item : items) {
@@ -312,7 +312,7 @@ public class RemotePersonRepo implements PersonRepo {
                 for (String friendName : friends) {
                     if (name.equals(friendName)) {
                         found = true;
-                        result.add(new Person(name, Person.PersonState.FRIENDS));
+                        result.add(new Person(name, Person.PersonType.FRIEND));
                         friends.remove(friendName); //This prevents the search from comparing someone we know has already been sorted
                         break; //Exit the loop because we found a match
                     }
@@ -323,7 +323,7 @@ public class RemotePersonRepo implements PersonRepo {
                     for (String sentRequestName : sentRequests) {
                         if (name.equals(sentRequestName)) {
                             found = true;
-                            result.add(new Person(name, Person.PersonState.SENT_REQUEST));
+                            result.add(new Person(name, Person.PersonType.SENT_REQUEST));
                             sentRequests.remove(sentRequestName); //This prevents the search from comparing someone we know has already been sorted
                             break; //Exit the loop because we found a match
                         }
@@ -334,14 +334,14 @@ public class RemotePersonRepo implements PersonRepo {
                         for (String receivedRequestName : receivedRequests) {
                             if (name.equals(receivedRequestName)) {
                                 found = true;
-                                result.add(new Person(name, Person.PersonState.RECEIVED_REQUEST));
+                                result.add(new Person(name, Person.PersonType.RECEIVED_REQUEST));
                                 receivedRequests.remove(receivedRequestName); //This prevents the search from comparing someone we know has already been sorted
                                 break; //Exit the loop because we found a match
                             }
                         }
                     }
                     if (!found) { //If the user was not in any of the lists, he/she must not be a friend
-                        result.add(new Person(name, Person.PersonState.NOT_FRIENDS));
+                        result.add(new Person(name, Person.PersonType.NOT_FRIEND));
                     }
                 }
             }

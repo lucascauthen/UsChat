@@ -16,12 +16,6 @@ public interface ChatRepo {
 
     void get(Request request, GetCallback callback);
 
-    enum RequestType {
-        SENT,
-        RECEIVED,
-        COMBINED
-    }
-
     interface GetCallback {
         void onGet(Response response);
     }
@@ -32,9 +26,9 @@ public interface ChatRepo {
 
     class Request {
         private final boolean skipCache;
-        private final RequestType requestType;
+        private final Chat.ChatType requestType;
 
-        public Request(boolean skipCache, RequestType requestType) {
+        public Request(boolean skipCache, Chat.ChatType requestType) {
             this.skipCache = skipCache;
             this.requestType = requestType;
         }
@@ -43,21 +37,21 @@ public interface ChatRepo {
             return skipCache;
         }
 
-        public RequestType requestType() {
+        public Chat.ChatType requestType() {
             return requestType;
         }
     }
 
     class Response {
         private final List<Chat> result;
-        private final RequestType requestType;
+        private final Chat.ChatType requestType;
 
-        public Response(List<Chat> result, RequestType requestType) {
+        public Response(List<Chat> result, Chat.ChatType requestType) {
             this.result = result;
             this.requestType = requestType;
         }
 
-        public RequestType requestType() {
+        public Chat.ChatType requestType() {
             return requestType;
         }
 

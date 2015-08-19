@@ -3,42 +3,55 @@ package com.lucascauthen.uschat.presentation.view.dialogs;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.lucascauthen.uschat.R;
-import com.lucascauthen.uschat.presentation.controller.base.BaseCameraViewPresenter;
-import com.lucascauthen.uschat.presentation.view.dialogs.listeners.OnAcceptListener;
+import com.lucascauthen.uschat.presentation.presenters.PicturePreviewPresenter;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.lucascauthen.uschat.presentation.view.views.PicturePreviewView;
 
-/**
- * Created by lhc on 7/2/15.
- */
-public class PicturePreviewDialog extends Dialog implements BaseCameraViewPresenter.PicturePreview{
-    private Bitmap image;
-    private BaseCameraViewPresenter.PicturePreview.OnAcceptPicture onAccept;
-    private BaseCameraViewPresenter.PicturePreview.OnRejectPicture onReject;
+import java.io.ByteArrayOutputStream;
 
+
+public class PicturePreviewDialog extends Dialog implements PicturePreviewView{
     @InjectView(R.id.preview_image_view) ImageView imageView;
     @InjectView(R.id.picture_preview_accept) ImageButton accept;
     @InjectView(R.id.picture_preview_reject) ImageButton reject;
 
-    public PicturePreviewDialog(Context context, Bitmap theImage) {
+    private OnAcceptPictureListener onAccept;
+    private OnRejectPictureListener onReject;
+    private Bitmap image;
+    private PicturePreviewPresenter presenter;
+
+    public PicturePreviewDialog(Context context, byte[] theImage, PicturePreviewPresenter presenter) {
         super(context, R.style.DialogSlideAnimation);
         setContentView(R.layout.dialog_picture_preview);
-        getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-        this.image = theImage;
+        this.image = BitmapFactory.decodeByteArray(theImage, 0, theImage.length);
         ButterKnife.inject(this);
 
-
         accept.setOnClickListener(view -> {
-            onAccept.accept(image);
+            presenter.compress(() -> {
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] data = stream.toByteArray();
+                presenter.onCompressComplete(() -> {
+                    if (onAccept != null) {
+                        onAccept.onAccept(data);
+                    }
+                    dismiss();
+                    dispose();
+                });
+            });
         });
         reject.setOnClickListener(view -> {
-            this.dismiss();
+            onReject.onReject();
+            dismiss();
+            dispose();
         });
         imageView = ((ImageView) findViewById(R.id.preview_image_view));
         imageView.setImageBitmap(image);
@@ -48,13 +61,16 @@ public class PicturePreviewDialog extends Dialog implements BaseCameraViewPresen
 
     }
 
-    @Override
-    public void setOnAcceptPictureListener(OnAcceptPicture onAccept) {
+    public void setOnAcceptPictureListener(OnAcceptPictureListener onAccept) {
         this.onAccept = onAccept;
     }
 
-    @Override
-    public void setOnRejectPictureListener(OnRejectPicture onReject) {
+    public void setOnRejectPictureListener(OnRejectPictureListener onReject) {
         this.onReject = onReject;
+    }
+
+    private void dispose() {
+        this.image = null;
+        presenter.detachView();
     }
 }

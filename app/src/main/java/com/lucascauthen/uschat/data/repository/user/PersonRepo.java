@@ -24,14 +24,6 @@ public interface PersonRepo {
 
     void get(Request request, GetCallback callback);
 
-    enum Type {
-        FRIEND,
-        SENT_REQUEST,
-        RECEIVED_REQUEST,
-        SEARCH,
-        REQUESTS
-    }
-
     interface GetCallback {
         void onGet(Response response);
     }
@@ -43,17 +35,17 @@ public interface PersonRepo {
     class Request {
         private final boolean skipCache;
         private final String query;
-        private final Type requestType;
+        private final Person.PersonType requestType;
         private final boolean hasQuery;
 
-        public Request(boolean skipCache, Type requestType) {
+        public Request(boolean skipCache, Person.PersonType requestType) {
             this.skipCache = skipCache;
             this.query = null;
             this.requestType = requestType;
             hasQuery = false;
         }
 
-        public Request(boolean skipCache, String query, Type requestType) {
+        public Request(boolean skipCache, String query, Person.PersonType requestType) {
             this.skipCache = skipCache;
             this.query = query;
             this.requestType = requestType;
@@ -68,7 +60,7 @@ public interface PersonRepo {
             return skipCache;
         }
 
-        public Type requestType() {
+        public Person.PersonType requestType() {
             return requestType;
         }
 
@@ -84,9 +76,9 @@ public interface PersonRepo {
 
     class Response {
         private final List<Person> result;
-        private final Type responseType;
+        private final Person.PersonType responseType;
 
-        public Response(List<Person> result, @NonNull Type responseType) {
+        public Response(List<Person> result, @NonNull Person.PersonType responseType) {
             if (result != null) {
                 this.result = result;
             } else {
@@ -99,7 +91,7 @@ public interface PersonRepo {
             return result;
         }
 
-        public Type responseType() {
+        public Person.PersonType responseType() {
             return responseType;
         }
 

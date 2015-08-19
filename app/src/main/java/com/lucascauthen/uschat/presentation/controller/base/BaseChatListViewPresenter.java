@@ -14,7 +14,7 @@ public interface BaseChatListViewPresenter extends BasePresenter<BaseChatListVie
 
     void onChatClose(Chat chat);
 
-    void setDisplayType(ChatRepo.RequestType type);
+    void setDisplayType(Chat.ChatType type);
 
     void requestUpdate(BaseChatListViewPresenter.OnDoneLoadingCallback callback, boolean repoNeedUpdate);
 

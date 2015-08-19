@@ -1,4 +1,7 @@
 package com.lucascauthen.uschat.presentation.view.views;
 
-public class ChatSentView {
+public interface ChatSentView {
+    void showLoading();
+
+    void hideLoading();
 }

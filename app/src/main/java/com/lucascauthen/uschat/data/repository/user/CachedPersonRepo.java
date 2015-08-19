@@ -21,7 +21,7 @@ public class CachedPersonRepo implements PersonCache {
 
     @Override
     public void sendFriendRequest(Person person, OnCompleteAction callback) {
-        person.setState(Person.PersonState.SENT_REQUEST);
+        person.setState(Person.PersonType.SENT_REQUEST);
         sentRequests.add(person);
         if (callback != null) {
             callback.onComplete("");
@@ -30,7 +30,7 @@ public class CachedPersonRepo implements PersonCache {
 
     @Override
     public void acceptReceivedRequest(Person person, OnCompleteAction callback) {
-        person.setState(Person.PersonState.FRIENDS);
+        person.setState(Person.PersonType.FRIENDS);
         friends.add(person);
         receivedRequests.remove(person);
         if (callback != null) {
@@ -40,7 +40,7 @@ public class CachedPersonRepo implements PersonCache {
 
     @Override
     public void rejectReceivedRequest(Person person, OnCompleteAction callback) {
-        person.setState(Person.PersonState.NOT_FRIENDS);
+        person.setState(Person.PersonType.NOT_FRIENDS);
         receivedRequests.remove(person);
         if (callback != null) {
             callback.onComplete("");
@@ -49,7 +49,7 @@ public class CachedPersonRepo implements PersonCache {
 
     @Override
     public void deleteSentRequest(Person person, OnCompleteAction callback) {
-        person.setState(Person.PersonState.NOT_FRIENDS);
+        person.setState(Person.PersonType.NOT_FRIENDS);
         sentRequests.remove(person);
         if (callback != null) {
             callback.onComplete("");
@@ -58,7 +58,7 @@ public class CachedPersonRepo implements PersonCache {
 
     @Override
     public void removeFriend(Person person, OnCompleteAction callback) {
-        person.setState(Person.PersonState.NOT_FRIENDS);
+        person.setState(Person.PersonType.NOT_FRIENDS);
         friends.remove(person);
         if (callback != null) {
             callback.onComplete("");
@@ -158,9 +158,9 @@ public class CachedPersonRepo implements PersonCache {
                 sentRequests.clear();
                 receivedRequests.clear();
                 for (Person person : response.result()) {
-                    if (person.state() == Person.PersonState.RECEIVED_REQUEST) {
+                    if (person.state() == Person.PersonType.RECEIVED_REQUEST) {
                         receivedRequests.add(person);
-                    } else if (person.state() == Person.PersonState.SENT_REQUEST) {
+                    } else if (person.state() == Person.PersonType.SENT_REQUEST) {
                         sentRequests.add(person);
                     }
                 }

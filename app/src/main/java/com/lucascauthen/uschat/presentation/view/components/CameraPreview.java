@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.Display;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
@@ -44,11 +45,11 @@ public class CameraPreview extends SurfaceView implements BaseCameraViewPresente
                 camera.setPreviewDisplay(holder);
                 Camera.Parameters parameters = camera.getParameters();
                 List<Camera.Size> sizeList = parameters.getSupportedPictureSizes();
-                parameters.setRotation(270);
                 int chosenSize = getPictureSizeIndexForHeight(sizeList, HEIGHT);
                 parameters.setPictureSize(sizeList.get(chosenSize).width, sizeList.get(chosenSize).height);
+                parameters.setRotation(90);
                 camera.setParameters(parameters);
-                camera.setDisplayOrientation(90);
+                setCameraDisplayOrientation();
                 camera.startPreview();
             } catch (IOException e) {
                 Log.d(getContext().getString(R.string.camera_log_tag), "Error setting camera preview: " + e.getMessage());
@@ -98,6 +99,56 @@ public class CameraPreview extends SurfaceView implements BaseCameraViewPresente
                 Log.d(getContext().getString(R.string.camera_log_tag), "Error starting camera preview: " + e.getMessage());
             }
         }
+    }
+    //Taken from http://stackoverflow.com/questions/4645960/how-to-set-android-camera-orientation-properly
+    public void setCameraDisplayOrientation() {
+        Camera.Parameters parameters = camera.getParameters();
+
+        Camera.CameraInfo camInfo = new Camera.CameraInfo();
+        Camera.getCameraInfo(getBackFacingCameraId(), camInfo);
+
+
+        Display display = ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        int rotation = display.getRotation();
+        int degrees = 0;
+        switch (rotation) {
+            case Surface.ROTATION_0:
+                degrees = 0;
+                break;
+            case Surface.ROTATION_90:
+                degrees = 90;
+                break;
+            case Surface.ROTATION_180:
+                degrees = 180;
+                break;
+            case Surface.ROTATION_270:
+                degrees = 270;
+                break;
+        }
+
+        int result;
+        if (camInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            result = (camInfo.orientation + degrees) % 360;
+            result = (360 - result) % 360;  // compensate the mirror
+        } else {  // back-facing
+            result = (camInfo.orientation - degrees + 360) % 360;
+        }
+        camera.setDisplayOrientation(result);
+    }
+    private int getBackFacingCameraId() {
+        int cameraId = -1;
+        // Search for the front facing camera
+        int numberOfCameras = Camera.getNumberOfCameras();
+        for (int i = 0; i < numberOfCameras; i++) {
+            Camera.CameraInfo info = new Camera.CameraInfo();
+            Camera.getCameraInfo(i, info);
+            if (info.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
+
+                cameraId = i;
+                break;
+            }
+        }
+        return cameraId;
     }
 
     @Override

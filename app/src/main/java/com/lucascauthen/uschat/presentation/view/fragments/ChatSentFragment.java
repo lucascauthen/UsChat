@@ -23,8 +23,8 @@ import butterknife.InjectView;
  */
 public class ChatSentFragment extends Fragment implements BaseChatSentPresenter.BaseSentChatView {
 
-    @InjectView(R.id.chat_sent_list_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-    @InjectView(R.id.chat_sent_list_rv) RecyclerView recyclerView;
+    @InjectView(R.id.swipeRefresh) SwipeRefreshLayout swipeRefreshLayout;
+    @InjectView(R.id.recyclerView) RecyclerView recyclerView;
 
     private BaseChatSentPresenter presenter;
     private ChatViewAdapter adapter;

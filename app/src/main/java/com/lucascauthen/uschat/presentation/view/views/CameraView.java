@@ -1,11 +1,6 @@
 package com.lucascauthen.uschat.presentation.view.views;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.view.View;
-import android.widget.FrameLayout;
-
-public interface CameraView {
+public interface CameraView extends BaseView {
     void enableControls();
 
     void disableControls();
@@ -14,11 +9,13 @@ public interface CameraView {
 
     void hideLoading();
 
-    void showPictureConfirmDialog(Bitmap image);
+    void showPictureConfirmDialog(byte[] picture);
 
-    void closePictureConfirmDialog();
+    void showFriendSelectDialog(byte[] compressedPicture);
 
-    void showFriendSelectDialog(); //This is probably not the best way to pass the data from the picture
+    void switchCameras();
 
-    void onSendChatComplete();
+    void capture();
+
+    void loadCamera();
 }

@@ -39,7 +39,7 @@ public class Chat {
             image = null;
             return reference;
         }
-        throw new RuntimeException("Trying to get an image that is not loaded");
+        return null;
     }
 
     public void setImage(Bitmap image) {
@@ -84,7 +84,7 @@ public class Chat {
     }
 
     public boolean isFromCurrentUser() {
-        return chatType == ChatType.SENT_CHAT;
+        return chatType == ChatType.SENT;
     }
 
     public String getFrom() {
@@ -96,6 +96,11 @@ public class Chat {
     }
 
     public byte[] getChatData() {
+        /*
+        byte[] data = chatData;
+        chatData = null;
+        return data;
+        */
         return chatData;
     }
 
@@ -141,8 +146,9 @@ public class Chat {
     }
 
     public enum ChatType {
-        SENT_CHAT,
-        RECEIVED_CHAT
+        SENT,
+        RECEIVED,
+        UNKNOWN
     }
 
     public interface ImageReadyCallback {

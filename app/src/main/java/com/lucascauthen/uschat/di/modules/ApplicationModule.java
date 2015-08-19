@@ -12,6 +12,7 @@ import com.lucascauthen.uschat.data.repository.chat.ChatRepo;
 import com.lucascauthen.uschat.data.repository.chat.MultiLevelChatRepo;
 import com.lucascauthen.uschat.data.repository.chat.RemoteChatRepo;
 import com.lucascauthen.uschat.data.repository.user.CachedPersonRepo;
+import com.lucascauthen.uschat.data.repository.user.MultiLevelPersonRepo;
 import com.lucascauthen.uschat.data.repository.user.PersonCache;
 import com.lucascauthen.uschat.data.repository.user.PersonRepo;
 import com.lucascauthen.uschat.data.repository.user.RemotePersonRepo;
@@ -154,8 +155,8 @@ public class ApplicationModule {
     }
 
     @Provides
-    BasePersonListViewPresenter providePersonListViewPresenter(BackgroundExecutor backgroundExecutor, ForegroundExecutor foregroundExecutor, User user) {
-        return new PersonListViewPresenter(foregroundExecutor, backgroundExecutor, user);
+    BasePersonListViewPresenter providePersonListViewPresenter(BackgroundExecutor backgroundExecutor, ForegroundExecutor foregroundExecutor, MultiLevelPersonRepo repo) {
+        return new PersonListViewPresenter(foregroundExecutor, backgroundExecutor, repo);
     }
 
     @Provides
@@ -208,8 +209,8 @@ public class ApplicationModule {
     //Repositories//
     @Provides
     @Singleton
-    User provideUser(PersonCache cache, PersonRepo secondaryRepo) {
-        return new User(cache, secondaryRepo);
+    MultiLevelPersonRepo provideUser(PersonCache cache, PersonRepo secondaryRepo) {
+        return new MultiLevelPersonRepo(cache, secondaryRepo);
     }
 
     @Provides

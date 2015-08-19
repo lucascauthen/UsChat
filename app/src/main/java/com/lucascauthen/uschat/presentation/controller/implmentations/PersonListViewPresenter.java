@@ -1,13 +1,12 @@
 package com.lucascauthen.uschat.presentation.controller.implmentations;
 
-import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.data.entities.Person;
 import com.lucascauthen.uschat.data.entities.User;
+import com.lucascauthen.uschat.data.repository.user.MultiLevelPersonRepo;
 import com.lucascauthen.uschat.data.repository.user.PersonRepo;
 import com.lucascauthen.uschat.domain.executor.BackgroundExecutor;
 import com.lucascauthen.uschat.domain.executor.ForegroundExecutor;
 import com.lucascauthen.uschat.presentation.controller.base.BasePersonListViewPresenter;
-import com.lucascauthen.uschat.presentation.controller.base.BaseRecyclerViewPresenter;
 import com.lucascauthen.uschat.util.NullObject;
 
 /**
@@ -20,28 +19,28 @@ public class PersonListViewPresenter implements BasePersonListViewPresenter {
 
     private final ForegroundExecutor foregroundExecutor;
     private final BackgroundExecutor backgroundExecutor;
-    private final User user;
+    private final MultiLevelPersonRepo repo;
 
     private PersonListCardView.InitialStateSetter stateSetter;
-    private PersonRepo.Type displayType;
+    private Person.PersonType displayType;
     private boolean repoNeedUpdate = true;
     private String query = "";
 
 
 
-    public PersonListViewPresenter(ForegroundExecutor foregroundExecutor, BackgroundExecutor backgroundExecutor, User user) {
+    public PersonListViewPresenter(ForegroundExecutor foregroundExecutor, BackgroundExecutor backgroundExecutor, MultiLevelPersonRepo repo) {
         this.foregroundExecutor = foregroundExecutor;
         this.backgroundExecutor = backgroundExecutor;
-        this.user = user;
+        this.repo = repo;
     }
 
     @Override
     public Person getItem(int index) {
         if(repoNeedUpdate) {
             repoNeedUpdate = false;
-            return user.get(new PersonRepo.Request(true, query, displayType)).result().get(index);
+            return repo.get(new PersonRepo.Request(true, query, displayType)).result().get(index);
         } else {
-            return user.get(new PersonRepo.Request(false, query, displayType)).result().get(index);
+            return repo.get(new PersonRepo.Request(false, query, displayType)).result().get(index);
         }
     }
 
@@ -59,9 +58,9 @@ public class PersonListViewPresenter implements BasePersonListViewPresenter {
     public int getSize() {
         if(repoNeedUpdate) {
             repoNeedUpdate = false;
-            return user.get(new PersonRepo.Request(true, query, displayType)).result().size();
+            return repo.get(new PersonRepo.Request(true, query, displayType)).result().size();
         } else {
-            return user.get(new PersonRepo.Request(false, query, displayType)).result().size();
+            return repo.get(new PersonRepo.Request(false, query, displayType)).result().size();
         }
     }
 
@@ -100,7 +99,7 @@ public class PersonListViewPresenter implements BasePersonListViewPresenter {
     }
 
     @Override
-    public void setDisplayType(PersonRepo.Type type) {
+    public void setDisplayType(Person.PersonType type) {
         this.displayType = type;
     }
 
@@ -113,7 +112,7 @@ public class PersonListViewPresenter implements BasePersonListViewPresenter {
     @Override
     public void sendAction(Person person, BaseActions action, PersonRepo.OnCompleteAction callback) {
         backgroundExecutor.execute(() -> {
-            action.execute(person, user, callback);
+            action.execute(person, repo, callback);
         });
     }
 

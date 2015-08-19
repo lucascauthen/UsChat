@@ -14,7 +14,7 @@ public interface BasePersonListViewPresenter extends BaseRecyclerViewPresenter<P
 
     void attachAdapter(BasePersonListAdapter adapter, PersonListCardView.InitialStateSetter setter);
 
-    void setDisplayType(PersonRepo.Type type);
+    void setDisplayType(Person.PersonType type);
 
     void requestUpdate(BasePersonListAdapter.OnDoneLoadingCallback callback, boolean repoNeedUpdate);
 
@@ -183,11 +183,11 @@ public interface BasePersonListViewPresenter extends BaseRecyclerViewPresenter<P
                         cardView.addActionButton("acceptRequest", BaseIcons.ACTION_ACCEPT, acceptRequest());
                         cardView.addActionButton("rejectRequest", BaseIcons.ACTION_REMOVE, rejectRequest());
                         break;
-                    case FRIENDS:
+                    case FRIEND:
                         cardView.setStateIcon(BaseIcons.PERSON_STATE_FRIEND);
                         cardView.addActionButton("removeFriend", BaseIcons.ACTION_REMOVE, removeFriend());
                         break;
-                    case NOT_FRIENDS:
+                    case NOT_FRIEND:
                         cardView.setStateIcon(BaseIcons.PERSON_STATE_NOT_FRIEND);
                         cardView.addActionButton("addFriend", BaseIcons.ACTION_ADD, addFriend());
                         break;

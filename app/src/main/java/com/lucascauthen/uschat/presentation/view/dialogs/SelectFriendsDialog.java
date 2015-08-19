@@ -14,51 +14,56 @@ import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.data.entities.Person;
 import com.lucascauthen.uschat.presentation.controller.base.BaseSelectFriendsDialogPresenter;
 import com.lucascauthen.uschat.presentation.controller.implmentations.SelectFriendsDialogPresenter;
-import com.lucascauthen.uschat.presentation.view.components.PersonViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.lucascauthen.uschat.presentation.presenters.FriendSelectPresenter;
+import com.lucascauthen.uschat.presentation.presenters.ListPresenter;
+import com.lucascauthen.uschat.presentation.view.components.recyclerviews.PersonRecyclerView;
+import com.lucascauthen.uschat.presentation.view.views.FriendSearchView;
+import com.lucascauthen.uschat.presentation.view.views.FriendSelectView;
+import com.lucascauthen.uschat.presentation.view.views.ListView;
 
-/**
- * Created by lhc on 7/2/15.
- */
-public class SelectFriendsDialog extends Dialog implements SelectFriendsDialogPresenter.BaseSelectFriendsDialog{
+
+public class SelectFriendsDialog extends Dialog implements FriendSelectView{
 
 
-    @InjectView(R.id.send_chat_accept) ImageButton sendButton;
-    @InjectView(R.id.select_friends_rv) RecyclerView recyclerView;
-    @InjectView(R.id.send_chat_reject) ImageButton rejectChat;
-    @InjectView(R.id.select_friends__loading) ProgressBar progress;
+    @InjectView(R.id.accept) ImageButton sendButton;
+    @InjectView(R.id.recyclerView) PersonRecyclerView recyclerView;
+    @InjectView(R.id.reject) ImageButton rejectChat;
+    @InjectView(R.id.progress) ProgressBar progress;
 
     private LinearLayoutManager layoutManager;
-    private List<Person> selectedFriends = new ArrayList<>();
-    private final BaseSelectFriendsDialogPresenter presenter;
+    private final FriendSelectPresenter presenter;
+    private byte[] pictureData;
 
-    public SelectFriendsDialog(Context context, BaseSelectFriendsDialogPresenter presenter, PersonViewAdapter adapter) {
+    public SelectFriendsDialog(Context context, FriendSelectPresenter presenter, byte[] pictureData) {
         super(context, R.style.SelectFriendsDialog);
         setContentView(R.layout.dialog_select_friends);
+        this.presenter = presenter;
+        this.pictureData = pictureData;
         ButterKnife.inject(this);
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        this.presenter = presenter;
 
         sendButton.setOnClickListener(view -> {
             dismiss();
-            presenter.onSend();
+            presenter.onSend(pictureData);
+            dispose();
         });
         rejectChat.setOnClickListener((view) -> {
             dismiss();
+            dispose();
         });
 
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        recyclerView.setAdapter(adapter);
-        presenter.attachAdapter(adapter);
         presenter.attachView(this);
+        presenter.attachSubView(recyclerView);
     }
 
     @Override
@@ -81,8 +86,7 @@ public class SelectFriendsDialog extends Dialog implements SelectFriendsDialogPr
         progress.setVisibility(View.GONE);
     }
 
-    public void update(byte[] data) {
-        this.presenter.attachPictureData(data);
-        this.presenter.updateRequested();
+    private void dispose() {
+        this.pictureData = null;
     }
 }

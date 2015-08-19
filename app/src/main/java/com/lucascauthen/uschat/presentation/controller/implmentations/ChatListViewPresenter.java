@@ -29,7 +29,7 @@ public class ChatListViewPresenter implements BaseChatListViewPresenter {
     private final ChatRepo repository;
     private boolean repoNeedUpdate = true;
 
-    private ChatRepo.RequestType displayType;
+    private Chat.ChatType displayType;
 
     public ChatListViewPresenter(BackgroundExecutor backgroundExecutor, ForegroundExecutor foregroundExecutor, ChatRepo repository) {
         this.backgroundExecutor = backgroundExecutor;
@@ -160,7 +160,7 @@ public class ChatListViewPresenter implements BaseChatListViewPresenter {
     }
 
     @Override
-    public void setDisplayType(ChatRepo.RequestType type) {
+    public void setDisplayType(Chat.ChatType type) {
         this.displayType = type;
     }
 

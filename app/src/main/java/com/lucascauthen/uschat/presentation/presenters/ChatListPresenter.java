@@ -1,0 +1,120 @@
+package com.lucascauthen.uschat.presentation.presenters;
+
+import com.lucascauthen.uschat.data.entities.Chat;
+import com.lucascauthen.uschat.data.repository.chat.ChatRepo;
+import com.lucascauthen.uschat.domain.executor.BackgroundExecutor;
+import com.lucascauthen.uschat.domain.executor.ForegroundExecutor;
+import com.lucascauthen.uschat.presentation.controller.base.BasePagerViewPresenter;
+import com.lucascauthen.uschat.presentation.view.views.ListView;
+import com.lucascauthen.uschat.presentation.view.views.cards.ChatListItem;
+import com.lucascauthen.uschat.util.NullObject;
+
+import java.util.List;
+
+public class ChatListPresenter implements ListPresenter<Chat, Chat.ChatType, ChatListItem> {
+
+    private static final ListView<Chat, Chat.ChatType, ChatListItem> NULL_VIEW = NullObject.create(ListView.class);
+    private static final BasePagerViewPresenter.PagerViewChanger NULL_PAGER_CHANGER = NullObject.create(BasePagerViewPresenter.PagerViewChanger.class);
+
+    private ListView<Chat, Chat.ChatType, ChatListItem> view = NULL_VIEW;
+    private BasePagerViewPresenter.PagerViewChanger changer = NULL_PAGER_CHANGER;
+
+    private final BackgroundExecutor backgroundExecutor;
+    private final ForegroundExecutor foregroundExecutor;
+    private final ChatRepo repository;
+    private boolean repoNeedUpdate = true;
+
+    private Chat.ChatType displayType;
+
+    ListView.OnClickListener<Chat, ChatListItem, ListPresenter<Chat, Chat.ChatType, ChatListItem>> listener;
+
+    ListView.InitialStateSetter<Chat, ChatListItem> initialStateSetter;
+
+    private String query = ""; //Unused right now
+
+    public ChatListPresenter(BackgroundExecutor backgroundExecutor, ForegroundExecutor foregroundExecutor, ChatRepo repository) {
+        this.backgroundExecutor = backgroundExecutor;
+        this.foregroundExecutor = foregroundExecutor;
+        this.repository = repository;
+    }
+
+    @Override
+    public Chat getItem(int index) {
+        if(repoNeedUpdate) {
+            repoNeedUpdate = false;
+            return repository.get(new ChatRepo.Request(true, displayType)).result().get(index);
+        } else {
+            return repository.get(new ChatRepo.Request(false, displayType)).result().get(index);
+        }
+    }
+
+    @Override
+    public void getItemInBackground(int position, GetItemCallBack<Chat> callback) {
+        backgroundExecutor.execute(() -> {
+            Chat item = getItem(position);
+            foregroundExecutor.execute(() -> {
+                callback.onGetItem(item);
+            });
+        });
+    }
+
+    @Override
+    public int getSize() {
+        if(repoNeedUpdate) {
+            repoNeedUpdate = false;
+            return repository.get(new ChatRepo.Request(true, displayType)).result().size();
+        } else {
+            return repository.get(new ChatRepo.Request(false, displayType)).result().size();
+        }
+    }
+
+    @Override
+    public void getSizeInBackground(GetSizeCallback callback) {
+        backgroundExecutor.execute(() -> {
+            int size = getSize();
+            foregroundExecutor.execute(() -> {
+                callback.onGetSize(size);
+            });
+        });
+    }
+
+    @Override
+    public void requestUpdate(ListView.OnUpdateCompleteCallback callback, boolean updateRepo) {
+        this.repoNeedUpdate = updateRepo;
+        view.notifyUpdate(callback);
+    }
+
+    @Override
+    public void attachView(ListView<Chat, Chat.ChatType, ChatListItem> view) {
+        this.view = view;
+        view.setInitialStateSetter(initialStateSetter);
+        view.setOnClickListener(listener);
+    }
+
+    @Override
+    public void detachView() {
+        this.view = NULL_VIEW;
+    }
+
+    @Override
+    public void setDisplayType(Chat.ChatType displayType) {
+        this.displayType = displayType;
+    }
+
+    @Override
+    public void setFilterQuery(String query) {
+        this.query = query; //Unused right now
+    }
+
+    @Override
+    public void setClickListener(ListView.OnClickListener<Chat, ChatListItem, ListPresenter<Chat, Chat.ChatType, ChatListItem>> listener) {
+        this.listener = listener;
+    }
+
+
+    @Override
+    public void setInitialStateSetter(ListView.InitialStateSetter<Chat, ChatListItem> initialStateSetter) {
+        this.initialStateSetter = initialStateSetter;
+    }
+
+}

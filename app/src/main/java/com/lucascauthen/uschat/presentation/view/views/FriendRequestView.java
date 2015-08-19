@@ -1,4 +1,7 @@
 package com.lucascauthen.uschat.presentation.view.views;
 
-public class FriendRequestView {
+public interface FriendRequestView {
+    void showLoading();
+
+    void hideLoading();
 }

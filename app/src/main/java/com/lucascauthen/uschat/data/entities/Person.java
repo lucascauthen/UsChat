@@ -1,13 +1,10 @@
 package com.lucascauthen.uschat.data.entities;
 
-/**
- * Created by lhc on 8/5/15.
- */
 public class Person {
     private final String name;
-    private PersonState state;
+    private PersonType state;
 
-    public Person(String name, PersonState state) {
+    public Person(String name, PersonType state) {
         this.name = name;
         this.state = state;
     }
@@ -16,19 +13,21 @@ public class Person {
         return name;
     }
 
-    public PersonState state() {
+    public PersonType state() {
         return state;
     }
 
-    public void setState(PersonState state) {
+    public void setState(PersonType state) {
         this.state = state;
     }
 
-    public enum PersonState {
-        FRIENDS,
-        SENT_REQUEST,
-        RECEIVED_REQUEST,
-        NOT_FRIENDS
+    public enum PersonType {
+        NOT_FRIEND,
+        FRIEND,
+        SENT_REQUEST, //This person was sent a request
+        RECEIVED_REQUEST, //The user received a request from this user
+        SEARCH,
+        REQUESTS
     }
 
 }

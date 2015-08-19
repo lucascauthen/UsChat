@@ -26,8 +26,8 @@ public class FriendListFragment extends Fragment implements BaseFriendsListPrese
 
     private LinearLayoutManager layoutManager;
 
-    @InjectView(R.id.friend_list_rv)RecyclerView recyclerView;
-    @InjectView(R.id.friend_list_swipe_refresh)SwipeRefreshLayout swipeRefreshLayout;
+    @InjectView(R.id.recyclerView)RecyclerView recyclerView;
+    @InjectView(R.id.swipeRefresh)SwipeRefreshLayout swipeRefreshLayout;
 
 
     public static FriendListFragment newInstance(BaseFriendsListPresenter presenter, PersonViewAdapter adapter) {

@@ -16,7 +16,6 @@ import com.parse.ParseUser;
 import com.parse.ProgressCallback;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +42,9 @@ public class RemoteChatRepo implements ChatRepo {
             user.add("sentChats", chat.getId());
             user.save();
 
+            //Get rid of the picture because we don't need to store it anymore
+            chat.setChatData(null);
+
             //TO
 
             //////////////
@@ -50,13 +52,13 @@ public class RemoteChatRepo implements ChatRepo {
             //////////////
             /*
 
-            Because the client can only modify its own data, this request is sent to the server to update the other user that this operation affects
+            Because the client can only modify its own data, this request is sent to the server to init the other user that this operation affects
 
              */
 
             Map<String, Object> map = new HashMap<>();
             map.put("currentUser", ParseUser.getCurrentUser().getUsername());
-            map.put("toUser", chat.getToString());
+            map.put("toUsers", chat.getToString());
             map.put("chatId", chat.getId());
             ParseCloud.callFunctionInBackground("sendChat", map, new FunctionCallback<Object>() { //Network call
                 public void done(Object object, ParseException e) {
@@ -146,9 +148,9 @@ public class RemoteChatRepo implements ChatRepo {
                     ParseObject chat = query.get(id); //Network call
                     List<Person> toPeople = new ArrayList<>();
                     for(Object name : chat.getList("to")) {
-                        toPeople.add(new Person((String)name, Person.PersonState.FRIENDS));
+                        toPeople.add(new Person((String)name, Person.PersonType.FRIENDS));
                     }
-
+                    Chat chatToAdd;
                     if(receivedChat) {
                         //Generate a function to load the image when the user requests it
                         Chat.LoadImageFunction function = new Chat.LoadImageFunction() {
@@ -172,11 +174,12 @@ public class RemoteChatRepo implements ChatRepo {
                                 });
                             }
                         };
-                        formattedChatList.add(new Chat(toPeople, chat.getString("from"), Chat.ChatType.RECEIVED_CHAT, function));
+                        chatToAdd = new Chat(toPeople, chat.getString("from"), Chat.ChatType.RECEIVED, function);
                     } else {
-                        formattedChatList.add(new Chat(toPeople, chat.getString("from"), Chat.ChatType.SENT_CHAT, null));
+                        chatToAdd = new Chat(toPeople, chat.getString("from"), Chat.ChatType.SENT, null);
                     }
-
+                    chatToAdd.setId(id);
+                    formattedChatList.add(chatToAdd);
                 }
                 return new Response(formattedChatList, request.requestType()); //Not returning an unmodifiable list because the user never directly has access to it
             } else {
@@ -184,7 +187,8 @@ public class RemoteChatRepo implements ChatRepo {
             }
         } catch (ParseException e) {
             e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
+            Log.e("UsChat", e.getMessage());
+            return new Response(new ArrayList<>(), request.requestType()); //Essentially a "safe" null return
         }
     }
 

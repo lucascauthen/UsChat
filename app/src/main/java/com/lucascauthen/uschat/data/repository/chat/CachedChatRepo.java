@@ -49,7 +49,7 @@ public class CachedChatRepo implements ChatCache {
             case RECEIVED:
                 cacheReceivedChats(response.result());
                 break;
-            case COMBINED:
+            case UNKNOWN:
                 clear();
                 for (Chat chat : response.result()) {
                     if (chat.isFromCurrentUser()) {
@@ -91,7 +91,7 @@ public class CachedChatRepo implements ChatCache {
             case RECEIVED:
                 listToSend = Collections.unmodifiableList(receivedChats);
                 break;
-            case COMBINED:
+            case UNKNOWN:
                 listToSend = new ArrayList<>(sentChats);
                 listToSend.addAll(receivedChats);
                 listToSend = Collections.unmodifiableList(listToSend);
