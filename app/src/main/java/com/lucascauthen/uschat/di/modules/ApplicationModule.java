@@ -128,7 +128,7 @@ public class ApplicationModule {
     }
 
     @Provides
-    PersonListPresenter providePersonListViewPresenter(BackgroundExecutor backgroundExecutor, ForegroundExecutor foregroundExecutor, MultiLevelPersonRepo repo) {
+    PersonListPresenter providePersonListViewPresenter(BackgroundExecutor backgroundExecutor, ForegroundExecutor foregroundExecutor, @Named("MainPersonRepo") PersonRepo repo) {
         return new PersonListPresenter(backgroundExecutor, foregroundExecutor, repo);
     }
 

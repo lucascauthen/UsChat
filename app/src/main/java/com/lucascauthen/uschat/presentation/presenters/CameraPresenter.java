@@ -26,6 +26,7 @@ public class CameraPresenter implements BasePresenter<CameraView>{
             view.disableControls();
             backgroundExecutor.execute(() -> {
                 view.switchCameras();
+                view.loadCamera();
                 foregroundExecutor.execute(() -> {
                     view.hideLoading();
                     view.enableControls();

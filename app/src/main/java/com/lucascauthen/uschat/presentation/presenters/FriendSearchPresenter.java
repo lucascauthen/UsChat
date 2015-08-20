@@ -59,6 +59,10 @@ public class FriendSearchPresenter implements BasePresenter<FriendSearchView>, P
         });
         view.setInitialStateSetter(PersonListItem.BasePersonListBehavior.defaultSetter(this));
         subPresenter.attachView(view);
+        this.view.showLoading();
+        subPresenter.requestUpdate(() -> {
+            this.view.hideLoading();
+        }, true);
     }
 
     @Override

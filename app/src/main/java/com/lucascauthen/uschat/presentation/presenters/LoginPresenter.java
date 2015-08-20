@@ -24,6 +24,9 @@ public class LoginPresenter implements BasePresenter<LoginView> {
     @Override
     public void attachView(LoginView view) {
         this.view = view;
+        if(ParseUser.getCurrentUser() != null) {
+            view.notifyLoginSuccess();
+        }
     }
 
     @Override

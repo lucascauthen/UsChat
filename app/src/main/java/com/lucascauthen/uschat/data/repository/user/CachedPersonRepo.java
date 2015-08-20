@@ -30,7 +30,7 @@ public class CachedPersonRepo implements PersonCache {
 
     @Override
     public void acceptReceivedRequest(Person person, OnCompleteAction callback) {
-        person.setState(Person.PersonType.FRIENDS);
+        person.setState(Person.PersonType.FRIEND);
         friends.add(person);
         receivedRequests.remove(person);
         if (callback != null) {
@@ -40,7 +40,7 @@ public class CachedPersonRepo implements PersonCache {
 
     @Override
     public void rejectReceivedRequest(Person person, OnCompleteAction callback) {
-        person.setState(Person.PersonType.NOT_FRIENDS);
+        person.setState(Person.PersonType.NOT_FRIEND);
         receivedRequests.remove(person);
         if (callback != null) {
             callback.onComplete("");
@@ -49,7 +49,7 @@ public class CachedPersonRepo implements PersonCache {
 
     @Override
     public void deleteSentRequest(Person person, OnCompleteAction callback) {
-        person.setState(Person.PersonType.NOT_FRIENDS);
+        person.setState(Person.PersonType.NOT_FRIEND);
         sentRequests.remove(person);
         if (callback != null) {
             callback.onComplete("");
@@ -58,7 +58,7 @@ public class CachedPersonRepo implements PersonCache {
 
     @Override
     public void removeFriend(Person person, OnCompleteAction callback) {
-        person.setState(Person.PersonType.NOT_FRIENDS);
+        person.setState(Person.PersonType.NOT_FRIEND);
         friends.remove(person);
         if (callback != null) {
             callback.onComplete("");

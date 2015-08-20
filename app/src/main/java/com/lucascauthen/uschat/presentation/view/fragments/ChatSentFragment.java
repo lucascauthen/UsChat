@@ -28,7 +28,6 @@ public class ChatSentFragment extends Fragment implements ChatSentView {
     public static ChatSentFragment newInstance(ChatSentPresenter presenter) {
         ChatSentFragment f = new ChatSentFragment();
         f.presenter = presenter;
-        f.recyclerView = new ChatRecyclerView(f.getActivity());
         return f;
     }
 

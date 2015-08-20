@@ -31,7 +31,7 @@ public class FriendSearchFragment extends Fragment implements FriendSearchView{
 
     @InjectView(R.id.recyclerView)PersonRecyclerView recyclerView;
     @InjectView(R.id.swipeRefresh)SwipeRefreshLayout swipeRefreshLayout;
-    @InjectView(R.id.friend_search_search_field)EditText searchField;
+    @InjectView(R.id.searchField)EditText searchField;
 
     public static FriendSearchFragment newInstance(FriendSearchPresenter presenter) {
         FriendSearchFragment f = new FriendSearchFragment();
@@ -49,7 +49,7 @@ public class FriendSearchFragment extends Fragment implements FriendSearchView{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_friend_list, null);
+        View v = inflater.inflate(R.layout.fragment_friend_search, null);
         ButterKnife.inject(this, v);
         recyclerView.setLayoutManager(layoutManager);
         presenter.attachView(this);

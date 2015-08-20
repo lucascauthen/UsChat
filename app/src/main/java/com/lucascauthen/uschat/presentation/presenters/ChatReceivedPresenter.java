@@ -92,6 +92,10 @@ public class ChatReceivedPresenter implements BasePresenter<ChatReceivedView>, P
             }
         });
         subPresenter.attachView(view);
+        this.view.showLoading();
+        subPresenter.requestUpdate(() -> {
+            this.view.hideLoading();
+        }, true);
     }
 
     public void onOpenChatComplete(Chat chat) {

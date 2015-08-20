@@ -87,19 +87,9 @@ public class PersonListPresenter implements ListPresenter<Person, Person.PersonT
     }
 
     @Override
-    public void setClickListener(ListView.OnClickListener<Person, PersonListItem, ListPresenter<Person, Person.PersonType, PersonListItem>> listener) {
-        this.listener = listener;
-    }
-
-    @Override
-    public void setInitialStateSetter(ListView.InitialStateSetter<Person, PersonListItem> initialStateSetter) {
-        this.initialStateSetter = initialStateSetter;
-    }
-
-
-    @Override
     public void attachView(ListView<Person, Person.PersonType, PersonListItem> view) {
         this.view = view;
+        view.attachPresenter(this);
     }
 
     @Override

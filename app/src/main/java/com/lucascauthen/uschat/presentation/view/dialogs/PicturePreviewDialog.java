@@ -4,9 +4,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import android.widget.ProgressBar;
 import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.presentation.presenters.PicturePreviewPresenter;
 
@@ -18,9 +20,10 @@ import java.io.ByteArrayOutputStream;
 
 
 public class PicturePreviewDialog extends Dialog implements PicturePreviewView{
-    @InjectView(R.id.preview_image_view) ImageView imageView;
-    @InjectView(R.id.picture_preview_accept) ImageButton accept;
-    @InjectView(R.id.picture_preview_reject) ImageButton reject;
+    @InjectView(R.id.imageView) ImageView imageView;
+    @InjectView(R.id.acceptButton) ImageButton accept;
+    @InjectView(R.id.rejectButton) ImageButton reject;
+    @InjectView(R.id.progressBar) ProgressBar progressBar;
 
     private OnAcceptPictureListener onAccept;
     private OnRejectPictureListener onReject;
@@ -31,15 +34,18 @@ public class PicturePreviewDialog extends Dialog implements PicturePreviewView{
         super(context, R.style.DialogSlideAnimation);
         setContentView(R.layout.dialog_picture_preview);
         this.image = BitmapFactory.decodeByteArray(theImage, 0, theImage.length);
+        this.presenter = presenter;
         ButterKnife.inject(this);
 
         accept.setOnClickListener(view -> {
+            showLoading();
             presenter.compress(() -> {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                image.compress(Bitmap.CompressFormat.PNG, 50, stream);
                 byte[] data = stream.toByteArray();
                 presenter.onCompressComplete(() -> {
                     if (onAccept != null) {
+                        hideLoading();
                         onAccept.onAccept(data);
                     }
                     dismiss();
@@ -52,7 +58,7 @@ public class PicturePreviewDialog extends Dialog implements PicturePreviewView{
             dismiss();
             dispose();
         });
-        imageView = ((ImageView) findViewById(R.id.preview_image_view));
+        imageView = ((ImageView) findViewById(R.id.imageView));
         imageView.setImageBitmap(image);
         imageView.setOnClickListener(view -> {
             //TODO: Add text to the view
@@ -75,11 +81,11 @@ public class PicturePreviewDialog extends Dialog implements PicturePreviewView{
 
     @Override
     public void showLoading() {
-        //TODO
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
-        //TODO
+        progressBar.setVisibility(View.INVISIBLE);
     }
 }

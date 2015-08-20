@@ -29,7 +29,6 @@ public class ChatReceivedFragment extends Fragment implements ChatReceivedView {
     public static ChatReceivedFragment newInstance(ChatReceivedPresenter presenter) {
         ChatReceivedFragment f = new ChatReceivedFragment();
         f.presenter = presenter;
-        f.recyclerView = new ChatRecyclerView(f.getActivity());
         return f;
     }
 

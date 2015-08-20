@@ -12,14 +12,13 @@ import android.view.SurfaceView;
 import android.view.WindowManager;
 
 import com.lucascauthen.uschat.R;
-import com.lucascauthen.uschat.presentation.controller.base.BaseCameraViewPresenter;
 
 import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class CameraPreview extends SurfaceView implements BaseCameraViewPresenter.CameraPreview{
+public class CameraPreview extends SurfaceView {
     private SurfaceHolder holder;
     private Camera camera;
     private final int HEIGHT;
@@ -151,13 +150,11 @@ public class CameraPreview extends SurfaceView implements BaseCameraViewPresente
         return cameraId;
     }
 
-    @Override
     public void attachCamera(Camera camera) {
         this.camera = camera;
         loadPreview(getHolder());
     }
 
-    @Override
     public SurfaceView getView() {
         return this;
     }

@@ -2,6 +2,7 @@ package com.lucascauthen.uschat.presentation.view.components.recyclerviews;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.AttributeSet;
 import com.lucascauthen.uschat.data.entities.Person;
 import com.lucascauthen.uschat.presentation.presenters.ListPresenter;
 import com.lucascauthen.uschat.presentation.view.base.ListView;
@@ -10,9 +11,20 @@ import com.lucascauthen.uschat.presentation.view.base.cards.PersonListItem;
 public class PersonRecyclerView extends RecyclerView implements ListView<Person, Person.PersonType, PersonListItem> {
     private final PersonViewAdapter adapter;
 
+    public PersonRecyclerView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        this.adapter = new PersonViewAdapter();
+        this.setAdapter(adapter);
+    }
+    public PersonRecyclerView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        this.adapter = new PersonViewAdapter();
+        this.setAdapter(adapter);
+    }
     public PersonRecyclerView(Context context) {
         super(context);
         this.adapter = new PersonViewAdapter();
+        this.setAdapter(adapter);
     }
 
     @Override

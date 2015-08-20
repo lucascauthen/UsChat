@@ -65,5 +65,9 @@ public class ChatSentPresenter implements BasePresenter<ChatSentView>, ParentPre
             }
         });
         subPresenter.attachView(view);
+        this.view.showLoading();
+        subPresenter.requestUpdate(() -> {
+            this.view.hideLoading();
+        }, true);
     }
 }

@@ -8,16 +8,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.lucascauthen.uschat.R;
-import com.lucascauthen.uschat.presentation.controller.base.BaseSignUpViewPresenter;
 import com.lucascauthen.uschat.presentation.presenters.SignUpPresenter;
 import com.lucascauthen.uschat.presentation.view.base.SignUpView;
 import rx.Observable;
 import rx.android.widget.OnTextChangeEvent;
+import rx.android.widget.WidgetObservable;
 
 import javax.inject.Inject;
 
@@ -49,10 +50,11 @@ public class SignUpActivity extends BaseActivity implements SignUpView {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         setContentView(R.layout.activity_signup);
-        getSupportActionBar().hide();
 
         //Butterknife initialization
         ButterKnife.inject(this);
+
+        initObservables();
 
         Observable.combineLatest(
                 //Test username
@@ -88,6 +90,8 @@ public class SignUpActivity extends BaseActivity implements SignUpView {
                 disableControls();
             }
         });
+
+        initFields();
 
         getApplicationComponent().inject(this);
 
@@ -146,5 +150,25 @@ public class SignUpActivity extends BaseActivity implements SignUpView {
     @OnClick(R.id.registerButton)
     void onRegisterClicked() {
         presenter.trySignUp(usernameField.getText().toString(), emailField.getText().toString(), passwordField.getText().toString());
+    }
+
+    private void initObservables() {
+        usernameObservable = WidgetObservable.text(usernameField);
+
+        emailObservable = WidgetObservable.text(emailField);
+
+        emailAgainObservable = WidgetObservable.text(emailAgainField);
+
+        passwordObservable = WidgetObservable.text(passwordField);
+
+        passwordAgainObservable = WidgetObservable.text(passwordAgainField);
+    }
+
+    private void initFields() {
+        usernameField.setText("");
+        emailField.setText("");
+        emailAgainField.setText("");
+        passwordField.setText("");
+        passwordAgainField.setText("");
     }
 }

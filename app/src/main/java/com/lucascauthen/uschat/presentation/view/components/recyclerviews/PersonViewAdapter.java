@@ -124,7 +124,7 @@ public class PersonViewAdapter extends RecyclerView.Adapter<PersonViewAdapter.Pe
             newButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onClick(person, thisObject, presenter);
+                    listener.onClick(person, thisObject);
                 }
             });
             actionContainer.addView(newButton);

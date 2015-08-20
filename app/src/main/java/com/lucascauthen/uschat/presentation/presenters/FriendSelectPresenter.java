@@ -79,5 +79,8 @@ public class FriendSelectPresenter implements BasePresenter<FriendSelectView>, P
             }
         });
         subPresenter.attachView(view);
+        subPresenter.requestUpdate(() -> {
+            this.view.hideLoading();
+        }, true);
     }
 }

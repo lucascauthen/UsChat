@@ -10,8 +10,6 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
 import com.lucascauthen.uschat.R;
-import com.lucascauthen.uschat.presentation.controller.base.BaseSelectFriendsDialogPresenter;
-import com.lucascauthen.uschat.presentation.controller.implmentations.SelectFriendsDialogPresenter;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

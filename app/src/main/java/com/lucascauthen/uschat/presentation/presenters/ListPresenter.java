@@ -21,10 +21,6 @@ public interface ListPresenter<T, D, V> extends BasePresenter<ListView<T, D, V>>
 
     void setFilterQuery(String query);
 
-    void setClickListener(ListView.OnClickListener<T, V, ListPresenter<T, D, V>> listener);
-
-    void setInitialStateSetter(ListView.InitialStateSetter<T, V> initialStateSetter);
-
     interface GetSizeCallback {
         void onGetSize(int size);
     }

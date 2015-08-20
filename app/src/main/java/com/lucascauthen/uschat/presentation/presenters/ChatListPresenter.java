@@ -82,8 +82,7 @@ public class ChatListPresenter implements ListPresenter<Chat, Chat.ChatType, Cha
     @Override
     public void attachView(ListView<Chat, Chat.ChatType, ChatListItem> view) {
         this.view = view;
-        view.setInitialStateSetter(initialStateSetter);
-        view.setOnClickListener(listener);
+        view.attachPresenter(this);
     }
 
     @Override
@@ -99,17 +98,6 @@ public class ChatListPresenter implements ListPresenter<Chat, Chat.ChatType, Cha
     @Override
     public void setFilterQuery(String query) {
         this.query = query; //Unused right now
-    }
-
-    @Override
-    public void setClickListener(ListView.OnClickListener<Chat, ChatListItem, ListPresenter<Chat, Chat.ChatType, ChatListItem>> listener) {
-        this.listener = listener;
-    }
-
-
-    @Override
-    public void setInitialStateSetter(ListView.InitialStateSetter<Chat, ChatListItem> initialStateSetter) {
-        this.initialStateSetter = initialStateSetter;
     }
 
 }
