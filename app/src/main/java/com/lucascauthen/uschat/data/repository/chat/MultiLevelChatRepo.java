@@ -16,6 +16,20 @@ public class MultiLevelChatRepo implements ChatRepo {
     }
 
     @Override
+    public void sendChat(Chat chat, OnCompleteAction callback, boolean waitForRemote) {
+        //WARNING: Not tested and it has the potential to break
+        if(waitForRemote) {
+            sendChat(chat, callback);
+        } else {
+            OnCompleteAction cacheCallback = (msg) -> {
+                chat.setId(msg);
+            };
+            cache.sendChat(chat, callback);
+            secondaryRepo.sendChat(chat, cacheCallback);
+        }
+    }
+
+    @Override
     public void sendChat(Chat chat, OnCompleteAction callback) {
         //The cached version of the chats does not contain a valid id, so it needs to be edited by the secondary repo when it is done
         OnCompleteAction cacheCallback = (msg) -> {
@@ -30,6 +44,16 @@ public class MultiLevelChatRepo implements ChatRepo {
     public void openChat(Chat chat, OnCompleteAction callback) {
         cache.openChat(chat, null); //This does not need a callback
         secondaryRepo.openChat(chat, callback);
+    }
+
+    @Override
+    public void openChat(Chat chat, OnCompleteAction callback, boolean waitForRemote) {
+        if (waitForRemote) {
+            openChat(chat, callback);
+        } else {
+            cache.openChat(chat, callback); //This does not need a callback
+            secondaryRepo.openChat(chat, null);
+        }
     }
 
     @Override

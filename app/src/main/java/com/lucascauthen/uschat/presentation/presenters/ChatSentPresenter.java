@@ -3,9 +3,9 @@ package com.lucascauthen.uschat.presentation.presenters;
 import com.lucascauthen.uschat.data.entities.Chat;
 import com.lucascauthen.uschat.domain.executor.BackgroundExecutor;
 import com.lucascauthen.uschat.domain.executor.ForegroundExecutor;
-import com.lucascauthen.uschat.presentation.view.views.ChatSentView;
-import com.lucascauthen.uschat.presentation.view.views.ListView;
-import com.lucascauthen.uschat.presentation.view.views.cards.ChatListItem;
+import com.lucascauthen.uschat.presentation.view.base.ChatSentView;
+import com.lucascauthen.uschat.presentation.view.base.ListView;
+import com.lucascauthen.uschat.presentation.view.base.cards.ChatListItem;
 import com.lucascauthen.uschat.util.NullObject;
 
 public class ChatSentPresenter implements BasePresenter<ChatSentView>, ParentPresenter<ListView<Chat, Chat.ChatType, ChatListItem>> {
@@ -46,13 +46,22 @@ public class ChatSentPresenter implements BasePresenter<ChatSentView>, ParentPre
         view.setOnClickListener(new ChatListItem.OnClickListener() {
             @Override
             public void onClick(Chat itemData, ChatListItem itemView, ListPresenter<Chat, Chat.ChatType, ChatListItem> presenter) {
-
+                //EMPTY
             }
         });
         view.setInitialStateSetter(new ChatListItem.InitialStateSetter() {
             @Override
             public void setState(Chat itemData, ChatListItem itemView) {
-
+                String name = "";
+                for (String person : itemData.getToString()) {
+                    name += person + ", ";
+                }
+                if (name.endsWith(", ")) {
+                    name = name.substring(0, name.length() - 2);
+                }
+                itemView.setName(name);
+                itemView.setMessage("Message Sent!");
+                itemView.setStateIcon(ChatListItem.SENT_ID);
             }
         });
         subPresenter.attachView(view);

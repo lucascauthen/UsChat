@@ -1,6 +1,7 @@
 package com.lucascauthen.uschat.data.repository.chat;
 
 import android.graphics.BitmapFactory;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import com.lucascauthen.uschat.data.entities.Chat;
 import com.lucascauthen.uschat.data.entities.Person;
@@ -29,7 +30,7 @@ public class RemoteChatRepo implements ChatRepo {
         ParseObject newChat = new ParseObject("Chats");
         newChat.put("to", chat.getToString());
         newChat.put("from", chat.getFrom());
-        ParseFile file = new ParseFile(chat.getChatData());
+        ParseFile file = new ParseFile(chat.getImage());
         try {
             file.save(); //Network call
             newChat.put("file", file);
@@ -83,7 +84,17 @@ public class RemoteChatRepo implements ChatRepo {
     }
 
     @Override
-    public void openChat(Chat chat, OnCompleteAction callback) {
+    public void sendChat(Chat chat, OnCompleteAction callback, boolean waitForRemote) {
+        sendChat(chat, callback);
+    }
+
+    @Override
+    public void openChat(Chat chat, OnCompleteAction callback, boolean waitForRemote) {
+        openChat(chat, callback);
+    }
+
+    @Override
+    public void openChat(Chat chat, @Nullable OnCompleteAction callback) {
         try {
             ParseUser user = ParseUser.getCurrentUser().fetch(); //Network call
             user.removeAll("receivedChats", Collections.singletonList(chat.getId()));
@@ -108,10 +119,14 @@ public class RemoteChatRepo implements ChatRepo {
                     if (e == null) {
                         String msg = object.toString();
                         Log.d("UsChat", msg);
-                        callback.onComplete(msg);
+                        if(callback != null) {
+                            callback.onComplete(msg);
+                        }
                     } else {
                         Log.d("UsChat", e.getMessage());
-                        callback.onComplete(e.getMessage());
+                        if(callback != null) {
+                            callback.onComplete(e.getMessage());
+                        }
                     }
                 }
             });
@@ -148,7 +163,7 @@ public class RemoteChatRepo implements ChatRepo {
                     ParseObject chat = query.get(id); //Network call
                     List<Person> toPeople = new ArrayList<>();
                     for(Object name : chat.getList("to")) {
-                        toPeople.add(new Person((String)name, Person.PersonType.FRIENDS));
+                        toPeople.add(new Person((String)name, Person.PersonType.FRIEND));
                     }
                     Chat chatToAdd;
                     if(receivedChat) {
@@ -161,7 +176,7 @@ public class RemoteChatRepo implements ChatRepo {
                                     @Override
                                     public void done(byte[] bytes, ParseException e) {
                                         if (e == null) {
-                                            readyCallback.ready(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+                                            readyCallback.ready(bytes);
                                         } else {
                                             e.printStackTrace();
                                         }

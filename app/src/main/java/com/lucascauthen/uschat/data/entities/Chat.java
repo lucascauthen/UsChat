@@ -1,6 +1,5 @@
 package com.lucascauthen.uschat.data.entities;
 
-import android.graphics.Bitmap;
 import android.os.Looper;
 
 import java.util.ArrayList;
@@ -15,7 +14,6 @@ public class Chat {
     private final LoadImageFunction loadFunction;
     private final String from;
 
-    private Bitmap image = null;
     private boolean isImageLoaded = false;
     private boolean isLoadingImage = false;
     private String id = "null";
@@ -30,20 +28,20 @@ public class Chat {
         this.loadFunction = function;
     }
 
-    public Bitmap getImage() {
+    public byte[] getImage() {
         if (isImageLoaded) {
             isImageLoaded = false;
             //This ensures that the managing of the bitmap is now put on the requester of the image
             //When this function looses scope, reference will no longer exist meaning that this object no longer has a reference to the image
-            Bitmap reference = image;
-            image = null;
+            byte[] reference = chatData;
+            chatData = null;
             return reference;
         }
         return null;
     }
 
-    public void setImage(Bitmap image) {
-        this.image = image;
+    public void setImage(byte[] image) {
+        this.chatData = image;
     }
 
     public void setId(String id) {
@@ -95,15 +93,6 @@ public class Chat {
         return isImageLoaded;
     }
 
-    public byte[] getChatData() {
-        /*
-        byte[] data = chatData;
-        chatData = null;
-        return data;
-        */
-        return chatData;
-    }
-
     public void setChatData(byte[] chatData) {
         this.chatData = chatData;
     }
@@ -152,7 +141,7 @@ public class Chat {
     }
 
     public interface ImageReadyCallback {
-        void ready(Bitmap image);
+        void ready(byte[] image);
     }
 
     public interface ProgressCallback {

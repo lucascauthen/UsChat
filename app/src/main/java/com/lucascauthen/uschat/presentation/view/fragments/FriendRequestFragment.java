@@ -1,6 +1,8 @@
-package com.lucascauthen.uschat.presentation.view.fragments.updated;
+package com.lucascauthen.uschat.presentation.view.fragments;
+
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,25 +12,22 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.lucascauthen.uschat.R;
-import com.lucascauthen.uschat.presentation.presenters.ChatSentPresenter;
-import com.lucascauthen.uschat.presentation.view.components.recyclerviews.ChatRecyclerView;
-import com.lucascauthen.uschat.presentation.view.views.ChatSentView;
+import com.lucascauthen.uschat.presentation.presenters.FriendListPresenter;
+import com.lucascauthen.uschat.presentation.presenters.FriendRequestPresenter;
+import com.lucascauthen.uschat.presentation.view.base.FriendRequestView;
+import com.lucascauthen.uschat.presentation.view.components.recyclerviews.PersonRecyclerView;
 
-
-public class ChatSentFragment extends Fragment implements ChatSentView {
-
-    @InjectView(R.id.swipeRefresh) SwipeRefreshLayout swipeRefreshLayout;
-    @InjectView(R.id.recyclerView) ChatRecyclerView recyclerView;
-
-    private ChatSentPresenter presenter;
+public class FriendRequestFragment extends Fragment implements FriendRequestView{
+    private FriendRequestPresenter presenter;
 
     private LinearLayoutManager layoutManager;
 
+    @InjectView(R.id.recyclerView)PersonRecyclerView recyclerView;
+    @InjectView(R.id.swipeRefresh)SwipeRefreshLayout swipeRefreshLayout;
 
-    public static ChatSentFragment newInstance(ChatSentPresenter presenter) {
-        ChatSentFragment f = new ChatSentFragment();
+    public static FriendRequestFragment newInstance(FriendRequestPresenter presenter) {
+        FriendRequestFragment f = new FriendRequestFragment();
         f.presenter = presenter;
-        f.recyclerView = new ChatRecyclerView(f.getActivity());
         return f;
     }
 
@@ -39,14 +38,14 @@ public class ChatSentFragment extends Fragment implements ChatSentView {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
     }
 
+    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_chat_sent, null);
+        View v = inflater.inflate(R.layout.fragment_friend_list, null);
         ButterKnife.inject(this, v);
         recyclerView.setLayoutManager(layoutManager);
         presenter.attachView(this);
         presenter.attachSubView(recyclerView);
-
         swipeRefreshLayout.setOnRefreshListener(() -> {
             presenter.onSwipe();
         });
@@ -62,6 +61,4 @@ public class ChatSentFragment extends Fragment implements ChatSentView {
     public void hideLoading() {
         this.swipeRefreshLayout.setRefreshing(false);
     }
-
-
 }

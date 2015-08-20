@@ -1,41 +1,37 @@
 package com.lucascauthen.uschat.presentation.view.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.lucascauthen.uschat.R;
-import com.lucascauthen.uschat.presentation.controller.base.BaseChatSentPresenter;
-import com.lucascauthen.uschat.presentation.view.components.ChatViewAdapter;
-
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.lucascauthen.uschat.R;
+import com.lucascauthen.uschat.presentation.presenters.ChatSentPresenter;
+import com.lucascauthen.uschat.presentation.view.components.recyclerviews.ChatRecyclerView;
+import com.lucascauthen.uschat.presentation.view.base.ChatSentView;
 
-/**
- * Created by lhc on 8/5/15.
- */
-public class ChatSentFragment extends Fragment implements BaseChatSentPresenter.BaseSentChatView {
+
+public class ChatSentFragment extends Fragment implements ChatSentView {
 
     @InjectView(R.id.swipeRefresh) SwipeRefreshLayout swipeRefreshLayout;
-    @InjectView(R.id.recyclerView) RecyclerView recyclerView;
+    @InjectView(R.id.recyclerView) ChatRecyclerView recyclerView;
 
-    private BaseChatSentPresenter presenter;
-    private ChatViewAdapter adapter;
+    private ChatSentPresenter presenter;
+
     private LinearLayoutManager layoutManager;
 
-    public static ChatSentFragment newInstance(BaseChatSentPresenter presenter, ChatViewAdapter adapter) {
+
+    public static ChatSentFragment newInstance(ChatSentPresenter presenter) {
         ChatSentFragment f = new ChatSentFragment();
         f.presenter = presenter;
-        f.adapter = adapter;
+        f.recyclerView = new ChatRecyclerView(f.getActivity());
         return f;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,15 +39,14 @@ public class ChatSentFragment extends Fragment implements BaseChatSentPresenter.
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
     }
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_chat_sent, null);
         ButterKnife.inject(this, v);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
-        presenter.attachAdapter(adapter);
         presenter.attachView(this);
+        presenter.attachSubView(recyclerView);
+
         swipeRefreshLayout.setOnRefreshListener(() -> {
             presenter.onSwipe();
         });
@@ -67,4 +62,6 @@ public class ChatSentFragment extends Fragment implements BaseChatSentPresenter.
     public void hideLoading() {
         this.swipeRefreshLayout.setRefreshing(false);
     }
+
+
 }

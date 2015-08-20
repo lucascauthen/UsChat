@@ -5,35 +5,27 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.lucascauthen.uschat.R;
-import com.lucascauthen.uschat.presentation.controller.base.BaseFriendsListPresenter;
-import com.lucascauthen.uschat.presentation.view.components.PersonViewAdapter;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.lucascauthen.uschat.R;
+import com.lucascauthen.uschat.presentation.presenters.FriendListPresenter;
+import com.lucascauthen.uschat.presentation.view.components.recyclerviews.PersonRecyclerView;
+import com.lucascauthen.uschat.presentation.view.base.FriendListView;
 
-/**
- * Created by lhc on 8/4/15.
- */
-public class FriendListFragment extends Fragment implements BaseFriendsListPresenter.BaseFriendListView{
-    private BaseFriendsListPresenter presenter;
-    private PersonViewAdapter adapter;
+public class FriendListFragment extends Fragment implements FriendListView {
+    private FriendListPresenter presenter;
 
     private LinearLayoutManager layoutManager;
 
-    @InjectView(R.id.recyclerView)RecyclerView recyclerView;
+    @InjectView(R.id.recyclerView)PersonRecyclerView recyclerView;
     @InjectView(R.id.swipeRefresh)SwipeRefreshLayout swipeRefreshLayout;
 
-
-    public static FriendListFragment newInstance(BaseFriendsListPresenter presenter, PersonViewAdapter adapter) {
+    public static FriendListFragment newInstance(FriendListPresenter presenter) {
         FriendListFragment f = new FriendListFragment();
         f.presenter = presenter;
-        f.adapter = adapter;
         return f;
     }
 
@@ -50,9 +42,8 @@ public class FriendListFragment extends Fragment implements BaseFriendsListPrese
         View v = inflater.inflate(R.layout.fragment_friend_list, null);
         ButterKnife.inject(this, v);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
-        presenter.attachAdapter(adapter);
         presenter.attachView(this);
+        presenter.attachSubView(recyclerView);
         swipeRefreshLayout.setOnRefreshListener(() -> {
             presenter.onSwipe();
         });

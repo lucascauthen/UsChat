@@ -12,23 +12,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import com.lucascauthen.uschat.R;
-import com.lucascauthen.uschat.presentation.controller.base.BaseChatTabViewPresenter;
 import com.lucascauthen.uschat.presentation.view.components.NestedViewPager;
 import com.lucascauthen.uschat.util.ActivityNavigator;
-
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-
 /**
  * Created by lhc on 7/1/15.
  */
-public class ChatTabFragment extends Fragment implements BaseChatTabViewPresenter.BaseChatTabView {
+public class ChatTabFragment extends Fragment {
 
     @InjectView(R.id.tab_viewpager)NestedViewPager viewPager;
     @InjectView(R.id.tab_view_tabs)TabLayout tabLayout;
@@ -43,7 +39,6 @@ public class ChatTabFragment extends Fragment implements BaseChatTabViewPresente
     };
 
 
-    private BaseChatTabViewPresenter presenter;
     private ActivityNavigator navigator;
     private final List<Fragment> fragments = new ArrayList<>();
 
@@ -52,9 +47,8 @@ public class ChatTabFragment extends Fragment implements BaseChatTabViewPresente
         //Required empty
     }
 
-    public static ChatTabFragment newInstance(BaseChatTabViewPresenter presenter, Fragment sentChats, Fragment receivedChats, ActivityNavigator navigator) {
+    public static ChatTabFragment newInstance(Fragment sentChats, Fragment receivedChats, ActivityNavigator navigator) {
         ChatTabFragment f = new ChatTabFragment();
-        f.presenter = presenter;
         f.navigator = navigator;
         f.fragments.add(sentChats);
         f.fragments.add(receivedChats);
@@ -89,7 +83,6 @@ public class ChatTabFragment extends Fragment implements BaseChatTabViewPresente
             tab.setCustomView(tabView);
 
         }
-        presenter.attachView(this);
         return v;
     }
     private class TabbedPageAdapter extends FragmentPagerAdapter {

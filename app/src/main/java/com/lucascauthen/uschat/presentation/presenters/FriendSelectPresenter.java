@@ -7,9 +7,9 @@ import com.lucascauthen.uschat.data.entities.User;
 import com.lucascauthen.uschat.data.repository.chat.ChatRepo;
 import com.lucascauthen.uschat.domain.executor.BackgroundExecutor;
 import com.lucascauthen.uschat.domain.executor.ForegroundExecutor;
-import com.lucascauthen.uschat.presentation.view.views.FriendSelectView;
-import com.lucascauthen.uschat.presentation.view.views.ListView;
-import com.lucascauthen.uschat.presentation.view.views.cards.PersonListItem;
+import com.lucascauthen.uschat.presentation.view.base.FriendSelectView;
+import com.lucascauthen.uschat.presentation.view.base.ListView;
+import com.lucascauthen.uschat.presentation.view.base.cards.PersonListItem;
 import com.lucascauthen.uschat.util.NullObject;
 
 import java.util.ArrayList;

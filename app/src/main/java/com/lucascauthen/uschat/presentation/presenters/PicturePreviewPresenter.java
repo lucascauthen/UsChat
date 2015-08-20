@@ -2,7 +2,7 @@ package com.lucascauthen.uschat.presentation.presenters;
 
 import com.lucascauthen.uschat.domain.executor.BackgroundExecutor;
 import com.lucascauthen.uschat.domain.executor.ForegroundExecutor;
-import com.lucascauthen.uschat.presentation.view.views.PicturePreviewView;
+import com.lucascauthen.uschat.presentation.view.base.PicturePreviewView;
 import com.lucascauthen.uschat.util.NullObject;
 
 public class PicturePreviewPresenter implements BasePresenter<PicturePreviewView> {

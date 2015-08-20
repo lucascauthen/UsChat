@@ -4,28 +4,20 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
 import com.lucascauthen.uschat.R;
-import com.lucascauthen.uschat.data.entities.Person;
 import com.lucascauthen.uschat.presentation.controller.base.BaseSelectFriendsDialogPresenter;
 import com.lucascauthen.uschat.presentation.controller.implmentations.SelectFriendsDialogPresenter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.lucascauthen.uschat.presentation.presenters.FriendSelectPresenter;
-import com.lucascauthen.uschat.presentation.presenters.ListPresenter;
 import com.lucascauthen.uschat.presentation.view.components.recyclerviews.PersonRecyclerView;
-import com.lucascauthen.uschat.presentation.view.views.FriendSearchView;
-import com.lucascauthen.uschat.presentation.view.views.FriendSelectView;
-import com.lucascauthen.uschat.presentation.view.views.ListView;
+import com.lucascauthen.uschat.presentation.view.base.FriendSelectView;
 
 
 public class SelectFriendsDialog extends Dialog implements FriendSelectView{

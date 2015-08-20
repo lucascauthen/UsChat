@@ -12,13 +12,16 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import butterknife.OnTextChanged;
 import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.presentation.controller.base.BaseSignUpViewPresenter;
+import com.lucascauthen.uschat.presentation.presenters.SignUpPresenter;
+import com.lucascauthen.uschat.presentation.view.base.SignUpView;
+import rx.Observable;
+import rx.android.widget.OnTextChangeEvent;
 
 import javax.inject.Inject;
 
-public class SignUpActivity extends BaseActivity implements BaseSignUpViewPresenter.SignUpView {
+public class SignUpActivity extends BaseActivity implements SignUpView {
 
     @InjectView(R.id.username) EditText usernameField;
     @InjectView(R.id.email) EditText emailField;
@@ -28,7 +31,13 @@ public class SignUpActivity extends BaseActivity implements BaseSignUpViewPresen
     @InjectView(R.id.registerButton) Button registerButton;
     @InjectView(R.id.loadingBar) ProgressBar loading;
 
-    @Inject BaseSignUpViewPresenter presenter;
+    @Inject SignUpPresenter presenter;
+
+    private Observable<OnTextChangeEvent> usernameObservable;
+    private Observable<OnTextChangeEvent> passwordObservable;
+    private Observable<OnTextChangeEvent> passwordAgainObservable;
+    private Observable<OnTextChangeEvent> emailObservable;
+    private Observable<OnTextChangeEvent> emailAgainObservable;
 
 
     public static Intent getCallingIntent(Context context) {
@@ -45,9 +54,55 @@ public class SignUpActivity extends BaseActivity implements BaseSignUpViewPresen
         //Butterknife initialization
         ButterKnife.inject(this);
 
+        Observable.combineLatest(
+                //Test username
+                usernameObservable.map(s -> testUsername(s.text().toString())),
+                //Test emails
+                Observable.combineLatest(emailObservable, emailAgainObservable, (a, b) -> {
+                    if (a.text().toString().equals(b.text().toString())) {
+                        return a.text().toString();
+                    } else {
+                        return false;
+                    }
+                }).map(s -> {
+                    return s.getClass().equals(String.class) && testEmail((String) s);
+                }),
+                //Test passwords
+                Observable.combineLatest(passwordObservable, passwordAgainObservable, (a, b) -> {
+                    if (a.text().toString().equals(b.text().toString())) {
+                        return a.text().toString();
+                    } else {
+                        return false;
+                    }
+                }).map(s -> {
+                    return s.getClass().equals(String.class) && testPassword((String) s);
+                }),
+
+                (a, b, c) -> {
+                    //Combine the results
+                    return a && b && c;
+                }).subscribe(valid -> {
+            if (valid) {
+                enableControls();
+            } else {
+                disableControls();
+            }
+        });
+
         getApplicationComponent().inject(this);
 
         presenter.attachView(this);
+    }
+    private boolean testUsername(String username) {
+        return !username.equals("");
+    }
+
+    private boolean testEmail(String email) {
+        return email.matches("^([0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\\w]*[0-9a-zA-Z]\\.)+[a-zA-Z]{2,9})$");
+    }
+
+    private boolean testPassword(String password) {
+        return password.matches("^([a-zA-Z0-9@*#]{8,15})$");
     }
 
     @Override
@@ -91,36 +146,5 @@ public class SignUpActivity extends BaseActivity implements BaseSignUpViewPresen
     @OnClick(R.id.registerButton)
     void onRegisterClicked() {
         presenter.trySignUp(usernameField.getText().toString(), emailField.getText().toString(), passwordField.getText().toString());
-    }
-
-    //Text changed actions
-    @OnTextChanged(R.id.username)
-    void onUsernameChanged() {
-        presenter.onUsernameChanged(usernameField.getText().toString());
-    }
-
-    @OnTextChanged(R.id.email)
-    void onEmailChanged() {
-        presenter.onEmailChanged(emailField.getText().toString());
-    }
-
-    @OnTextChanged(R.id.emailAgain)
-    void onEmailAgainChanged() {
-        presenter.onEmailAgainChanged(emailAgainField.getText().toString());
-    }
-
-    @OnTextChanged(R.id.password)
-    void onPasswordChanged() {
-        presenter.onPasswordChanged(passwordField.getText().toString());
-    }
-
-    @OnTextChanged(R.id.passwordAgain)
-    void onPasswordAgainChanged() {
-        presenter.onPasswordAgainChanged(passwordAgainField.getText().toString());
-    }
-
-    @Override
-    public void sendMessage(String msg) {
-        //Empty
     }
 }

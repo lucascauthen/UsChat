@@ -10,7 +10,11 @@ import java.util.List;
 public interface ChatRepo {
     void sendChat(Chat chat, OnCompleteAction callback);
 
+    void sendChat(Chat chat, OnCompleteAction callback, boolean waitForRemote);
+
     void openChat(Chat chat, OnCompleteAction callback);
+
+    void openChat(Chat chat, OnCompleteAction callback, boolean waitForRemote);
 
     Response get(Request request);
 

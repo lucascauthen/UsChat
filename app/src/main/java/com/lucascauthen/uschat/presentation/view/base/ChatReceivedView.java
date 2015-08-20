@@ -1,4 +1,4 @@
-package com.lucascauthen.uschat.presentation.view.views;
+package com.lucascauthen.uschat.presentation.view.base;
 
 import com.lucascauthen.uschat.data.entities.Chat;
 

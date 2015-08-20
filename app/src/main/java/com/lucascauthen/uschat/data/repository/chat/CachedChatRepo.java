@@ -76,8 +76,21 @@ public class CachedChatRepo implements ChatCache {
     }
 
     @Override
+    public void sendChat(Chat chat, OnCompleteAction callback, boolean waitForRemote) {
+        sendChat(chat, callback);
+    }
+
+    @Override
     public void openChat(Chat chat, OnCompleteAction callback) {
         receivedChats.remove(chat);
+        if(callback != null) {
+            callback.onComplete("");
+        }
+    }
+
+    @Override
+    public void openChat(Chat chat, OnCompleteAction callback, boolean waitForRemote) {
+
     }
 
     @Override

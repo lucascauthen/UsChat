@@ -4,8 +4,8 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import com.lucascauthen.uschat.data.entities.Chat;
 import com.lucascauthen.uschat.presentation.presenters.ListPresenter;
-import com.lucascauthen.uschat.presentation.view.views.ListView;
-import com.lucascauthen.uschat.presentation.view.views.cards.ChatListItem;
+import com.lucascauthen.uschat.presentation.view.base.ListView;
+import com.lucascauthen.uschat.presentation.view.base.cards.ChatListItem;
 
 public class ChatRecyclerView extends RecyclerView implements ListView<Chat, Chat.ChatType, ChatListItem>{
     private final ChatViewAdapter adapter;

@@ -1,6 +1,6 @@
 package com.lucascauthen.uschat.presentation.presenters;
 
-import com.lucascauthen.uschat.presentation.view.views.ListView;
+import com.lucascauthen.uschat.presentation.view.base.ListView;
 
 //  T - "type": what data type the list view holds
 //  D - "display type": what subset of T the list view holds

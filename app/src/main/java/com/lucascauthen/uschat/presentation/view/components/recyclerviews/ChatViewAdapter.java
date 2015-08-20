@@ -14,9 +14,8 @@ import butterknife.InjectView;
 import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.data.entities.Chat;
 import com.lucascauthen.uschat.presentation.presenters.ListPresenter;
-import com.lucascauthen.uschat.presentation.view.views.ListView;
-import com.lucascauthen.uschat.presentation.view.views.cards.ChatListItem;
-import com.lucascauthen.uschat.util.NullObject;
+import com.lucascauthen.uschat.presentation.view.base.ListView;
+import com.lucascauthen.uschat.presentation.view.base.cards.ChatListItem;
 
 import javax.inject.Inject;
 
@@ -44,7 +43,7 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ChatVi
     public void onBindViewHolder(ChatViewHolder holder, int position) {
 
         presenter.getItemInBackground(position, (chat) -> {
-            holder.init(chat);
+            holder.bindData(chat);
             holder.loadState();
         });
     }
@@ -111,28 +110,8 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ChatVi
             });
         }
 
-        private void init(Chat chat) {
+        private void bindData(Chat chat) {
             this.chat = chat;
-            if (chat.getChatType() == Chat.ChatType.RECEIVED) {
-                personName.setText(chat.getFrom());
-                chatType.setImageResource(RECEIVED_ID);
-                cv.setCardBackgroundColor(context.getResources().getColor(R.color.accent_dark));
-            } else {
-                chatType.setImageResource(SENT_ID);
-                String name = "";
-                for (String person : chat.getToString()) {
-                    name += person + ", ";
-                }
-                if(name.endsWith(", ")) {
-                    name = name.substring(0, name.length() - 2);
-                }
-                personName.setText(name);
-            }
-            if (chat.isFromCurrentUser()) {
-                msg.setText(SENT_MSG);
-            } else {
-                msg.setText(RECEIVED_MSG);
-            }
         }
 
         @Override
@@ -150,8 +129,18 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ChatVi
         }
 
         @Override
+        public void setName(String msg) {
+            this.personName.setText(msg);
+        }
+
+        @Override
         public void setMessage(String msg) {
             this.msg.setText(msg);
+        }
+
+        @Override
+        public void setStateIcon(int resourceId) {
+            chatType.setImageResource(resourceId);
         }
 
         private void loadState() {

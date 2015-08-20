@@ -8,20 +8,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.lucascauthen.uschat.R;
-import com.lucascauthen.uschat.presentation.controller.base.BaseLoginViewPresenter;
-import com.lucascauthen.uschat.util.ActivityNavigator;
-
-import javax.inject.Inject;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import butterknife.OnTextChanged;
+import com.lucascauthen.uschat.R;
+import com.lucascauthen.uschat.presentation.presenters.LoginPresenter;
+import com.lucascauthen.uschat.presentation.view.base.LoginView;
+import com.lucascauthen.uschat.util.ActivityNavigator;
+import rx.Observable;
+import rx.android.widget.OnTextChangeEvent;
+import rx.android.widget.WidgetObservable;
+
+import javax.inject.Inject;
 
 
-public class LoginActivity extends BaseActivity implements BaseLoginViewPresenter.LoginView {
+public class LoginActivity extends BaseActivity implements LoginView {
 
     @InjectView(R.id.usernameField) EditText usernameField;
     @InjectView(R.id.passwordField) EditText passwordField;
@@ -29,9 +30,11 @@ public class LoginActivity extends BaseActivity implements BaseLoginViewPresente
     @InjectView(R.id.signUpButton) Button signUpButton;
     @InjectView(R.id.progressBar) ProgressBar loading;
 
-    @Inject BaseLoginViewPresenter presenter;
-    @Inject
-    ActivityNavigator navigator;
+    @Inject LoginPresenter presenter;
+    @Inject ActivityNavigator navigator;
+
+    private Observable<OnTextChangeEvent> usernameObservable;
+    private Observable<OnTextChangeEvent> passwordObservable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +43,32 @@ public class LoginActivity extends BaseActivity implements BaseLoginViewPresente
 
         //Butterknife initialization
         ButterKnife.inject(this);
+        usernameObservable = WidgetObservable.text(usernameField);
+        passwordObservable = WidgetObservable.text(passwordField);
+
+        Observable.combineLatest(
+                usernameObservable.map((username) -> testUsername(username.text().toString())),
+                passwordObservable.map((password) -> testPassword(password.text().toString())),
+                (user, pass) -> user && pass)
+                  .subscribe((valid) -> {
+                      if (valid) {
+                          disableLoginControls();
+                      } else {
+                          enableLoginControls();
+                      }
+                  });
 
         getApplicationComponent().inject(this);
 
         presenter.attachView(this);
+    }
+
+    private boolean testUsername(String text) {
+        return !text.equals("");
+    }
+
+    private boolean testPassword(String text) {
+        return text.matches("^([a-zA-Z0-9@*#]{8,15})$");
     }
 
     public static Intent getCallingIntent(Context context) {
@@ -112,21 +137,5 @@ public class LoginActivity extends BaseActivity implements BaseLoginViewPresente
     @OnClick(R.id.signUpButton)
     void onButtonSignupClick() {
         navigator.navigateToSignUp(getApplicationContext());
-    }
-
-    //Text field actions
-    @OnTextChanged(R.id.usernameField)
-    void onUsernameChanged() {
-        presenter.onUsernameChanged(usernameField.getText().toString());
-    }
-
-    @OnTextChanged(R.id.passwordField)
-    void onPasswordChanged() {
-        presenter.onPasswordChanged(passwordField.getText().toString());
-    }
-
-    @Override
-    public void sendMessage(String msg) {
-        //Empty
     }
 }

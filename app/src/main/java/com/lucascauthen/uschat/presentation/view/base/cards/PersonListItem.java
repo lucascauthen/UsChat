@@ -1,62 +1,44 @@
-package com.lucascauthen.uschat.presentation.controller.base;
+package com.lucascauthen.uschat.presentation.view.base.cards;
 
-import android.support.annotation.Nullable;
 import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.data.entities.Person;
 import com.lucascauthen.uschat.data.repository.user.PersonRepo;
+import com.lucascauthen.uschat.presentation.presenters.ListPresenter;
+import com.lucascauthen.uschat.presentation.view.base.ListView;
 
-/**
- * Created by lhc on 7/30/15.
- */
-public interface BasePersonListViewPresenter extends BaseRecyclerViewPresenter<Person, BasePersonListViewPresenter.BasePersonListAdapter> {
+public interface PersonListItem {
+    void addActionButton(String key, int iconId, OnClickActionListener listener);
 
-    PersonListCardView.InitialStateSetter getInitialStateSetter();
+    void removeActionButton(String key);
 
-    void attachAdapter(BasePersonListAdapter adapter, PersonListCardView.InitialStateSetter setter);
+    void resetActionButtons();
 
-    void setDisplayType(Person.PersonType type);
+    void changeIconState(String key, int iconId);
 
-    void requestUpdate(BasePersonListAdapter.OnDoneLoadingCallback callback, boolean repoNeedUpdate);
+    void setStateIcon(int iconId);
 
-    void sendAction(Person person, BaseActions action, PersonRepo.OnCompleteAction callback);
+    void showLoading();
 
-    void setQuery(@Nullable String query);
+    void hideLoading();
 
-    interface BasePersonListAdapter {
-        void notifyDataUpdate(OnDoneLoadingCallback callback);
-
-        void attachPresenter(BasePersonListViewPresenter presenter);
-
-        interface OnDoneLoadingCallback {
-            void done();
-        }
+    interface OnClickActionListener {
+        void onClick(Person person, PersonListItem item);
     }
 
-    interface PersonListCardView {
 
-        void addActionButton(String key, int iconId, OnClickActionListener listener);
+    interface PersonListPresenter {
+        void sendAction(Person person, BaseActions action, PersonRepo.OnCompleteAction callback);
 
-        void removeActionButton(String key);
-
-        void resetActionButtons();
-
-        void changeIconState(String key, int iconId);
-
-        void setStateIcon(int iconId);
-
-        void showLoading();
-
-        void hideLoading();
-
-        interface OnClickActionListener {
-            void onClick(Person person, PersonListCardView view, BasePersonListViewPresenter presenter);
-        }
-
-        interface InitialStateSetter {
-            void setState(Person person, PersonListCardView view);
-        }
+        void onActionComplete(Runnable completeFunction);
     }
 
+    interface OnClickListener extends ListView.OnClickListener<Person, PersonListItem, ListPresenter<Person, Person.PersonType, PersonListItem>> {
+        //This redefines the type to reduce boilerplate
+    }
+
+    interface InitialStateSetter extends ListView.InitialStateSetter<Person, PersonListItem> {
+        //This redefines the type to reduce boilerplate
+    }
     enum BaseActions {
         ADD_FRIEND {
             @Override
@@ -109,87 +91,97 @@ public interface BasePersonListViewPresenter extends BaseRecyclerViewPresenter<P
     }
 
     class BasePersonListBehavior {
-        private static PersonListCardView.OnClickActionListener cancelRequest() {
-            return (person, cardView, presenter) -> {
+        private static PersonListItem.OnClickActionListener cancelRequest(PersonListPresenter presenter) {
+            return (person, cardView) -> {
                 cardView.showLoading();
                 cardView.setStateIcon(BaseIcons.PERSON_STATE_NOT_FRIEND);
                 cardView.resetActionButtons();
-                cardView.addActionButton("addFriend", BaseIcons.ACTION_ADD, addFriend());
+                cardView.addActionButton("addFriend", BaseIcons.ACTION_ADD, addFriend(presenter));
                 presenter.sendAction(person, BaseActions.CANCEL_REQUEST, (msg) -> {
-                    cardView.hideLoading();
+                    presenter.onActionComplete(() -> {
+                        cardView.hideLoading();
+                    });
                 });
             };
         }
 
-        private static PersonListCardView.OnClickActionListener addFriend() {
-            return (person, cardView, presenter) -> {
+        private static PersonListItem.OnClickActionListener addFriend(PersonListPresenter presenter) {
+            return (person, cardView) -> {
                 cardView.showLoading();
                 cardView.setStateIcon(BaseIcons.PERSON_STATE_SENT_REQUEST);
                 cardView.resetActionButtons();
-                cardView.addActionButton("cancelRequest", BaseIcons.ACTION_REMOVE, cancelRequest());
+                cardView.addActionButton("cancelRequest", BaseIcons.ACTION_REMOVE, cancelRequest(presenter));
                 presenter.sendAction(person, BaseActions.ADD_FRIEND, (msg) -> {
-                    cardView.hideLoading();
+                    presenter.onActionComplete(() -> {
+                        cardView.hideLoading();
+                    });
                 });
             };
         }
 
-        private static PersonListCardView.OnClickActionListener removeFriend() {
-            return (person, cardView, presenter) -> {
+        private static PersonListItem.OnClickActionListener removeFriend(PersonListPresenter presenter) {
+            return (person, cardView) -> {
                 cardView.showLoading();
                 cardView.setStateIcon(BaseIcons.PERSON_STATE_NOT_FRIEND);
                 cardView.resetActionButtons();
-                cardView.addActionButton("addFriend", BaseIcons.ACTION_ADD, addFriend());
+                cardView.addActionButton("addFriend", BaseIcons.ACTION_ADD, addFriend(presenter));
                 presenter.sendAction(person, BaseActions.REMOVE_FRIEND, (msg) -> {
-                    cardView.hideLoading();
+                    presenter.onActionComplete(() -> {
+                        cardView.hideLoading();
+                    });
                 });
 
             };
         }
 
-        private static PersonListCardView.OnClickActionListener acceptRequest() {
-            return (person, cardView, presenter) -> {
+        private static PersonListItem.OnClickActionListener acceptRequest(PersonListPresenter presenter) {
+            return (person, cardView) -> {
                 cardView.showLoading();
                 cardView.setStateIcon(BaseIcons.PERSON_STATE_FRIEND);
                 cardView.resetActionButtons();
-                cardView.addActionButton("removeFriend", BaseIcons.ACTION_REMOVE, removeFriend());
+                cardView.addActionButton("removeFriend", BaseIcons.ACTION_REMOVE, removeFriend(presenter));
                 presenter.sendAction(person, BaseActions.ACCEPT_REQUEST, (msg) -> {
-                    cardView.hideLoading();
+                    presenter.onActionComplete(() -> {
+                        cardView.hideLoading();
+                    });
                 });
             };
         }
 
-        private static PersonListCardView.OnClickActionListener rejectRequest() {
-            return (person, cardView, presenter) -> {
+        private static PersonListItem.OnClickActionListener rejectRequest(PersonListPresenter presenter) {
+            return (person, cardView) -> {
                 cardView.showLoading();
                 cardView.setStateIcon(BaseIcons.PERSON_STATE_NOT_FRIEND);
                 cardView.resetActionButtons();
-                cardView.addActionButton("addFriend", BaseIcons.ACTION_ADD, addFriend());
+                cardView.addActionButton("addFriend", BaseIcons.ACTION_ADD, addFriend(presenter));
                 presenter.sendAction(person, BaseActions.REJECT_REQUEST, (msg) -> {
-                    cardView.hideLoading();
+                    presenter.onActionComplete(() -> {
+                        cardView.hideLoading();
+                    });
                 });
             };
         }
 
-        public static PersonListCardView.InitialStateSetter defaultSetter() {
+        public static PersonListItem.InitialStateSetter defaultSetter(PersonListPresenter presenter) {
             return (person, cardView) -> {
                 cardView.resetActionButtons(); //Ensures that there is not action buttons assigned
                 switch (person.state()) {
                     case SENT_REQUEST:
                         cardView.setStateIcon(BaseIcons.PERSON_STATE_SENT_REQUEST);
-                        cardView.addActionButton("cancelRequest", BaseIcons.ACTION_REMOVE, cancelRequest());
+                        cardView.addActionButton("cancelRequest", BaseIcons.ACTION_REMOVE, cancelRequest(presenter));
                         break;
                     case RECEIVED_REQUEST:
                         cardView.setStateIcon(BaseIcons.PERSON_STATE_RECEIVED_REQUEST);
-                        cardView.addActionButton("acceptRequest", BaseIcons.ACTION_ACCEPT, acceptRequest());
-                        cardView.addActionButton("rejectRequest", BaseIcons.ACTION_REMOVE, rejectRequest());
+                        cardView.addActionButton("acceptRequest", BaseIcons.ACTION_ACCEPT, acceptRequest(presenter));
+                        cardView.addActionButton("rejectRequest", BaseIcons.ACTION_REMOVE, rejectRequest(presenter));
                         break;
                     case FRIEND:
                         cardView.setStateIcon(BaseIcons.PERSON_STATE_FRIEND);
-                        cardView.addActionButton("removeFriend", BaseIcons.ACTION_REMOVE, removeFriend());
+                        cardView.addActionButton("removeFriend", BaseIcons.ACTION_REMOVE, removeFriend(presenter));
                         break;
                     case NOT_FRIEND:
                         cardView.setStateIcon(BaseIcons.PERSON_STATE_NOT_FRIEND);
-                        cardView.addActionButton("addFriend", BaseIcons.ACTION_ADD, addFriend());
+                        cardView.addActionButton("addFriend", BaseIcons.ACTION_ADD, addFriend(presenter));
                         break;
                     default:
                         //EMPTY
@@ -198,3 +190,4 @@ public interface BasePersonListViewPresenter extends BaseRecyclerViewPresenter<P
         }
     }
 }
+

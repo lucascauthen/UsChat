@@ -1,6 +1,6 @@
 package com.lucascauthen.uschat.presentation.presenters;
 
-import com.lucascauthen.uschat.presentation.view.views.PagerView;
+import com.lucascauthen.uschat.presentation.view.base.PagerView;
 
 public class MainPagerPresenter implements BasePresenter<PagerView>{
 

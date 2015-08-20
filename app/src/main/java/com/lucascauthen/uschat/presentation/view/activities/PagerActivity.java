@@ -11,7 +11,7 @@ import android.support.v4.view.ViewPager;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.lucascauthen.uschat.R;
-import com.lucascauthen.uschat.presentation.controller.base.BasePagerViewPresenter;
+import com.lucascauthen.uschat.presentation.view.base.PagerView;
 import com.lucascauthen.uschat.presentation.view.fragments.CameraFragment;
 import com.lucascauthen.uschat.presentation.view.fragments.ChatTabFragment;
 import com.lucascauthen.uschat.presentation.view.fragments.FriendTabFragment;
@@ -19,7 +19,7 @@ import com.lucascauthen.uschat.presentation.view.fragments.FriendTabFragment;
 import javax.inject.Inject;
 
 
-public class PagerActivity extends BaseActivity implements BasePagerViewPresenter.PagerView, BasePagerViewPresenter.PagerViewChanger {
+public class PagerActivity extends BaseActivity {
     private final int NUM_PAGES = 3;
 
     @InjectView(R.id.mainPager)ViewPager pager;
@@ -46,7 +46,7 @@ public class PagerActivity extends BaseActivity implements BasePagerViewPresente
         pager.setAdapter(pagerAdapter);
 
         pager.setOffscreenPageLimit(NUM_PAGES);
-        pager.setCurrentItem(Pages.CAMERA);
+        pager.setCurrentItem(PagerView.Pages.CAMERA);
 
         pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -68,7 +68,6 @@ public class PagerActivity extends BaseActivity implements BasePagerViewPresente
         });
     }
 
-    @Override
     public void changePage(int index) {
         if(index < pager.getChildCount()) {
             pager.setCurrentItem(index);
@@ -85,11 +84,11 @@ public class PagerActivity extends BaseActivity implements BasePagerViewPresente
         @Override
         public Fragment getItem(int position) {
             switch(position) {
-                case Pages.CHAT:
+                case PagerView.Pages.CHAT:
                     return chatTabFragment;
-                case Pages.CAMERA:
+                case PagerView.Pages.CAMERA:
                     return cameraFragment;
-                case Pages.FRIENDS:
+                case PagerView.Pages.FRIENDS:
                     return friendTabFragment;
                 default:
                     return chatTabFragment;

@@ -1,43 +1,38 @@
 package com.lucascauthen.uschat.presentation.view.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.lucascauthen.uschat.R;
-import com.lucascauthen.uschat.data.entities.Chat;
-import com.lucascauthen.uschat.presentation.controller.base.BaseChatListViewPresenter;
-import com.lucascauthen.uschat.presentation.controller.base.BaseChatReceivedPresenter;
-import com.lucascauthen.uschat.presentation.view.components.ChatViewAdapter;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.lucascauthen.uschat.R;
+import com.lucascauthen.uschat.data.entities.Chat;
+import com.lucascauthen.uschat.presentation.presenters.ChatReceivedPresenter;
+import com.lucascauthen.uschat.presentation.view.components.recyclerviews.ChatRecyclerView;
 import com.lucascauthen.uschat.presentation.view.dialogs.ChatViewDialog;
+import com.lucascauthen.uschat.presentation.view.base.ChatReceivedView;
 
-/**
- * Created by lhc on 8/5/15.
- */
-public class ChatReceivedFragment extends Fragment implements BaseChatReceivedPresenter.BaseReceivedChatView, BaseChatListViewPresenter.ChatDisplayView {
+public class ChatReceivedFragment extends Fragment implements ChatReceivedView {
 
-    @InjectView(R.id.chat_received_list_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-    @InjectView(R.id.chat_received_list_rv) RecyclerView recyclerView;
+    @InjectView(R.id.swipeRefresh) SwipeRefreshLayout swipeRefreshLayout;
+    @InjectView(R.id.recyclerView) ChatRecyclerView recyclerView;
 
-    private BaseChatReceivedPresenter presenter;
-    private ChatViewAdapter adapter;
+    private ChatReceivedPresenter presenter;
+
     private LinearLayoutManager layoutManager;
 
-    public static ChatReceivedFragment newInstance(BaseChatReceivedPresenter presenter, ChatViewAdapter adapter) {
+
+    public static ChatReceivedFragment newInstance(ChatReceivedPresenter presenter) {
         ChatReceivedFragment f = new ChatReceivedFragment();
         f.presenter = presenter;
-        f.adapter = adapter;
+        f.recyclerView = new ChatRecyclerView(f.getActivity());
         return f;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,15 +40,14 @@ public class ChatReceivedFragment extends Fragment implements BaseChatReceivedPr
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
     }
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_chat_received, null);
+        View v = inflater.inflate(R.layout.fragment_chat_sent, null);
         ButterKnife.inject(this, v);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
-        presenter.attachAdapter(adapter);
         presenter.attachView(this);
+        presenter.attachSubView(recyclerView);
+
         swipeRefreshLayout.setOnRefreshListener(() -> {
             presenter.onSwipe();
         });

@@ -4,17 +4,14 @@ import com.lucascauthen.uschat.data.entities.Person;
 import com.lucascauthen.uschat.data.repository.user.PersonRepo;
 import com.lucascauthen.uschat.domain.executor.BackgroundExecutor;
 import com.lucascauthen.uschat.domain.executor.ForegroundExecutor;
-import com.lucascauthen.uschat.presentation.controller.base.BasePagerViewPresenter;
-import com.lucascauthen.uschat.presentation.view.views.ListView;
-import com.lucascauthen.uschat.presentation.view.views.cards.PersonListItem;
+import com.lucascauthen.uschat.presentation.view.base.ListView;
+import com.lucascauthen.uschat.presentation.view.base.cards.PersonListItem;
 import com.lucascauthen.uschat.util.NullObject;
 
 public class PersonListPresenter implements ListPresenter<Person, Person.PersonType, PersonListItem> {
     private static final ListView<Person, Person.PersonType, PersonListItem> NULL_VIEW = NullObject.create(ListView.class);
-    private static final BasePagerViewPresenter.PagerViewChanger NULL_PAGER_CHANGER = NullObject.create(BasePagerViewPresenter.PagerViewChanger.class);
 
     private ListView<Person, Person.PersonType, PersonListItem> view = NULL_VIEW;
-    private BasePagerViewPresenter.PagerViewChanger changer = NULL_PAGER_CHANGER;
 
     private final BackgroundExecutor backgroundExecutor;
     private final ForegroundExecutor foregroundExecutor;

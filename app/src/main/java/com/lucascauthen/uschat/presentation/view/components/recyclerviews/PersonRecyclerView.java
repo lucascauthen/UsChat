@@ -4,8 +4,8 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import com.lucascauthen.uschat.data.entities.Person;
 import com.lucascauthen.uschat.presentation.presenters.ListPresenter;
-import com.lucascauthen.uschat.presentation.view.views.ListView;
-import com.lucascauthen.uschat.presentation.view.views.cards.PersonListItem;
+import com.lucascauthen.uschat.presentation.view.base.ListView;
+import com.lucascauthen.uschat.presentation.view.base.cards.PersonListItem;
 
 public class PersonRecyclerView extends RecyclerView implements ListView<Person, Person.PersonType, PersonListItem> {
     private final PersonViewAdapter adapter;

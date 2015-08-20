@@ -17,8 +17,8 @@ import butterknife.InjectView;
 import com.lucascauthen.uschat.R;
 import com.lucascauthen.uschat.data.entities.Person;
 import com.lucascauthen.uschat.presentation.presenters.ListPresenter;
-import com.lucascauthen.uschat.presentation.view.views.ListView;
-import com.lucascauthen.uschat.presentation.view.views.cards.PersonListItem;
+import com.lucascauthen.uschat.presentation.view.base.ListView;
+import com.lucascauthen.uschat.presentation.view.base.cards.PersonListItem;
 
 import java.util.HashMap;
 import java.util.Iterator;

@@ -14,24 +14,20 @@ import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import com.lucascauthen.uschat.R;
-import com.lucascauthen.uschat.presentation.controller.base.BasePeopleTabViewPresenter;
 import com.lucascauthen.uschat.presentation.view.components.NestedViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-
 
 /**
  * Created by lhc on 7/1/15.
  */
-public class FriendTabFragment extends Fragment  implements BasePeopleTabViewPresenter.BaseTabView{
+public class FriendTabFragment extends Fragment {
 
-    private BasePeopleTabViewPresenter presenter;
     private final List<Fragment> fragments = new ArrayList<>();
     @InjectView(R.id.tab_viewpager)NestedViewPager viewPager;
     @InjectView(R.id.tab_view_tabs)TabLayout tabLayout;
@@ -40,9 +36,8 @@ public class FriendTabFragment extends Fragment  implements BasePeopleTabViewPre
         //Required empty
     }
 
-    public static FriendTabFragment newInstance(BasePeopleTabViewPresenter presenter, Fragment friendList, Fragment requestList, Fragment personSearch) {
+    public static FriendTabFragment newInstance(Fragment friendList, Fragment requestList, Fragment personSearch) {
         FriendTabFragment f = new FriendTabFragment();
-        f.presenter = presenter;
         f.fragments.add(friendList);
         f.fragments.add(requestList);
         f.fragments.add(personSearch);
@@ -59,7 +54,7 @@ public class FriendTabFragment extends Fragment  implements BasePeopleTabViewPre
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_friend_tab_view, null);
         ButterKnife.inject(this, v);
-        presenter.attachView(this);
+        //presenter.attachView(this); TODO might take out (i.e. it might not need a presenter)
         viewPager.setAdapter(new TabbedPageAdapter(getChildFragmentManager(), getActivity(), fragments));
         tabLayout.setupWithViewPager(viewPager);
 

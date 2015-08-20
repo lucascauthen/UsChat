@@ -4,20 +4,15 @@ import com.lucascauthen.uschat.data.entities.Chat;
 import com.lucascauthen.uschat.data.repository.chat.ChatRepo;
 import com.lucascauthen.uschat.domain.executor.BackgroundExecutor;
 import com.lucascauthen.uschat.domain.executor.ForegroundExecutor;
-import com.lucascauthen.uschat.presentation.controller.base.BasePagerViewPresenter;
-import com.lucascauthen.uschat.presentation.view.views.ListView;
-import com.lucascauthen.uschat.presentation.view.views.cards.ChatListItem;
+import com.lucascauthen.uschat.presentation.view.base.ListView;
+import com.lucascauthen.uschat.presentation.view.base.cards.ChatListItem;
 import com.lucascauthen.uschat.util.NullObject;
-
-import java.util.List;
 
 public class ChatListPresenter implements ListPresenter<Chat, Chat.ChatType, ChatListItem> {
 
     private static final ListView<Chat, Chat.ChatType, ChatListItem> NULL_VIEW = NullObject.create(ListView.class);
-    private static final BasePagerViewPresenter.PagerViewChanger NULL_PAGER_CHANGER = NullObject.create(BasePagerViewPresenter.PagerViewChanger.class);
 
     private ListView<Chat, Chat.ChatType, ChatListItem> view = NULL_VIEW;
-    private BasePagerViewPresenter.PagerViewChanger changer = NULL_PAGER_CHANGER;
 
     private final BackgroundExecutor backgroundExecutor;
     private final ForegroundExecutor foregroundExecutor;

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.view.ViewGroup;
@@ -25,9 +26,9 @@ public class ChatViewDialog extends Dialog {
     private TextView timerText;
     private CountDownTimer timer;
 
-    public ChatViewDialog(Context context, Bitmap theImage, long duration) {
+    public ChatViewDialog(Context context, byte[] theImage, long duration) {
         super(context, R.style.DialogSlideStyle);
-        this.image = theImage;
+        this.image = BitmapFactory.decodeByteArray(theImage, 0, theImage.length);
         setContentView(R.layout.dialog_chat_viewer);
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         findViewById(R.id.chat_close_view).setOnClickListener(view -> {

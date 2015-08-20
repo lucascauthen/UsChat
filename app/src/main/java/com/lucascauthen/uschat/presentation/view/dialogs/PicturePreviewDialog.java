@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
@@ -13,7 +12,7 @@ import com.lucascauthen.uschat.presentation.presenters.PicturePreviewPresenter;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import com.lucascauthen.uschat.presentation.view.views.PicturePreviewView;
+import com.lucascauthen.uschat.presentation.view.base.PicturePreviewView;
 
 import java.io.ByteArrayOutputStream;
 
@@ -72,5 +71,15 @@ public class PicturePreviewDialog extends Dialog implements PicturePreviewView{
     private void dispose() {
         this.image = null;
         presenter.detachView();
+    }
+
+    @Override
+    public void showLoading() {
+        //TODO
+    }
+
+    @Override
+    public void hideLoading() {
+        //TODO
     }
 }

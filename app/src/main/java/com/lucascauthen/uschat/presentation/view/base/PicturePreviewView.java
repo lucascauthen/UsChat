@@ -1,6 +1,4 @@
-package com.lucascauthen.uschat.presentation.view.views;
-
-import android.graphics.Bitmap;
+package com.lucascauthen.uschat.presentation.view.base;
 
 public interface PicturePreviewView {
     void showLoading();

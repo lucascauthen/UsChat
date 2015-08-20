@@ -1,4 +1,4 @@
-package com.lucascauthen.uschat.presentation.view.views;
+package com.lucascauthen.uschat.presentation.view.base;
 
 public interface PagerView { //Interface for the presenter
     class Pages {
