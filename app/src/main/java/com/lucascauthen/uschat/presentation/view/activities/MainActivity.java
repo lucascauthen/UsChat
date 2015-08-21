@@ -16,6 +16,5 @@ public class MainActivity extends BaseActivity{
     @Override
     public View onCreateView(String name, Context context, AttributeSet attrs) {
         return super.onCreateView(name, context, attrs);
-
     }
 }

@@ -15,7 +15,7 @@ public interface ListView<T, D, V> {
 
     void setInitialStateSetter(InitialStateSetter<T, V> initialStateSetter);
 
-    interface OnUpdateCompleteCallback<T, I> {
+    interface OnUpdateCompleteCallback {
         void done();
     }
 

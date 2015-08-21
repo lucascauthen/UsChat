@@ -48,7 +48,7 @@ public class PagerActivity extends BaseActivity {
         pager.setOffscreenPageLimit(NUM_PAGES);
         pager.setCurrentItem(PagerView.Pages.CAMERA);
 
-        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
