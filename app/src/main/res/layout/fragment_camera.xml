@@ -5,14 +5,14 @@
         xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
         android:layout_height="match_parent" tools:context="com.lucascauthen.uschat.old.CameraFragment">
         <FrameLayout
-            android:id="@+id/camera_preview"
+            android:id="@+id/cameraPreviewHolder"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             />
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/camera_switch_button"
+            android:id="@+id/cameraSwitchButton"
             android:layout_gravity="end|top"
             android:src="@drawable/switch_button"
             android:background="@drawable/lightest_circle_bg"
@@ -21,7 +21,7 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/camera_capture_button"
+            android:id="@+id/cameraCaptureButton"
             android:layout_gravity="center_horizontal|bottom"
             android:src="@drawable/camera_button"
             android:background="@drawable/light_circle_bg"
@@ -30,7 +30,7 @@
 
     </FrameLayout>
     <ProgressBar
-        android:id="@+id/camera_loading"
+        android:id="@+id/loadingBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:indeterminate="true"

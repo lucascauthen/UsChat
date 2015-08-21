@@ -83,12 +83,12 @@ public class PersonViewAdapter extends RecyclerView.Adapter<PersonViewAdapter.Pe
 
     public static class PersonViewHolder extends RecyclerView.ViewHolder implements PersonListItem {
 
-        @InjectView(R.id.person_card_name) TextView personName;
-        @InjectView(R.id.person_card_state_image) ImageView stateImage;
-        @InjectView(R.id.person_card_action_container) LinearLayout actionContainer;
-        @InjectView(R.id.person_card_progress_bar) ProgressBar progressBar;
+        @InjectView(R.id.name) TextView personName;
+        @InjectView(R.id.stateImage) ImageView stateImage;
+        @InjectView(R.id.actionContainer) LinearLayout actionContainer;
+        @InjectView(R.id.progressBar) ProgressBar progressBar;
         @InjectView(R.id.person_cv) CardView cv;
-        @InjectView(R.id.person_card_parent_layout) RelativeLayout background;
+        @InjectView(R.id.parentLayout) RelativeLayout background;
 
         private final HashMap<String, ImageButton> actionButtons = new LinkedHashMap<>();
 

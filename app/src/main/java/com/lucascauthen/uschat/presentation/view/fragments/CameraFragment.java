@@ -25,10 +25,10 @@ import com.lucascauthen.uschat.presentation.view.base.CameraView;
 
 public class CameraFragment extends Fragment implements CameraView {
 
-    @InjectView(R.id.camera_preview) FrameLayout previewFrame;
-    @InjectView(R.id.camera_capture_button) ImageButton captureButton;
-    @InjectView(R.id.camera_switch_button) ImageButton switchButton;
-    @InjectView(R.id.camera_loading) ProgressBar loading;
+    @InjectView(R.id.cameraPreviewHolder) FrameLayout previewFrame;
+    @InjectView(R.id.cameraCaptureButton) ImageButton captureButton;
+    @InjectView(R.id.cameraSwitchButton) ImageButton switchButton;
+    @InjectView(R.id.loadingBar) ProgressBar loading;
 
     private CameraPresenter presenter;
     private PicturePreviewPresenter previewPresenter;

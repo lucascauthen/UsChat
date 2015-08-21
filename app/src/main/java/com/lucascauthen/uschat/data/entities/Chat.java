@@ -95,6 +95,7 @@ public class Chat {
 
     public void setChatData(byte[] chatData) {
         this.chatData = chatData;
+        isImageLoaded = true;
     }
 
 

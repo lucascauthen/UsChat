@@ -27,13 +27,13 @@ public class PicturePreviewDialog extends Dialog implements PicturePreviewView{
 
     private OnAcceptPictureListener onAccept;
     private OnRejectPictureListener onReject;
-    private Bitmap image;
+    private byte[] image;
     private PicturePreviewPresenter presenter;
 
     public PicturePreviewDialog(Context context, byte[] theImage, PicturePreviewPresenter presenter) {
         super(context, R.style.DialogSlideAnimation);
         setContentView(R.layout.dialog_picture_preview);
-        this.image = BitmapFactory.decodeByteArray(theImage, 0, theImage.length);
+        this.image = theImage;
         this.presenter = presenter;
         ButterKnife.inject(this);
 
@@ -41,8 +41,10 @@ public class PicturePreviewDialog extends Dialog implements PicturePreviewView{
             showLoading();
             presenter.compress(() -> {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                image.compress(Bitmap.CompressFormat.PNG, 50, stream);
-                byte[] data = stream.toByteArray();
+                //image.compress(Bitmap.CompressFormat.PNG, 50, stream);
+                //byte[] data = stream.toByteArray();
+                byte[] data = image;
+                image = null; //Ensures that the byte array goes out of scope an is no londer stored in the class
                 presenter.onCompressComplete(() -> {
                     if (onAccept != null) {
                         hideLoading();
@@ -59,7 +61,7 @@ public class PicturePreviewDialog extends Dialog implements PicturePreviewView{
             dispose();
         });
         imageView = ((ImageView) findViewById(R.id.imageView));
-        imageView.setImageBitmap(image);
+        imageView.setImageBitmap(BitmapFactory.decodeByteArray(theImage, 0, theImage.length));
         imageView.setOnClickListener(view -> {
             //TODO: Add text to the view
         });

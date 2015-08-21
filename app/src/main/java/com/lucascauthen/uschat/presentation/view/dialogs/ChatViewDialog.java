@@ -2,11 +2,9 @@ package com.lucascauthen.uschat.presentation.view.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
@@ -31,13 +29,13 @@ public class ChatViewDialog extends Dialog {
         this.image = BitmapFactory.decodeByteArray(theImage, 0, theImage.length);
         setContentView(R.layout.dialog_chat_viewer);
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-        findViewById(R.id.chat_close_view).setOnClickListener(view -> {
+        findViewById(R.id.closeButton).setOnClickListener(view -> {
             close();
         });
-        imageView = ((ImageView) findViewById(R.id.chat_image_view));
+        imageView = ((ImageView) findViewById(R.id.chatImageView));
         imageView.setImageBitmap(image);
 
-        timerText = ((TextView)findViewById(R.id.chat_timer_text));
+        timerText = ((TextView)findViewById(R.id.timerText));
         timerText.setText(String.valueOf((int)(duration / 1000)));
 
         timer = new CountDownTimer(duration, 250) {

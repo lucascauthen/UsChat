@@ -26,8 +26,8 @@ import java.util.List;
  */
 public class ChatTabFragment extends Fragment {
 
-    @InjectView(R.id.tab_viewpager)NestedViewPager viewPager;
-    @InjectView(R.id.tab_view_tabs)TabLayout tabLayout;
+    @InjectView(R.id.viewPager)NestedViewPager viewPager;
+    @InjectView(R.id.tabs)TabLayout tabLayout;
 
     private final int[] icons = {
             R.drawable.ic_sent,
@@ -70,8 +70,8 @@ public class ChatTabFragment extends Fragment {
         for(int i = 0; i < tabLayout.getTabCount(); i++) {
             TabLayout.Tab tab = tabLayout.getTabAt(i);
             View tabView = inflater.inflate(R.layout.tab_chat, null);
-            ImageView icon = (ImageView)tabView.findViewById(R.id.tab_icon);
-            TextView title = (TextView) tabView.findViewById(R.id.tab_title);
+            ImageView icon = (ImageView)tabView.findViewById(R.id.tabIcon);
+            TextView title = (TextView) tabView.findViewById(R.id.tabTitle);
 
             if(i <= icons.length - 1 && i <= tabTitles.length - 1) {
                 icon.setImageResource(icons[i]);

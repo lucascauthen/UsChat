@@ -75,12 +75,34 @@ public class FriendSelectPresenter implements BasePresenter<FriendSelectView>, P
         view.setInitialStateSetter(new PersonListItem.InitialStateSetter() {
             @Override
             public void setState(Person itemData, PersonListItem itemView) {
-                //TODO
+                itemView.resetActionButtons();
+                itemView.setStateIcon(PersonListItem.BaseIcons.PERSON_STATE_FRIEND);
+                itemView.addActionButton("add", PersonListItem.BaseIcons.ACTION_ADD, onAddClick());
             }
         });
         subPresenter.attachView(view);
         subPresenter.requestUpdate(() -> {
             this.view.hideLoading();
         }, true);
+    }
+
+    private PersonListItem.OnClickActionListener onAddClick() {
+        return (person, itemView) -> {
+            itemView.resetActionButtons();
+            listToSend.add(person);
+            view.enableSend();
+            itemView.addActionButton("remove", PersonListItem.BaseIcons.ACTION_REMOVE, onRemoveClick());
+        };
+    }
+
+    private PersonListItem.OnClickActionListener onRemoveClick() {
+        return (person, itemView) -> {
+            itemView.resetActionButtons();
+            listToSend.remove(person);
+            if(listToSend.size() == 0) {
+                view.disableSend();
+            }
+            itemView.addActionButton("add", PersonListItem.BaseIcons.ACTION_ADD, onAddClick());
+        };
     }
 }

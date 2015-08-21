@@ -29,8 +29,8 @@ import java.util.List;
 public class FriendTabFragment extends Fragment {
 
     private final List<Fragment> fragments = new ArrayList<>();
-    @InjectView(R.id.tab_viewpager)NestedViewPager viewPager;
-    @InjectView(R.id.tab_view_tabs)TabLayout tabLayout;
+    @InjectView(R.id.viewPager)NestedViewPager viewPager;
+    @InjectView(R.id.tabs)TabLayout tabLayout;
 
     public FriendTabFragment() {
         //Required empty

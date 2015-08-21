@@ -80,11 +80,11 @@ public class ChatViewAdapter extends RecyclerView.Adapter<ChatViewAdapter.ChatVi
         private final String SENT_MSG = "Chat sent";
         private final String RECEIVED_MSG = "Tap to load";
 
-        @InjectView(R.id.chatcard_cv) CardView cv;
-        @InjectView(R.id.chatcard_message_type) ImageView chatType;
-        @InjectView(R.id.chatcard_name) TextView personName;
-        @InjectView(R.id.chatcard_msg) TextView msg;
-        @InjectView(R.id.chatcard_progress_bar) ProgressBar loading;
+        @InjectView(R.id.cardView) CardView cv;
+        @InjectView(R.id.stateImage) ImageView chatType;
+        @InjectView(R.id.name) TextView personName;
+        @InjectView(R.id.message) TextView msg;
+        @InjectView(R.id.progressBar) ProgressBar loading;
 
         private Chat chat;
 
