@@ -5,12 +5,12 @@
     android:layout_height="wrap_content"
     >
     <ImageView
-        android:id="@+id/tab_icon"
+        android:id="@+id/tabIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"/>
     <com.lucascauthen.uschat.presentation.view.components.AutoResizeTextView
-        android:id="@+id/tab_title"
+        android:id="@+id/tabTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
