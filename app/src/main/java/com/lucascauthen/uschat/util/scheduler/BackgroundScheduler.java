@@ -1,4 +1,4 @@
-package com.lucascauthen.uschat.domain.scheduler;
+package com.lucascauthen.uschat.util.scheduler;
 
 import rx.Scheduler;
 

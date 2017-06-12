@@ -1,9 +1,12 @@
 package com.lucascauthen.uschat.presentation.view.activities;
 
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -15,8 +18,10 @@ import com.lucascauthen.uschat.presentation.view.base.PagerView;
 import com.lucascauthen.uschat.presentation.view.fragments.CameraFragment;
 import com.lucascauthen.uschat.presentation.view.fragments.ChatTabFragment;
 import com.lucascauthen.uschat.presentation.view.fragments.FriendTabFragment;
+import com.lucascauthen.uschat.util.Permissions;
 
 import javax.inject.Inject;
+
 
 
 public class PagerActivity extends BaseActivity {
@@ -100,4 +105,6 @@ public class PagerActivity extends BaseActivity {
             return NUM_PAGES;
         }
     }
+
+
 }

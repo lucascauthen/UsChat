@@ -18,4 +18,6 @@ public interface CameraView extends BaseView {
     void capture();
 
     void loadCamera();
+
+    void showMessage(String msg);
 }

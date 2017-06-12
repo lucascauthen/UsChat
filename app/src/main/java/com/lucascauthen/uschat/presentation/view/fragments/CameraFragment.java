@@ -1,8 +1,13 @@
 package com.lucascauthen.uschat.presentation.view.fragments;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +26,9 @@ import com.lucascauthen.uschat.presentation.view.components.CameraPreview;
 import com.lucascauthen.uschat.presentation.view.dialogs.PicturePreviewDialog;
 import com.lucascauthen.uschat.presentation.view.dialogs.SelectFriendsDialog;
 import com.lucascauthen.uschat.presentation.view.base.CameraView;
+import com.lucascauthen.uschat.util.Permissions;
+
+
 
 
 public class CameraFragment extends Fragment implements CameraView {
@@ -40,6 +48,7 @@ public class CameraFragment extends Fragment implements CameraView {
     private Camera.PictureCallback pictureCallback;
     private int curCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
 
+
     public static CameraFragment newInstance(CameraPresenter mainPresenter, PicturePreviewPresenter previewPresenter, FriendSelectPresenter selectPresenter) {
         CameraFragment f = new CameraFragment();
         f.presenter = mainPresenter;
@@ -52,7 +61,13 @@ public class CameraFragment extends Fragment implements CameraView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_camera, null);
         v.setClickable(true);
-
+        PackageManager pm = getActivity().getPackageManager();
+        if(!pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+            disableControls();
+            presenter.setHasCamera(false);
+        } else {
+            presenter.setHasCamera(true);
+        }
         cameraPreview = new CameraPreview(getActivity()); //Not injected because this requires activity scope and my current DI configuration is not setup for scoping
 
         ButterKnife.inject(this, v);
@@ -71,7 +86,7 @@ public class CameraFragment extends Fragment implements CameraView {
             }
         });
         switchButton.setOnClickListener((view) -> {
-            presenter.onDoubleTap();
+            presenter.onSwitchCameras();
         });
 
         presenter.attachView(this);
@@ -138,7 +153,11 @@ public class CameraFragment extends Fragment implements CameraView {
 
     @Override
     public void capture() {
-        camera.takePicture(null, null, pictureCallback);
+        if(camera != null) {
+            camera.takePicture(null, null, pictureCallback);
+        } else {
+            presenter.onCaptureError("Unable to take a picture because you don't have a camera or haven't given us permission to use it!");
+        }
     }
 
     @Override
@@ -149,6 +168,7 @@ public class CameraFragment extends Fragment implements CameraView {
         cameraPreview.attachCamera(camera);
         presenter.onCameraLoaded();
     }
+
 
     @Override
     public void onAttach() {
@@ -163,7 +183,7 @@ public class CameraFragment extends Fragment implements CameraView {
     @Override
     public void onResume() {
         super.onResume();
-        presenter.onLoadCamera();
+        checkForPermissions();
     }
 
     @Override
@@ -185,6 +205,33 @@ public class CameraFragment extends Fragment implements CameraView {
             Log.d("CameraFragment", "Something went wrong trying to open the camera.");
         }
         return c; // returns null if camera is unavailable
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch(requestCode) {
+            case Permissions.CAMERA: {
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    presenter.onLoadCamera();
+                } else {
+                    //Disable camera functionality
+                    disableControls();
+                }
+                return;
+            }
+
+        }
+    }
+
+    private void checkForPermissions() {
+        if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            //Should explain?
+            if(ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.CAMERA)) {
+                //Explain permission requirement
+
+            }
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, Permissions.CAMERA);
+        }
     }
 
 }

@@ -1,7 +1,7 @@
 package com.lucascauthen.uschat.presentation.presenters;
 
-import com.lucascauthen.uschat.domain.executor.BackgroundExecutor;
-import com.lucascauthen.uschat.domain.executor.ForegroundExecutor;
+import com.lucascauthen.uschat.util.executor.BackgroundExecutor;
+import com.lucascauthen.uschat.util.executor.ForegroundExecutor;
 import com.lucascauthen.uschat.presentation.view.base.SignUpView;
 import com.lucascauthen.uschat.util.NullObject;
 import com.parse.ParseException;

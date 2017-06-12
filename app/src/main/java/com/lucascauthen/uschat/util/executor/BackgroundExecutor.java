@@ -1,4 +1,4 @@
-package com.lucascauthen.uschat.domain.executor;
+package com.lucascauthen.uschat.util.executor;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;

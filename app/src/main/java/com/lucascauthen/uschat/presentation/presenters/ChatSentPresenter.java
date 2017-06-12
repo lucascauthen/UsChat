@@ -1,8 +1,8 @@
 package com.lucascauthen.uschat.presentation.presenters;
 
 import com.lucascauthen.uschat.data.entities.Chat;
-import com.lucascauthen.uschat.domain.executor.BackgroundExecutor;
-import com.lucascauthen.uschat.domain.executor.ForegroundExecutor;
+import com.lucascauthen.uschat.util.executor.BackgroundExecutor;
+import com.lucascauthen.uschat.util.executor.ForegroundExecutor;
 import com.lucascauthen.uschat.presentation.view.base.ChatSentView;
 import com.lucascauthen.uschat.presentation.view.base.ListView;
 import com.lucascauthen.uschat.presentation.view.base.cards.ChatListItem;

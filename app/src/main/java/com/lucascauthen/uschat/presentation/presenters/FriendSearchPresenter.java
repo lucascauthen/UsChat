@@ -2,8 +2,8 @@ package com.lucascauthen.uschat.presentation.presenters;
 
 import com.lucascauthen.uschat.data.entities.Person;
 import com.lucascauthen.uschat.data.repository.user.PersonRepo;
-import com.lucascauthen.uschat.domain.executor.BackgroundExecutor;
-import com.lucascauthen.uschat.domain.executor.ForegroundExecutor;
+import com.lucascauthen.uschat.util.executor.BackgroundExecutor;
+import com.lucascauthen.uschat.util.executor.ForegroundExecutor;
 import com.lucascauthen.uschat.presentation.view.base.FriendSearchView;
 import com.lucascauthen.uschat.presentation.view.base.ListView;
 import com.lucascauthen.uschat.presentation.view.base.cards.PersonListItem;

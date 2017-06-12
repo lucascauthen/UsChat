@@ -1,6 +1,5 @@
-package com.lucascauthen.uschat.domain.executor;
+package com.lucascauthen.uschat.util.executor;
 
-import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
